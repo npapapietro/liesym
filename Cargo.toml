@@ -1,0 +1,18 @@
+[package]
+name = "liesym"
+version = "0.1.0"
+authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "liesym"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.13.1", features = ["extension-module"]}
+ndarray = { version = "0.14", features = ["approx", "rayon"]}
+num-traits = "0.2"
+numpy = "0.13.0"
+num = "0.3"
+itertools = "0.10.0"
