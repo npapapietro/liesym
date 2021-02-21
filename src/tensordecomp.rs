@@ -1,7 +1,7 @@
 use crate::debug::debug_on;
 use crate::matrix_methods::{all_pos, select_pos_diff};
 use crate::orbit::OrbitMethods;
-use crate::utils::{adjacent_find, to_rational_matrix, Array2R};
+use crate::utils::{adjacent_find, Array2R};
 // use itertools::Itertools;
 use num::rational::Ratio;
 use numpy::PyReadonlyArray3;

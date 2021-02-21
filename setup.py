@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 from setuptools_rust import RustExtension
 
-setup_requires = ['setuptools-rust>=0.11.6']
-install_requires = ['numpy']
+setup_requires = ['setuptools-rust>=0.11.6', 'pytest-runner']
+install_requires = ['numpy', 'sympy']
 
 setup(
     name='liesym',
@@ -17,5 +17,6 @@ setup(
     setup_requires=setup_requires,
     packages=find_packages(),
     zip_safe=False,
-    include_package_data=True
+    include_package_data=True,
+    test_requires=["pytest"]
 )

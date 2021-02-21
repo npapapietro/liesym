@@ -36,3 +36,14 @@ impl Frac {
         println!("{}", m.mapv(|x| Frac { 0: x }))
     }
 }
+
+#[allow(dead_code)]
+pub struct Logger {}
+impl Logger {
+    #[allow(dead_code)]
+    pub fn debug(msg: String) {
+        if debug_on() {
+            println!("{}", msg);
+        }
+    }
+}
