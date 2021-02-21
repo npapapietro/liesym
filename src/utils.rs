@@ -110,14 +110,10 @@ mod test {
         let eval_str = format!("np.array({}, dtype='int64')", mat);
         println!("Evaluating '{}'", eval_str);
 
-        py.eval(
-            &*eval_str,
-            Some(get_np_locals(py)),
-            None,
-        )
-        .unwrap()
-        .downcast()
-        .unwrap()
+        py.eval(&*eval_str, Some(get_np_locals(py)), None)
+            .unwrap()
+            .downcast()
+            .unwrap()
     }
 
     fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>

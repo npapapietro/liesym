@@ -1,8 +1,6 @@
 /// Extension methods that perform various matrix operations not included
 /// in pyo3, numpy, or ndarray. Additionally this should be seen as a separate
 /// mod than the utils as these are are more extentions than utilies.
-
-
 use crate::utils::Array2R;
 
 use itertools::Itertools;

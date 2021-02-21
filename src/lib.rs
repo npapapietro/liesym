@@ -1,11 +1,10 @@
 mod debug;
-mod utils;
-mod matrix_methods;
 mod liealgebra_interface;
+mod matrix_methods;
+mod utils;
 
-use crate::debug::{enable_debug};
+use crate::debug::enable_debug;
 use crate::liealgebra_interface::LieAlgebraBackend;
-
 
 use pyo3::prelude::{pymodule, PyModule, PyResult, Python};
 
@@ -22,12 +21,10 @@ fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     fn test_none<'py>(_py: Python<'py>, num: Option<i64>) {
         match num {
             None => println!("None passed"),
-            Some(x) => println!("{} passed", x)
+            Some(x) => println!("{} passed", x),
         }
     }
     m.add_class::<LieAlgebraBackend>()?;
-
-
 
     // #[pyfn(m, "tensordecomposition")]
     // fn tensor_decomposition<'py>(
@@ -67,8 +64,6 @@ fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     //     (numer.into_pyarray(py), denom.into_pyarray(py))
 
     // }
-
-
 
     Ok(())
 }
