@@ -37,8 +37,10 @@ impl Frac {
     }
 }
 
+#[allow(dead_code)]
 pub struct Logger {}
 impl Logger {
+    #[allow(dead_code)]
     pub fn debug(msg: String){
         if debug_on(){
             println!("{}",msg);

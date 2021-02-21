@@ -10,9 +10,12 @@ name = "liesym"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.13.1", features = ["extension-module"]}
 ndarray = { version = "0.14", features = ["approx", "rayon"]}
 num-traits = "0.2"
 numpy = "0.13.0"
 num = "0.3"
 itertools = "0.10.0"
+[dependencies.pyo3]
+version = "0.13.1"
+extension-module = ["extension-module"]
+default = ["extension-module"]

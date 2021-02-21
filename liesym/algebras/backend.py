@@ -45,8 +45,10 @@ def _rust_wrapper(func):
 
 class _LieAlgebraBackendWrapped:
     @_rust_new
-    def __init__(self, *args):
-        self.backend = _LieAlgebraBackend(*args)
+    def __init__(self, *args, **kwargs):
+        # obscuring this option
+        backend = kwargs.get("backend", _LieAlgebraBackend)
+        self.backend = backend(*args)
 
     @_rust_wrapper
     def orbit(self, weight, stabilizers):
@@ -58,7 +60,6 @@ class _LieAlgebraBackendWrapped:
 
 def create_backend(algebra):
     _debug_mode(True)
-    print(algebra.omega_matrix)
     return _LieAlgebraBackendWrapped(
         algebra.rank,
         algebra.roots,
@@ -69,5 +70,3 @@ def create_backend(algebra):
         algebra.omega_matrix.pinv(),
         algebra.cocartan_matrix,
     )
-
-

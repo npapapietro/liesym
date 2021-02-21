@@ -1,10 +1,10 @@
-use crate::debug::debug_on;
 use ndarray::Array;
 use num::rational::Ratio;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
 use std::iter::FromIterator;
 
+use crate::debug::debug_on;
 use crate::matrix_methods::{all_pos, reflect_weights, reflection_matrix};
 use crate::utils::{
     to_rational_list, to_rational_matrix, to_rational_vector, vecarray_to_pyreturn, Array2R,
@@ -16,14 +16,17 @@ pub struct LieAlgebraBackend {
     roots: usize,
     simple_roots: Vec<Array2R>,
 
+    #[allow(dead_code)]
     cartan_matrix: Array2R,
     cartan_matrix_inverse: Array2R,
 
+    #[allow(dead_code)]
     omega_matrix: Array2R,
     omega_matrix_inverse: Array2R,
 
     cocartan_matrix: Array2R,
 
+    #[allow(dead_code)]
     positive_roots: Option<Vec<Array2R>>,
 }
 // Public implementations exposed in python
