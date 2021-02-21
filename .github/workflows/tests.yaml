@@ -35,24 +35,13 @@ jobs:
       fail-fast: false  # If one platform fails, allow the rest to keep testing.
       matrix:
         rust: [stable]
-        python-version: [3.9] #[3.6, 3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
+        python-version: [3.6, 3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
         platform: [
-          # { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
+          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
           { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
-          # { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-          # { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
+          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
+          { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
         ]
-        # exclude:
-        #   # There is no 64-bit pypy on windows
-        #   - python-version: pypy-3.6
-        #     platform: { os: "windows-latest", python-architecture: "x64" }
-        # include:
-        #   # Test minimal supported Rust version
-        #   - rust: 1.41.1
-        #     python-version: 3.9
-        #     platform: { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" }
-        #     msrv: "MSRV"
-
     steps:
       - uses: actions/checkout@v2
 
@@ -97,27 +86,3 @@ jobs:
       # TODO: this is a hack to workaround compile_error! warnings about auto-initialize on PyPy
       # Once cargo's `resolver = "2"` is stable (~ MSRV Rust 1.52), remove this.
       PYO3_CI: 1
-
-  coverage:
-    needs: [fmt]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-          profile: minimal
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --no-fail-fast
-        env:
-          CARGO_INCREMENTAL: 0
-          RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests"
-          RUSTDOCFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests"
-      - uses: actions-rs/grcov@v0.1
-        id: coverage
-      - uses: codecov/codecov-action@v1
-        with:
-          file: ${{ steps.coverage.outputs.report }}
