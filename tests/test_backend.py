@@ -37,6 +37,7 @@ def testBackendA():
         assert simple_roots.shape == (3,4,2)
 
         assert isinstance(cartan_matrix, np.ndarray)
+
         assert cartan_matrix.shape == (3,3,2)
 
         assert isinstance(cartan_matrix_inverse, np.ndarray)

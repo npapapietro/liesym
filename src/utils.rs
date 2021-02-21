@@ -91,7 +91,7 @@ pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
     use ndarray::{array, Dimension};
     use num::rational::Ratio;
@@ -101,12 +101,12 @@ mod test {
         types::{IntoPyDict, PyDict},
     };
 
-    fn get_np_locals(py: Python<'_>) -> &'_ PyDict {
+    pub fn get_np_locals(py: Python<'_>) -> &'_ PyDict {
         [("np", get_array_module(py).unwrap())].into_py_dict(py)
     }
 
     // #[allow(dead_code)]
-    fn py3darray<'py>(py: Python<'py>, mat: String) -> &'py PyArray3<i64> {
+    pub fn py3darray<'py>(py: Python<'py>, mat: String) -> &'py PyArray3<i64> {
         let eval_str = format!("np.array({}, dtype='int64')", mat);
         println!("Evaluating '{}'", eval_str);
 

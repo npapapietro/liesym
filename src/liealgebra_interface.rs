@@ -200,8 +200,75 @@ impl LieAlgebraBackend {
 
 #[cfg(test)]
 mod test {
-    // use super::*;
-    // use ndarray::{array, Array, Dimension};
+    use super::*;
+    use crate::utils::test::{get_np_locals, py3darray};
+
+    fn python_strings() -> (usize, usize, String, String, String, String, String, String) {
+        let rank = 3;
+        let roots = 12;
+        let simple_roots_str =
+            "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
+                .to_string();
+        let cartan_matrix_str =
+            "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-1,1]],[[0,1],[-1,1],[2,1]]]".to_string();
+        let cartan_matrix_inv_str =
+            "[[[3,4],[1,2],[1,4]],[[1,2],[1,1],[1,2]],[[1,4],[1,2],[3,4]]]".to_string();
+        let omega_matrix_str =
+            "[[[3,4],[-1,4],[-1,4],[-1,4]],[[1,2],[1,2],[-1,2],[-1,2]],[[1,4],[1,4],[1,4],[-3,4]]]"
+                .to_string();
+        let omega_matrix_inv_str =
+            "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[1,1]],[[0,1],[0,1],[-1,1]]]"
+                .to_string();
+        let cocartan_matrix_str =
+            "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
+                .to_string();
+
+        (
+            rank,
+            roots,
+            simple_roots_str,
+            cartan_matrix_str,
+            cartan_matrix_inv_str,
+            omega_matrix_str,
+            omega_matrix_inv_str,
+            cocartan_matrix_str,
+        )
+    }
+
+    #[test]
+    fn test_liealgebrabackend_new() {
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+
+        let (
+            rank,
+            roots,
+            simple_roots_str,
+            cartan_matrix_str,
+            cartan_matrix_inv_str,
+            omega_matrix_str,
+            omega_matrix_inv_str,
+            cocartan_matrix_str,
+        ) = python_strings();
+
+        let simple_roots = py3darray(py, simple_roots_str).readonly();
+        let cartan_matrix = py3darray(py, cartan_matrix_str).readonly();
+        let cartan_matrix_inv = py3darray(py, cartan_matrix_inv_str).readonly();
+        let omega_matrix = py3darray(py, omega_matrix_str).readonly();
+        let omega_matrix_inv = py3darray(py, omega_matrix_inv_str).readonly();
+        let cocartan_matrix = py3darray(py, cocartan_matrix_str).readonly();
+
+        LieAlgebraBackend::new(
+            rank,
+            roots,
+            simple_roots,
+            cartan_matrix,
+            cartan_matrix_inv,
+            omega_matrix,
+            omega_matrix_inv,
+            cocartan_matrix
+        );
+    }
 
     // fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
     // where
