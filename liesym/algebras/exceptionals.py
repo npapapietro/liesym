@@ -1,40 +1,21 @@
-
-from typing import List
-from numpy import isnan
-from sympy.core import Basic
 from sympy import Matrix, S
 from sympy.core.sympify import _sympify
 
-from .methods import (
-    _cartan_matrix,
-    _cocartan_matrix,
-    _quadratic_form,
-    _reflection_matricies,
-)
+from .base import LieAlgebra
 
-from .backend import orbit
 
-class F4(Basic):
+class F4(LieAlgebra):
     def __new__(cls):
         return super().__new__(cls, "F", _sympify(4))
 
     def __init__(self, *args, **kwargs):
-        self._simple_roots = None
-        self._positive_roots = None
-        self._cartan_matrix = None
-        self._omega_matrix = None
-        self._quadratic_form = None
-        self._cocartan_matrix = None
-        self._reflection_matricies = None
-        self._fundamental_weights = None
-
-    @property
-    def series(self) -> str:
-        return self.args[0]
-
-    @property
-    def rank(self) -> int:
-        return self.args[1]
+        super().__init__()
+        self._simple_roots = [
+            Matrix([[1, -1, 0, 0]]),
+            Matrix([[0, 1, -1, 0]]),
+            Matrix([[0, 0, 1, 0]]),
+            Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
+        ]
 
     @property
     def dimension(self) -> int:
@@ -44,71 +25,59 @@ class F4(Basic):
     def roots(self) -> int:
         return 48
 
-    @property
-    def simple_roots(self) -> List[Matrix]:
-        if self._simple_roots is None:
-            self._simple_roots = [
-                Matrix([[1, -1, 0, 0]]),
-                Matrix([[0, 1, -1, 0]]),
-                Matrix([[0, 0, 1, 0]]),
-                Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
-            ]
 
-        return self._simple_roots
+class G2(LieAlgebra):
+    def __new__(cls):
+        return super().__new__(cls, "G", _sympify(2))
 
-    @property
-    def cartan_matrix(self) -> Matrix:
-        if self._cartan_matrix is None:
-            self._cartan_matrix = _cartan_matrix(self.simple_roots)
-        return self._cartan_matrix
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self._simple_roots = [
+            Matrix([[0, 1, -1]]),
+            Matrix([[1, -2, 1]])
+        ]
 
     @property
-    def cocartan_matrix(self) -> Matrix:
-        if self._cocartan_matrix is None:
-            self._cocartan_matrix = _cocartan_matrix(self.simple_roots)
-        return self._cocartan_matrix
+    def dimension(self) -> int:
+        return 3
 
     @property
-    def omega_matrix(self) -> Matrix:
-        if self._omega_matrix is None:
-            self._omega_matrix = self.cocartan_matrix.pinv().T
-        return self._omega_matrix
+    def roots(self) -> int:
+        return 12
+
+
+def _e_series_default_roots(n):
+    e8 = [
+        [S.Half, -S.Half, -S.Half,
+         -S.Half, -S.Half, -S.Half,
+         -S.Half, S.Half],
+        [-1, 1, 0, 0, 0, 0, 0, 0],
+        [0, -1, 1, 0, 0, 0, 0, 0],
+        [0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, -1, 1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0],
+        [0, 0, 0, 0, 0, -1, 1, 0],
+        [1, 1, 0, 0, 0, 0, 0, 0]]
+
+    roots = e8[:n - 1] + [e8[-1]]
+    return [Matrix([roots[i]]) for i in range(n)]
+
+
+class E(LieAlgebra):
+    def __new__(cls, n):
+        if n not in [6,7,8]:
+            raise ValueError("Algebra series E only defined for 6, 7 and 8}")
+        return super().__new__(cls, "E", _sympify(n))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self._simple_roots = _e_series_default_roots(self.args[1])
 
     @property
-    def metric_tensor(self) -> Matrix:
-        if self._quadratic_form is None:
-            self._quadratic_form = _quadratic_form(
-                self.cartan_matrix, self.simple_roots)
-        return self._quadratic_form
+    def dimension(self) -> int:
+        return self.rank
 
     @property
-    def reflection_matricies(self) -> List[Matrix]:
-        if self._reflection_matricies is None:
-            self._reflection_matricies = _reflection_matricies(
-                self.simple_roots)
-        return self._reflection_matricies
+    def roots(self) -> int:
+        return [72, 126, 240][self.rank-6]
 
-    @property
-    def funamdental_weights(self):
-        if self._fundamental_weights is None:
-            self._fundamental_weights = [self.omega_matrix.row(
-                i) for i in range(self.omega_matrix.rows)]
-        return self._fundamental_weights
-
-    def orbit(self, weight: Matrix, stabilizers=None, **kwargs) -> List[Matrix]:
-        orbit(self, weight, stabilizers=stabilizers, **kwargs)
-
-
-    # def tensor_product_decomp(self, *irreps: Matrix, as_dims=False) -> List[Matrix]:
-
-    #     return _tensor_decomp(
-    #         self.simple_roots,
-    #         self.cartan_matrix,
-    #         self.cartan_matrix.pinv(),
-    #         self.cocartan_matrix.T,
-    #         self.omega_matrix,
-    #         self.omega_matrix.pinv(),
-    #         self.roots,
-    #         self.rank,
-    #         irreps,
-    #     )
