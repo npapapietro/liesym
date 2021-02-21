@@ -35,23 +35,23 @@ jobs:
       fail-fast: false  # If one platform fails, allow the rest to keep testing.
       matrix:
         rust: [stable]
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10-dev, pypy-3.6]
+        python-version: [3.9] #[3.6, 3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
         platform: [
-          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
+          # { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
           { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
-          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-          { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
+          # { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
+          # { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
         ]
-        exclude:
-          # There is no 64-bit pypy on windows
-          - python-version: pypy-3.6
-            platform: { os: "windows-latest", python-architecture: "x64" }
-        include:
-          # Test minimal supported Rust version
-          - rust: 1.41.1
-            python-version: 3.9
-            platform: { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" }
-            msrv: "MSRV"
+        # exclude:
+        #   # There is no 64-bit pypy on windows
+        #   - python-version: pypy-3.6
+        #     platform: { os: "windows-latest", python-architecture: "x64" }
+        # include:
+        #   # Test minimal supported Rust version
+        #   - rust: 1.41.1
+        #     python-version: 3.9
+        #     platform: { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" }
+        #     msrv: "MSRV"
 
     steps:
       - uses: actions/checkout@v2
@@ -74,21 +74,19 @@ jobs:
         name: Prepare LD_LIBRARY_PATH (Ubuntu only)
         run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
 
+      - name: Install cargo test and setup.py dependencies
+        run: |
+          python -m pip install -U pip setuptools
+          pip install setuptools-rust pytest numpy
+
       - name: Build docs
         run: cargo doc --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
 
       - name: Build (no features)
         run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
 
-      # Run tests (except on PyPy, because no embedding API).
-      - if: matrix.python-version != 'pypy-3.6'
-        name: Test
+      - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
-
-      - name: Install python test dependencies
-        run: |
-          python -m pip install -U pip setuptools
-          pip install setuptools-rust pytest
 
       - name: Run python tests
         run: |
