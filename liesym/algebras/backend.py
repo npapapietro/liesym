@@ -59,7 +59,7 @@ class _LieAlgebraBackendWrapped:
         return self.backend.root_system()
 
 def create_backend(algebra):
-    _debug_mode(True)
+    # _debug_mode(True)
     return _LieAlgebraBackendWrapped(
         algebra.rank,
         algebra.roots,

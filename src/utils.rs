@@ -101,22 +101,20 @@ pub mod test {
         types::{IntoPyDict, PyDict},
     };
 
-    pub fn get_np_locals(py: Python<'_>) -> &'_ PyDict {
+    fn get_np_locals(py: Python<'_>) -> &'_ PyDict {
         [("np", get_array_module(py).unwrap())].into_py_dict(py)
     }
 
     // #[allow(dead_code)]
     pub fn py3darray<'py>(py: Python<'py>, mat: String) -> &'py PyArray3<i64> {
         let eval_str = format!("np.array({}, dtype='int64')", mat);
-        println!("Evaluating '{}'", eval_str);
-
         py.eval(&*eval_str, Some(get_np_locals(py)), None)
             .unwrap()
             .downcast()
             .unwrap()
     }
 
-    fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
+    pub fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
     where
         D: Dimension,
     {

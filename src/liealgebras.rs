@@ -1,7 +1,11 @@
+use itertools::Itertools;
+use ndarray::parallel::prelude::IntoParallelIterator;
+use ndarray::parallel::prelude::ParallelIterator;
 use ndarray::Array;
 use num::rational::Ratio;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
+use std::cmp::Ordering;
 use std::iter::FromIterator;
 
 use crate::debug::debug_on;
@@ -24,6 +28,7 @@ pub struct LieAlgebraBackend {
     omega_matrix: Array2R,
     omega_matrix_inverse: Array2R,
 
+    #[allow(dead_code)]
     cocartan_matrix: Array2R,
 
     #[allow(dead_code)]
@@ -91,10 +96,9 @@ impl LieAlgebraBackend {
             println!("Starting orbit calculated");
         }
         let mut full_orbit = self.full_orbit(self.to_dominant(weight), None);
-        let rot = self.omega_matrix_inverse.dot(&self.cartan_matrix_inverse);
 
         // Sorting by rotating and sum value
-        full_orbit.sort_by(|a, b| self.root_level(a, &rot).cmp(&self.root_level(b, &rot)));
+        full_orbit.sort_by(|a, b| self.sort_by_ortho(a, b));
 
         full_orbit
     }
@@ -107,8 +111,7 @@ impl LieAlgebraBackend {
     ///
     fn orbit_stabilizers(&self, weight: Array2R, stablizers: Vec<usize>) -> Vec<Array2R> {
         let mut full_orbit = self.full_orbit(self.to_dominant(weight), Some(stablizers));
-        let rot = self.omega_matrix_inverse.dot(&self.cartan_matrix_inverse);
-        full_orbit.sort_by(|a, b| self.root_level(a, &rot).cmp(&self.root_level(b, &rot)));
+        full_orbit.sort_by(|a, b| self.sort_by_ortho(a, b));
 
         full_orbit
     }
@@ -138,19 +141,23 @@ impl LieAlgebraBackend {
     }
 
     /// Integer root level for a weight `x`
-    fn root_level<'a>(&self, x: &'a Array2R, rot: &'a Array2R) -> Ratio<i64> {
-        x.dot(&self.cartan_matrix_inverse).dot(rot).sum()
+    fn root_level<'a>(&self, x: &'a Array2R) -> Ratio<i64> {
+        x.dot(&self.cartan_matrix_inverse).sum()
+    }
+
+    fn ortho_to_omega<'a>(&self, x: &'a Array2R) -> Array2R {
+        x.dot(&self.omega_matrix_inverse)
     }
 
     /// Returns a list of either count 1 or 0 with the dominant weight
     /// if it exists in the list
-    fn find_dom<'a>(&self, arrays: &'a Vec<Array2R>) -> Vec<Array2R> {
+    fn find_dom<'a>(&self, arrays: &'a Vec<Array2R>) -> Option<Array2R> {
         for i in arrays.iter() {
             if all_pos(&i.dot(&self.omega_matrix_inverse)) {
-                return vec![i.clone()];
+                return Some(i.clone());
             }
         }
-        Vec::new()
+        None
     }
 
     /// Returns the dominant weight by rotating across
@@ -159,9 +166,9 @@ impl LieAlgebraBackend {
         let mut orbits = vec![weight];
         loop {
             orbits = self.reflect_weights(orbits, None);
-            let dom = self.find_dom(&orbits);
-            if dom.len() > 0 {
-                break (&dom[0]).clone();
+            match self.find_dom(&orbits) {
+                Some(x) => break x,
+                None => continue,
             }
         }
     }
@@ -175,34 +182,56 @@ impl LieAlgebraBackend {
         orbit
     }
 
+    /// Calculates all the roots of the algebra in the omega basis.
+    /// This is done by generating all the orbits of the simple roots, taking
+    /// unique roots in those orbits and ordering them via root level.
+    /// Roots of the same level are conventionally ordered by index value,
+    /// which is how rust sorts vec![Vec<Integer/Rational>]
     fn root_system_backend(&self) -> Vec<Array2R> {
-        let mut roots = Vec::new();
-        for i in self.simple_roots.iter() {
-            let orbit = self.orbit_no_stabilizers(i.clone());
-            roots.extend(orbit.iter().cloned());
-        }
-
-        roots = roots.iter().map(|x| x.dot(&self.cocartan_matrix)).collect();
+        let mut roots = self
+            .simple_roots
+            .clone()
+            .into_par_iter()
+            .flat_map(|x| self.orbit_no_stabilizers(x))
+            .map(|x| self.ortho_to_omega(&x))
+            .collect::<Vec<Array2R>>()
+            .iter()
+            .unique()
+            .cloned()
+            .collect::<Vec<Array2R>>();
 
         for _ in 0..self.rank {
             roots.push(Array::zeros((1, self.rank)));
         }
-        let rot = self.omega_matrix_inverse.dot(&self.cartan_matrix_inverse);
-        roots.sort_by(|a, b| {
-            self.root_level(a, &rot)
-                .cmp(&self.root_level(b, &rot))
-                .then(Vec::from_iter(a.iter().clone()).cmp(&Vec::from_iter(b.iter().clone())))
-        });
+        roots.sort_by(|a, b| self.sort_by_omega(a, b));
 
         roots
+    }
+
+    fn sort_by_omega<'a>(&self, a: &'a Array2R, b: &'a Array2R) -> Ordering {
+        let root_level_cmp = self.root_level(b).cmp(&self.root_level(a));
+        let convention_ordering = Vec::from_iter(a.iter()).cmp(&Vec::from_iter(b.iter()));
+
+        root_level_cmp.then(convention_ordering)
+    }
+
+    fn sort_by_ortho<'a>(&self, a: &'a Array2R, b: &'a Array2R) -> Ordering {
+        let x = self.ortho_to_omega(a);
+        let y = self.ortho_to_omega(b);
+        self.sort_by_omega(&x, &y)
     }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::utils::test::{get_np_locals, py3darray};
+    use ndarray::array;
+    use std::collections::HashSet;
+    use std::iter::FromIterator;
 
+    use crate::utils::test::{py3darray, to_ratio};
+
+    /// Generate A3 algebra
     fn python_strings() -> (usize, usize, String, String, String, String, String, String) {
         let rank = 3;
         let roots = 12;
@@ -235,8 +264,7 @@ mod test {
         )
     }
 
-    #[test]
-    fn test_liealgebrabackend_new() {
+    fn helper_liealgebra() -> LieAlgebraBackend {
         let gil = Python::acquire_gil();
         let py = gil.python();
 
@@ -257,7 +285,6 @@ mod test {
         let omega_matrix = py3darray(py, omega_matrix_str).readonly();
         let omega_matrix_inv = py3darray(py, omega_matrix_inv_str).readonly();
         let cocartan_matrix = py3darray(py, cocartan_matrix_str).readonly();
-
         LieAlgebraBackend::new(
             rank,
             roots,
@@ -266,91 +293,138 @@ mod test {
             cartan_matrix_inv,
             omega_matrix,
             omega_matrix_inv,
-            cocartan_matrix
-        );
+            cocartan_matrix,
+        )
     }
 
-    // fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
-    // where
-    //     D: Dimension,
-    // {
-    //     x.mapv(|x| Ratio::new(x, 1))
-    // }
+    #[test]
+    fn test_liealgebrabackend_new() {
+        // asserts no panics
+        helper_liealgebra();
+    }
 
-    // #[test]
-    // fn test_orbit() {
-    //     let half: num::rational::Ratio<i64> = Ratio::new(1, 2);
+    #[test]
+    fn test_to_dom() {
+        let algebra = helper_liealgebra();
 
-    //     let simple_roots = vec![
-    //         to_ratio(array![[1, -1, 0, 0]]),
-    //         to_ratio(array![[0, 1, -1, 0]]),
-    //         to_ratio(array![[0, 0, 1, 0]]),
-    //         array![[-half, -half, -half, -half]],
-    //     ];
-    //     let cartan_inv = to_ratio(array![
-    //         [2, 3, 4, 2],
-    //         [3, 6, 8, 4],
-    //         [2, 4, 6, 3],
-    //         [1, 2, 3, 2]
-    //     ]);
-    //     let omega_inv = to_ratio(array![
-    //         [1, 0, 0, -1],
-    //         [-1, 1, 0, -1],
-    //         [0, -1, 2, -1],
-    //         [0, 0, 0, -1]
-    //     ]);
-    //     let weight = to_ratio(array![[1, -1, 0, 0]]);
+        let non_dom = to_ratio(array![[1, 0, 1, 0]]);
+        let result = algebra.to_dominant(non_dom);
 
-    //     let orb = OrbitMethods {
-    //         simple_roots: simple_roots,
-    //         cartan_inv: cartan_inv,
-    //         omega_inv: omega_inv,
-    //         omega: Array2R::zeros((1, 1)),
-    //         cocartan_t: Array2R::zeros((1, 1)),
-    //         n_roots: 48,
-    //         rank: 4,
-    //     };
+        assert_eq!(result, to_ratio(array![[1, 1, 0, 0]]));
+    }
 
-    //     let res = orb.orbit(weight);
-    //     assert_eq!(res.len(), 24);
-    // }
+    #[test]
+    fn test_root_level() {
+        let algebra = helper_liealgebra();
+        let tests = vec![
+            to_ratio(array![[1, -1, 0, 0]]),
+            to_ratio(array![[1, 0, -1, 0]]),
+            to_ratio(array![[1, 0, 0, -1]]),
+            to_ratio(array![[-1, 1, 0, 0]]),
+        ];
+        let expected: Vec<i64> = vec![1, 2, 3, -1];
 
-    // #[test]
-    // fn test_orbit_to_dom() {
-    //     let half: num::rational::Ratio<i64> = Ratio::new(1, 2);
+        let results: Vec<i64> = tests
+            .iter()
+            .map(|x| algebra.root_level(&algebra.ortho_to_omega(&x)).to_integer())
+            .collect();
 
-    //     let simple_roots = vec![
-    //         to_ratio(array![[1, -1, 0, 0]]),
-    //         to_ratio(array![[0, 1, -1, 0]]),
-    //         to_ratio(array![[0, 0, 1, 0]]),
-    //         array![[-half, -half, -half, -half]],
-    //     ];
-    //     let cartan_inv = to_ratio(array![
-    //         [2, 3, 4, 2],
-    //         [3, 6, 8, 4],
-    //         [2, 4, 6, 3],
-    //         [1, 2, 3, 2]
-    //     ]);
-    //     let omega_inv = to_ratio(array![
-    //         [1, 0, 0, -1],
-    //         [-1, 1, 0, -1],
-    //         [0, -1, 2, -1],
-    //         [0, 0, 0, -1]
-    //     ]);
+        assert_eq!(results, expected);
+    }
 
-    //     let orb = OrbitMethods {
-    //         simple_roots: simple_roots,
-    //         cartan_inv: cartan_inv,
-    //         omega_inv: omega_inv,
-    //         omega: Array2R::zeros((1, 1)),
-    //         cocartan_t: Array2R::zeros((1, 1)),
-    //         n_roots: 48,
-    //         rank: 4,
-    //     };
+    #[test]
+    fn test_ortho_to_omega() {
+        let algebra = helper_liealgebra();
+        let tests = vec![
+            to_ratio(array![[1, -1, 0, 0]]),
+            to_ratio(array![[1, 0, -1, 0]]),
+            to_ratio(array![[1, 0, 0, -1]]),
+            to_ratio(array![[-1, 1, 0, 0]]),
+        ];
+        let expected = vec![
+            to_ratio(array![[2, -1, 0]]),
+            to_ratio(array![[1, 1, -1]]),
+            to_ratio(array![[1, 0, 1]]),
+            to_ratio(array![[-2, 1, 0]]),
+        ];
 
-    //     let non_dom = to_ratio(array![[0, 1, 1, 0i64]]);
-    //     let result = orb.to_dominant(non_dom);
+        let results: Vec<Array2R> = tests.iter().map(|x| algebra.ortho_to_omega(&x)).collect();
 
-    //     assert_eq!(result, to_ratio(array![[1, 0, 0, -1i64]]));
-    // }
+        assert_eq!(results, expected);
+    }
+
+    #[test]
+    fn test_full_orbit() {
+        let algebra = helper_liealgebra();
+
+        let non_dom = to_ratio(array![[1, 0, 1, 0]]);
+        let result: HashSet<Array2R> =
+            HashSet::from_iter(algebra.full_orbit(non_dom, None).into_iter());
+
+        let expected: HashSet<Array2R> = HashSet::from_iter(
+            vec![
+                to_ratio(array![[1, 0, 1, 0]]),
+                to_ratio(array![[1, 0, 0, 1]]),
+                to_ratio(array![[1, 1, 0, 0]]),
+                to_ratio(array![[0, 1, 1, 0]]),
+                to_ratio(array![[0, 1, 0, 1]]),
+                to_ratio(array![[0, 0, 1, 1]]),
+            ]
+            .into_iter(),
+        );
+        // order doesn't matter
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_orbit_no_stabilizers() {
+        let algebra = helper_liealgebra();
+        let sr = to_ratio(array![[1, -1, 0, 0]]);
+
+        let results: HashSet<Array2R> =
+            HashSet::from_iter(algebra.orbit_no_stabilizers(sr).into_iter());
+        let expected: HashSet<Array2R> = HashSet::from_iter(
+            vec![
+                to_ratio(array![[-1, 0, 0, 1]]),
+                to_ratio(array![[-1, 0, 1, 0]]),
+                to_ratio(array![[-1, 1, 0, 0]]),
+                to_ratio(array![[0, -1, 0, 1]]),
+                to_ratio(array![[0, -1, 1, 0]]),
+                to_ratio(array![[0, 0, -1, 1]]),
+                to_ratio(array![[0, 0, 1, -1]]),
+                to_ratio(array![[0, 1, -1, 0]]),
+                to_ratio(array![[0, 1, 0, -1]]),
+                to_ratio(array![[1, -1, 0, 0]]),
+                to_ratio(array![[1, 0, -1, 0]]),
+                to_ratio(array![[1, 0, 0, -1]]),
+            ]
+            .into_iter(),
+        );
+
+        assert_eq!(results, expected);
+    }
+
+    #[test]
+    fn test_rootsystem_backend() {
+        let algebra = helper_liealgebra();
+        let results = algebra.root_system_backend();
+        let expected = vec![
+            to_ratio(array![[1, 0, 1]]),
+            to_ratio(array![[-1, 1, 1]]),
+            to_ratio(array![[1, 1, -1]]),
+            to_ratio(array![[-1, 2, -1]]),
+            to_ratio(array![[0, -1, 2]]),
+            to_ratio(array![[2, -1, 0]]),
+            to_ratio(array![[0, 0, 0]]),
+            to_ratio(array![[0, 0, 0]]),
+            to_ratio(array![[0, 0, 0]]),
+            to_ratio(array![[-2, 1, 0]]),
+            to_ratio(array![[0, 1, -2]]),
+            to_ratio(array![[1, -2, 1]]),
+            to_ratio(array![[-1, -1, 1]]),
+            to_ratio(array![[1, -1, -1]]),
+            to_ratio(array![[-1, 0, -1]]),
+        ];
+        assert_eq!(results, expected)
+    }
 }
