@@ -45,23 +45,32 @@ def test_A():
         Matrix([[Rational(1, 4), Rational(1, 4), Rational(1, 4), Rational(-3, 4)]])]
 
     # backend
-    # assert A3.root_system() == [
-    #     Matrix([[1, 0, 1]]),
-    #     Matrix([[-1, 1, 1]]),
-    #     Matrix([[1, 1, -1]]),
-    #     Matrix([[-1, 2, -1]]),
-    #     Matrix([[0, -1, 2]]),
-    #     Matrix([[2, -1, 0]]),
-    #     Matrix([[0, 0, 0]]),
-    #     Matrix([[0, 0, 0]]),
-    #     Matrix([[0, 0, 0]]),
-    #     Matrix([[-2, 1, 0]]),
-    #     Matrix([[0, 1, -2]]),
-    #     Matrix([[1, -2, 1]]),
-    #     Matrix([[-1, -1, 1]]),
-    #     Matrix([[1, -1, -1]]),
-    #     Matrix([[-1, 0, -1]])
-    # ]
+    assert A3.root_system() == [
+        Matrix([[1, 0, 1]]),
+        Matrix([[-1, 1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 0]]),
+        Matrix([[0, 1, -2]]),
+        Matrix([[1, -2, 1]]),
+        Matrix([[-1, -1, 1]]),
+        Matrix([[1, -1, -1]]),
+        Matrix([[-1, 0, -1]])
+    ]
+
+    assert A3.positive_roots == [
+        Matrix([[1, 0, 1]]),
+        Matrix([[-1, 1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+    ]
 
 
 def test_B():
@@ -103,6 +112,43 @@ def test_B():
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(1, 2)]])
     ]
 
+    # backend
+    assert B3.root_system() == [
+        Matrix([[0, 1, 0]]),
+        Matrix([[1, -1, 2]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[1, 0, 0]]),
+        Matrix([[-1, 1, 0]]),
+        Matrix([[1, 1, -2]]),
+        Matrix([[-1, 2, -2]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 0]]),
+        Matrix([[0, 1, -2]]),
+        Matrix([[1, -2, 2]]),
+        Matrix([[-1, -1, 2]]),
+        Matrix([[1, -1, 0]]),
+        Matrix([[-1, 0, 0]]),
+        Matrix([[1, 0, -2]]),
+        Matrix([[-1, 1, -2]]),
+        Matrix([[0, -1, 0]]),
+    ]
+
+    assert B3.positive_roots == [
+        Matrix([[0, 1, 0]]),
+        Matrix([[1, -1, 2]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[1, 0, 0]]),
+        Matrix([[-1, 1, 0]]),
+        Matrix([[1, 1, -2]]),
+        Matrix([[-1, 2, -2]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+    ]
+
 
 def test_C():
     C2 = C(2)
@@ -141,7 +187,42 @@ def test_C():
         Matrix([[1, 1, 0]]),
         Matrix([[1, 1, 1]])
     ]
+    # backend
+    assert C3.root_system() == [
+        Matrix([[ 2, 0, 0 ]]),
+        Matrix([[ 0, 1, 0 ]]),
+        Matrix([[ -2, 2, 0 ]]),
+        Matrix([[ 1, -1, 1 ]]),
+        Matrix([[ -1, 0, 1 ]]),
+        Matrix([[ 1, 1, -1 ]]),
+        Matrix([[ -1, 2, -1 ]]),
+        Matrix([[ 0, -2, 2 ]]),
+        Matrix([[ 2, -1, 0 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ -2, 1, 0 ]]),
+        Matrix([[ 0, 2, -2 ]]),
+        Matrix([[ 1, -2, 1 ]]),
+        Matrix([[ -1, -1, 1 ]]),
+        Matrix([[ 1, 0, -1 ]]),
+        Matrix([[ -1, 1, -1 ]]),
+        Matrix([[ 2, -2, 0 ]]),
+        Matrix([[ 0, -1, 0 ]]),
+        Matrix([[ -2, 0, 0 ]]),
+    ]
 
+    assert C3.positive_roots == [
+        Matrix([[ 2, 0, 0 ]]),
+        Matrix([[ 0, 1, 0 ]]),
+        Matrix([[ -2, 2, 0 ]]),
+        Matrix([[ 1, -1, 1 ]]),
+        Matrix([[ -1, 0, 1 ]]),
+        Matrix([[ 1, 1, -1 ]]),
+        Matrix([[ -1, 2, -1 ]]),
+        Matrix([[ 0, -2, 2 ]]),
+        Matrix([[ 2, -1, 0 ]]),
+    ]
 
 def test_D():
     D2 = D(2)
@@ -180,4 +261,32 @@ def test_D():
         Matrix([[1, 0, 0]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(-1, 2)]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(1, 2)]])
+    ]
+
+    # backend
+    assert D3.root_system() == [
+        Matrix([[ 0, 1, 1 ]]),
+        Matrix([[ 1, -1, 1 ]]),
+        Matrix([[ 1, 1, -1 ]]),
+        Matrix([[ -1, 0, 2 ]]),
+        Matrix([[ -1, 2, 0 ]]),
+        Matrix([[ 2, -1, -1 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ 0, 0, 0 ]]),
+        Matrix([[ -2, 1, 1 ]]),
+        Matrix([[ 1, -2, 0 ]]),
+        Matrix([[ 1, 0, -2 ]]),
+        Matrix([[ -1, -1, 1 ]]),
+        Matrix([[ -1, 1, -1 ]]),
+        Matrix([[ 0, -1, -1 ]]),
+    ]
+
+    assert D3.positive_roots == [
+        Matrix([[ 0, 1, 1 ]]),
+        Matrix([[ 1, -1, 1 ]]),
+        Matrix([[ 1, 1, -1 ]]),
+        Matrix([[ -1, 0, 2 ]]),
+        Matrix([[ -1, 2, 0 ]]),
+        Matrix([[ 2, -1, -1 ]]),
     ]

@@ -1,10 +1,10 @@
 mod debug;
-mod liealgebra_interface;
+mod liealgebras;
 mod matrix_methods;
 mod utils;
 
 use crate::debug::enable_debug;
-use crate::liealgebra_interface::LieAlgebraBackend;
+use crate::liealgebras::LieAlgebraBackend;
 
 use pyo3::prelude::{pymodule, PyModule, PyResult, Python};
 

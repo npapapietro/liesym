@@ -91,7 +91,7 @@ pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use super::*;
     use ndarray::{array, Dimension};
     use num::rational::Ratio;
@@ -106,17 +106,15 @@ mod test {
     }
 
     // #[allow(dead_code)]
-    fn py3darray<'py>(py: Python<'py>, mat: String) -> &'py PyArray3<i64> {
+    pub fn py3darray<'py>(py: Python<'py>, mat: String) -> &'py PyArray3<i64> {
         let eval_str = format!("np.array({}, dtype='int64')", mat);
-        println!("Evaluating '{}'", eval_str);
-
         py.eval(&*eval_str, Some(get_np_locals(py)), None)
             .unwrap()
             .downcast()
             .unwrap()
     }
 
-    fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
+    pub fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
     where
         D: Dimension,
     {

@@ -39,7 +39,15 @@ impl TensorDecomposition {
         }
         // let cartan = to_rational_matrix(cartan);
 
-        let orbitmethods = OrbitMethods::new(simple_roots, omega_inv, omega, cartan_inv, cocartan_t, n_roots, rank);
+        let orbitmethods = OrbitMethods::new(
+            simple_roots,
+            omega_inv,
+            omega,
+            cartan_inv,
+            cocartan_t,
+            n_roots,
+            rank,
+        );
         let positive_roots = TensorDecomposition::generate_positive_roots(&orbitmethods);
 
         TensorDecomposition {
