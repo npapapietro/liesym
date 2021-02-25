@@ -48,8 +48,6 @@ pub fn all_pos<'a>(x: &'a Array2R) -> bool {
     true
 }
 
-
-
 #[cfg(test)]
 mod test {
     use super::*;
