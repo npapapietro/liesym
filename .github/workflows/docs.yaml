@@ -13,5 +13,3 @@ jobs:
         run: pip install Sphinx sphinx_math_dollar
       - name: Building documentation
         run: cd docs && make clean && make html
-      - name: Yeet docs
-        run: cp -a docs/build/html/. ../docs
