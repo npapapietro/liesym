@@ -148,3 +148,4 @@ dmypy.json
 *.exe
 config.toml
 *.npy
+docsrc/_build

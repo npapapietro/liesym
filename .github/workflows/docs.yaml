@@ -12,4 +12,4 @@ jobs:
       - name: Install dependencies
         run: pip install Sphinx sphinx_math_dollar
       - name: Building documentation
-        run: cd docs && make clean && make html
+        run: cd docssrc && make github
