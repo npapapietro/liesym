@@ -1,4 +1,3 @@
-
 from sympy.core import Basic
 from sympy.core.sympify import _sympify
 from sympy import Matrix
@@ -16,7 +15,8 @@ from .backend import create_backend
 
 class LieAlgebra(Basic):
     def __new__(cls, series: str, rank: int):
-        """Returns a new instance of a Sympy object
+        """
+        Returns a new instance of a Sympy object
 
         Args:
             series (str): The series type
@@ -71,14 +71,15 @@ class LieAlgebra(Basic):
 
         Examples
         ========
-        ```python
-        algebra = F4()
 
-        my_simple_roots = [
-                # my basis
-            ]
-        algebra.simple_roots = my_simple_roots
-        ```
+        change of basis::
+
+            algebra = F4()
+            my_simple_roots = [
+                    # my basis
+                ]
+            algebra.simple_roots = my_simple_roots
+
         """
         return self._simple_roots
 

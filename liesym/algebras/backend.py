@@ -19,8 +19,6 @@ def _to_rational_tuple(obj):
     return np.array([(i.p, i.q) for i in x], dtype=np.int64).reshape(*obj.shape, 2)
 
 
-
-
 def _rust_new(func):
     def inner(*args, **kwargs):
         cls = args[0]
@@ -58,8 +56,8 @@ class _LieAlgebraBackendWrapped:
     def root_system(self):
         return self.backend.root_system()
 
+
 def create_backend(algebra):
-    # _debug_mode(True)
     return _LieAlgebraBackendWrapped(
         algebra.rank,
         algebra.roots,

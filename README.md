@@ -19,7 +19,8 @@ An alternative to solve this problem would be to use a compiled
 backend that supports generics (and isn't a pain to build with python).
 
 Rust has good python binding support through [py03](https://github.com/PyO3/pyo3)
-and allows easy communication through numpy using [rust-numpy](https://github.com/PyO3/rust-numpy) as well as numpy like api inside rust using [ndarray](https://github.com/rust-ndarray/ndarray).
+and allows easy communication through numpy using [rust-numpy](https://github.com/PyO3/rust-numpy)
+as well as numpy like api inside rust using [ndarray](https://github.com/rust-ndarray/ndarray).
 
 ## Repo Layout
 
@@ -41,3 +42,25 @@ imported in `./liesym/__init__.py`
 └── ...                 # other stuff
 ```
 
+## Example use
+
+```python
+from liesym import A, G2
+
+su3 = A(2)
+pr3 = su3.positive_roots
+
+assert pr3 == [Matrix([[1, 1]]), Matrix([[-1, 2]]), Matrix([[2, -1]])]
+
+g2 = G2()
+prg = g2.positive_roots
+
+assert prg == [
+    Matrix([[0, 1]]),
+    Matrix([[3, -1]]),
+    Matrix([[1, 0]]),
+    Matrix([[-1, 1]]),
+    Matrix([[-3, 2]]),
+    Matrix([[2, -1]])
+]
+```
