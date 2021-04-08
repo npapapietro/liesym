@@ -14,7 +14,7 @@ jobs:
     - uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
-        folder: docs/_build/html
+        folder: docs/build/html
     # - name: Commit documentation changes
     #   run: |
     #     git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
