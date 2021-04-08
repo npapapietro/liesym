@@ -13,11 +13,11 @@ jobs:
         docs-folder: "docs/"
     - name: check build
       run : |
-        ls docs/build/html
+        cp -r docs/_build/html/* gh-pages/
     - uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
-        folder: docs/build/html
+        folder: gh-pages
     # - name: Commit documentation changes
     #   run: |
     #     git clone https://github.com/npapapietro/liesym.git --branch gh-pages --single-branch gh-pages
