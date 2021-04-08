@@ -106,7 +106,7 @@ class LieAlgebra(Basic):
         - https://mathworld.wolfram.com/CartanMatrix.html
 
         Returns:
-            Matrix: Cartan Matrix as Sympy object
+            Matrix: Cartan Matrix as a Sympy object
         """
         if self._cartan_matrix is None:
             self._cartan_matrix = _cartan_matrix(self.simple_roots)
@@ -114,18 +114,38 @@ class LieAlgebra(Basic):
 
     @property
     def cocartan_matrix(self) -> Matrix:
+        """The cocartan matrix rows are generated from the coroots of 
+        the algebra such that multiplication by a simple root will
+        generate a row of the cartan matrix.
+
+        Returns:
+            Matrix: Cocartan Matrix as a Sympy object
+        """
         if self._cocartan_matrix is None:
             self._cocartan_matrix = _cocartan_matrix(self.simple_roots)
         return self._cocartan_matrix
 
     @property
     def omega_matrix(self) -> Matrix:
+        """The rows of the omega matrix are the fundamental weights
+        of the algebra.
+
+        Returns:
+            Matrix: Omega Matrix as a Sympy object
+        """
         if self._omega_matrix is None:
             self._omega_matrix = self.cocartan_matrix.pinv().T
         return self._omega_matrix
 
     @property
     def metric_tensor(self) -> Matrix:
+        """Also known as the quadratic form, the metric tensor
+        serves as the metrix for the inner product of two roots or weights
+        when they are not in the orthogonal basis.
+
+        Returns:
+            Matrix: Metric Tensor as a Sympy object
+        """
         if self._quadratic_form is None:
             self._quadratic_form = _quadratic_form(
                 self.cartan_matrix, self.simple_roots)
@@ -133,6 +153,12 @@ class LieAlgebra(Basic):
 
     @property
     def reflection_matricies(self) -> List[Matrix]:
+        """Returns a list of reflection matrices built from
+        rotations about each simple root.
+
+        Returns:
+            List[Matrix]: List of Sympy Matrices
+        """
         if self._reflection_matricies is None:
             self._reflection_matricies = _reflection_matricies(
                 self.simple_roots)
@@ -140,6 +166,11 @@ class LieAlgebra(Basic):
 
     @property
     def fundamental_weights(self) -> List[Matrix]:
+        """Returns the fundamental weights of the algebra. 
+
+        Returns:
+            List[Matrix]: List of Sympy Matrices
+        """
         if self._fundamental_weights is None:
             self._fundamental_weights = [self.omega_matrix.row(
                 i) for i in range(self.omega_matrix.rows)]
@@ -147,6 +178,13 @@ class LieAlgebra(Basic):
 
     @property
     def positive_roots(self) -> List[Matrix]:
+        """Returns the postive roots of the algebra. They are sorted 
+        first by their distance from the highest root and then by 
+        tuple ordering (convention).
+
+        Returns:
+            List[Matrix]: List of Sympy Matrices
+        """
         if self._positive_roots is None:
             self._positive_roots = self.root_system()[:self.roots // 2]
         return self._positive_roots
