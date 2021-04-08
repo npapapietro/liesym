@@ -13,7 +13,7 @@ jobs:
         docs-folder: "docs/"
     - name: check build
       run : |
-        cp -r docs/_build/html/* gh-pages/
+        cp -r docs/build/html/* gh-pages/
     - uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
