@@ -11,6 +11,9 @@ jobs:
       with:
         pre-build-command: python -m pip install sphinx-math-dollar
         docs-folder: "docs/"
+    - name: check build
+      run : |
+        ls docs/buid/html
     - uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages
