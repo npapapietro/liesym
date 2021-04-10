@@ -1,10 +1,6 @@
 liesym.algebras package
 =======================
 
-Submodules
-----------
-
-
 
 liesym.algebras.base module
 ---------------------------
@@ -13,6 +9,8 @@ liesym.algebras.base module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: default_assumptions 
+
 
 liesym.algebras.classic module
 ------------------------------
@@ -21,6 +19,7 @@ liesym.algebras.classic module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: default_assumptions 
 
 liesym.algebras.exceptionals module
 -----------------------------------
@@ -29,19 +28,4 @@ liesym.algebras.exceptionals module
    :members:
    :undoc-members:
    :show-inheritance:
-
-liesym.algebras.methods module
-------------------------------
-
-.. automodule:: liesym.algebras.methods
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: liesym.algebras
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   :exclude-members: default_assumptions 

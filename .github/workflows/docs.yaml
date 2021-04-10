@@ -9,13 +9,12 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ammaraskar/sphinx-action@master
       with:
-        pre-build-command: python -m pip install sphinx-math-dollar
+        pre-build-command: python -m pip install sphinx-math-dollar groundwork-sphinx-theme
         docs-folder: "docs/"
     - name: check build
       run : |
         mkdir gh-pages && \
         cp -r docs/build/html/* gh-pages/
-        touch gh-pages/.nojekyll
     - uses: JamesIves/github-pages-deploy-action@4.1.1
       with:
         branch: gh-pages

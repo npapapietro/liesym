@@ -7,14 +7,16 @@ Welcome to liesym's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 4
+
+   liesym.algebras
 
 
+Module contents
+---------------
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. automodule:: liesym
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: default_assumptions 

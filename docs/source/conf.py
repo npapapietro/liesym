@@ -31,7 +31,14 @@ release = '0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx_math_dollar', 'sphinx.ext.mathjax', 'sphinx.ext.githubpages'
+    'sphinx.ext.autodoc', 
+    'sphinx_math_dollar', 
+    'sphinx.ext.mathjax', 
+    'sphinx.ext.githubpages',
+    'sphinx.ext.viewcode',
+    'numpydoc',
+    'sphinx.ext.inheritance_diagram'
+    
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -48,14 +55,18 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
+html_theme = 'pydata_sphinx_theme'
+
+pygments_style = 'sphinx'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 autodoc_inherit_docstrings = True
+numpydoc_show_inherited_class_members=False
+numpydoc_class_members_toctree=False
 
 # MathJax file, which is free to use.  See https://www.mathjax.org/#gettingstarted
 # As explained in the link using latest.js will get the latest version even
@@ -75,3 +86,24 @@ source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
+
+autodoc_mock_imports = ["liesym.liesym"]
+
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# latex_engine = 'pdflatex'
+
+# latex_elements = {
+
+#     'preamble': r'''
+# \usepackage[titles]{tocloft}
+# \usepackage{etoolbox}
+# \usepackage{dynkin-diagrams}
+# \cftsetpnumwidth {1.25cm}\cftsetrmarg{1.5cm}
+# \setlength{\cftchapnumwidth}{0.75cm}
+# \setlength{\cftsecindent}{\cftchapnumwidth}
+# \setlength{\cftsecnumwidth}{1.25cm}
+# ''',
+#     'printindex': r'\footnotesize\raggedright\printindex',
+# }
+# latex_show_urls = 'footnote'

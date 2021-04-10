@@ -72,7 +72,9 @@ class LieAlgebra(Basic):
         Examples
         ========
 
-        change of basis::
+        .. code-block:: python
+        
+            from liesym import F4
 
             algebra = F4()
             my_simple_roots = [
@@ -100,10 +102,9 @@ class LieAlgebra(Basic):
 
         where $a_i$ is the i'th simple root and $\langle,\rangle$ is the scalar product.
 
-        Sources
-        =======
-        - https://en.wikipedia.org/wiki/Cartan_matrix
-        - https://mathworld.wolfram.com/CartanMatrix.html
+        Sources:
+            - https://en.wikipedia.org/wiki/Cartan_matrix
+            - https://mathworld.wolfram.com/CartanMatrix.html
 
         Returns:
             Matrix: Cartan Matrix as a Sympy object

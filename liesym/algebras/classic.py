@@ -14,6 +14,13 @@ def _euclidean_root(i, n):
 
 
 class A(LieAlgebra):
+    """The compact lie group of type A has a dynkin diagram of
+
+    .. raw:: latex
+
+        A/{}
+
+    """
     def __new__(cls, n):
         return super().__new__(cls, "A", _sympify(n))
 
@@ -24,10 +31,22 @@ class A(LieAlgebra):
 
     @property
     def dimension(self) -> int:
+        """The dimension of the simple Lie algebra A series is
+        one greater than the rank of the algebra.
+
+        .. math::
+            dim = n + 1
+        """
         return self.rank + 1
 
     @property
     def roots(self) -> int:
+        """The number of roots for the simple Lie algebra A is 
+        defined as 
+
+        .. math::
+            n^2 + 1
+        """
         return self.rank*(self.rank + 1)
 
 
@@ -71,6 +90,7 @@ class C(LieAlgebra):
 
 
 class D(LieAlgebra):
+    """test"""
     def __new__(cls, n):
         return super().__new__(cls, "D", _sympify(n))
 
