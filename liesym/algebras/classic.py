@@ -9,17 +9,13 @@ def _euclidean_root(i, n):
     root[i] = 1
     try:
         root[i+1] = -1
-    except IndexError: pass # catches B last root
+    except IndexError:
+        pass  # catches B last root
     return Matrix([root])
 
 
 class A(LieAlgebra):
-    """The compact lie group of type A has a dynkin diagram of
-
-    .. raw:: latex
-
-        A/{}
-
+    r"""The compact lie group of type A.
     """
     def __new__(cls, n):
         return super().__new__(cls, "A", _sympify(n))
@@ -35,7 +31,7 @@ class A(LieAlgebra):
         one greater than the rank of the algebra.
 
         .. math::
-            dim = n + 1
+            n + 1
         """
         return self.rank + 1
 
@@ -45,12 +41,14 @@ class A(LieAlgebra):
         defined as 
 
         .. math::
-            n^2 + 1
+            n(n + 1)
         """
-        return self.rank*(self.rank + 1)
+        return self.rank * (self.rank + 1)
 
 
 class B(LieAlgebra):
+    r"""The compact lie group of type B.
+    """
     def __new__(cls, n):
         return super().__new__(cls, "B", _sympify(n))
 
@@ -61,14 +59,27 @@ class B(LieAlgebra):
 
     @property
     def dimension(self) -> int:
+        """The dimension of the simple Lie algebra B series is
+        equal to the rank of the algebra.
+        """
+
         return self.rank
 
     @property
     def roots(self) -> int:
+        """The number of roots for the simple Lie algebra B is 
+        defined as 
+
+        .. math::
+            2n^2
+        """
         return 2 * self.rank**2
 
 
 class C(LieAlgebra):
+    r"""The compact lie group of type C.
+    """
+
     def __new__(cls, n):
         return super().__new__(cls, "C", _sympify(n))
 
@@ -82,15 +93,28 @@ class C(LieAlgebra):
 
     @property
     def dimension(self) -> int:
+        """The dimension of the simple Lie algebra C series is
+        equal to the rank of the algebra.
+        """
+
         return self.rank
 
     @property
     def roots(self) -> int:
+        """The number of roots for the simple Lie algebra C is 
+        defined as 
+
+        .. math::
+            2n^2
+        """
+
         return 2 * self.rank**2
 
 
 class D(LieAlgebra):
-    """test"""
+    r"""The compact lie group of type C.
+    """
+
     def __new__(cls, n):
         return super().__new__(cls, "D", _sympify(n))
 
@@ -105,8 +129,19 @@ class D(LieAlgebra):
 
     @property
     def dimension(self) -> int:
+        """The dimension of the simple Lie algebra D series is
+        equal to the rank of the algebra.
+        """
+
         return self.rank
 
     @property
     def roots(self) -> int:
+        """The number of roots for the simple Lie algebra D is 
+        defined as 
+
+        .. math::
+            2n(n-1)
+        """
+
         return 2 * self.rank * (self.rank - 1)

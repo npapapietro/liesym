@@ -191,11 +191,34 @@ class LieAlgebra(Basic):
         return self._positive_roots
 
     def orbit(self, weight: Matrix, stabilizers=None, **kwargs) -> List[Matrix]:
+        """
+        Returns the orbit of the weight or root by reflecting it
+        a plane. A stabilizer may be passed to calculate the orbit using
+        the Orbit-Stabilizer theorem.
+
+        Args:
+            weight (Matrix): A Matrix of shape (1, rank)
+            stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer
+            theorem, integer iterable of simple root indexes. Defaults to None.
+
+        Sources
+        =======
+        - https://en.wikipedia.org/wiki/Coadjoint_representation#Coadjoint_orbit
+        - https://en.wikipedia.org/wiki/Group_action#Orbits_and_stabilizers
+
+        """
         if self._backend is None:
             self._backend = create_backend(self)
         return self._backend.orbit(weight, stabilizers)
 
     def root_system(self, **kwargs) -> List[Matrix]:
+        """Returns the entire rootsystem of the algebra. This
+        includes the positive, negative and zeros of the algebra.
+
+
+        Returns:
+            List[Matrix]: List of ordered roots.
+        """
         if self._backend is None:
             self._backend = create_backend(self)
         return self._backend.root_system()
