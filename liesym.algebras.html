@@ -32,6 +32,8 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Welcome to liesym’s documentation!" href="index.html" />
@@ -121,17 +123,17 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#liesym-algebras-base-module">
+  <a class="reference internal nav-link" href="#module-liesym.algebras.base">
    liesym.algebras.base module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#liesym-algebras-classic-module">
+  <a class="reference internal nav-link" href="#module-liesym.algebras.classic">
    liesym.algebras.classic module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#liesym-algebras-exceptionals-module">
+  <a class="reference internal nav-link" href="#module-liesym.algebras.exceptionals">
    liesym.algebras.exceptionals module
   </a>
  </li>
@@ -158,14 +160,440 @@
                 
   <div class="section" id="liesym-algebras-package">
 <h1>liesym.algebras package<a class="headerlink" href="#liesym-algebras-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="liesym-algebras-base-module">
-<h2>liesym.algebras.base module<a class="headerlink" href="#liesym-algebras-base-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-liesym.algebras.base">
+<span id="liesym-algebras-base-module"></span><h2>liesym.algebras.base module<a class="headerlink" href="#module-liesym.algebras.base" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="liesym.algebras.base.LieAlgebra">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.base.</code><code class="sig-name descname">LieAlgebra</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/base.html#LieAlgebra"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.base.LieAlgebra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Basic</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.cartan_matrix" title="liesym.algebras.base.LieAlgebra.cartan_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartan_matrix</span></code></a></dt><dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.cocartan_matrix" title="liesym.algebras.base.LieAlgebra.cocartan_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cocartan_matrix</span></code></a></dt><dd><p>The cocartan matrix rows are generated from the coroots of the algebra such that multiplication by a simple root will generate a row of the cartan matrix.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.dimension" title="liesym.algebras.base.LieAlgebra.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>Algebra dimension</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.fundamental_weights" title="liesym.algebras.base.LieAlgebra.fundamental_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fundamental_weights</span></code></a></dt><dd><p>Returns the fundamental weights of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.metric_tensor" title="liesym.algebras.base.LieAlgebra.metric_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metric_tensor</span></code></a></dt><dd><p>Also known as the quadratic form, the metric tensor serves as the metrix for the inner product of two roots or weights when they are not in the orthogonal basis.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.omega_matrix" title="liesym.algebras.base.LieAlgebra.omega_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega_matrix</span></code></a></dt><dd><p>The rows of the omega matrix are the fundamental weights of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.positive_roots" title="liesym.algebras.base.LieAlgebra.positive_roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">positive_roots</span></code></a></dt><dd><p>Returns the postive roots of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.rank" title="liesym.algebras.base.LieAlgebra.rank"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rank</span></code></a></dt><dd><p>Algebra rank</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.reflection_matricies" title="liesym.algebras.base.LieAlgebra.reflection_matricies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reflection_matricies</span></code></a></dt><dd><p>Returns a list of reflection matrices built from rotations about each simple root.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.roots" title="liesym.algebras.base.LieAlgebra.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>Total number of roots in the algebra</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.series" title="liesym.algebras.base.LieAlgebra.series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">series</span></code></a></dt><dd><p>Algebra series type</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.simple_roots" title="liesym.algebras.base.LieAlgebra.simple_roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_roots</span></code></a></dt><dd><p>Returns a list of Sympy matrix (1,dimension) objects representing a chosen basis of the algebra.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.orbit" title="liesym.algebras.base.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers])</p></td>
+<td><p>Returns the orbit of the weight or root by reflecting it a plane.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.root_system" title="liesym.algebras.base.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>(**kwargs)</p></td>
+<td><p>Returns the entire rootsystem of the algebra.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.cartan_matrix">
+<em class="property">property </em><code class="sig-name descname">cartan_matrix</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.cartan_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
+generated by</p>
+<div class="math notranslate nohighlight">
+\[a_{ji} = 2 \langle\alpha_i, \alpha_j\rangle / \langle\alpha_j, \alpha_j\rangle\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_i\)</span> is the i’th simple root and <span class="math notranslate nohighlight">\(\langle,\rangle\)</span> is the scalar product.</p>
+<dl class="simple">
+<dt>Sources:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Cartan_matrix">https://en.wikipedia.org/wiki/Cartan_matrix</a></p></li>
+<li><p><a class="reference external" href="https://mathworld.wolfram.com/CartanMatrix.html">https://mathworld.wolfram.com/CartanMatrix.html</a></p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><p>Matrix: Cartan Matrix as a Sympy object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.cocartan_matrix">
+<em class="property">property </em><code class="sig-name descname">cocartan_matrix</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.cocartan_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The cocartan matrix rows are generated from the coroots of 
+the algebra such that multiplication by a simple root will
+generate a row of the cartan matrix.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Matrix: Cocartan Matrix as a Sympy object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.fundamental_weights">
+<em class="property">property </em><code class="sig-name descname">fundamental_weights</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the fundamental weights of the algebra.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[Matrix]: List of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.metric_tensor">
+<em class="property">property </em><code class="sig-name descname">metric_tensor</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.metric_tensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Also known as the quadratic form, the metric tensor
+serves as the metrix for the inner product of two roots or weights
+when they are not in the orthogonal basis.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Matrix: Metric Tensor as a Sympy object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.omega_matrix">
+<em class="property">property </em><code class="sig-name descname">omega_matrix</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.omega_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rows of the omega matrix are the fundamental weights
+of the algebra.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Matrix: Omega Matrix as a Sympy object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.orbit">
+<code class="sig-name descname">orbit</code><span class="sig-paren">(</span><em class="sig-param">weight: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">stabilizers=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/base.html#LieAlgebra.orbit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.orbit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the orbit of the weight or root by reflecting it
+a plane. A stabilizer may be passed to calculate the orbit using
+the Orbit-Stabilizer theorem.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>weight (Matrix): A Matrix of shape (1, rank)
+stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer
+theorem, integer iterable of simple root indexes. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.positive_roots">
+<em class="property">property </em><code class="sig-name descname">positive_roots</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.positive_roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the postive roots of the algebra. They are sorted 
+first by their distance from the highest root and then by 
+tuple ordering (convention).</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[Matrix]: List of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.rank">
+<em class="property">property </em><code class="sig-name descname">rank</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra rank</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.reflection_matricies">
+<em class="property">property </em><code class="sig-name descname">reflection_matricies</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of reflection matrices built from
+rotations about each simple root.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[Matrix]: List of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.root_system">
+<code class="sig-name descname">root_system</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/base.html#LieAlgebra.root_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.root_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the entire rootsystem of the algebra. This
+includes the positive, negative and zeros of the algebra.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[Matrix]: List of ordered roots.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of roots in the algebra</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.series">
+<em class="property">property </em><code class="sig-name descname">series</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra series type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.simple_roots">
+<em class="property">property </em><code class="sig-name descname">simple_roots</code><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.simple_roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Sympy matrix (1,dimension)
+objects representing a chosen basis of the algebra.</p>
+<p>This method can be overridden to choose your own basis,
+be sure to do this before any other properties are called
+as they are lazily evaluated and the simple_roots define
+the entire representation of the algebra.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">F4</span>
+
+<span class="n">algebra</span> <span class="o">=</span> <span class="n">F4</span><span class="p">()</span>
+<span class="n">my_simple_roots</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># my basis</span>
+    <span class="p">]</span>
+<span class="n">algebra</span><span class="o">.</span><span class="n">simple_roots</span> <span class="o">=</span> <span class="n">my_simple_roots</span>
+</pre></div>
 </div>
-<div class="section" id="liesym-algebras-classic-module">
-<h2>liesym.algebras.classic module<a class="headerlink" href="#liesym-algebras-classic-module" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="liesym-algebras-exceptionals-module">
-<h2>liesym.algebras.exceptionals module<a class="headerlink" href="#liesym-algebras-exceptionals-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-liesym.algebras.classic">
+<span id="liesym-algebras-classic-module"></span><h2>liesym.algebras.classic module<a class="headerlink" href="#module-liesym.algebras.classic" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="liesym.algebras.classic.A">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.classic.</code><code class="sig-name descname">A</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/classic.html#A"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.classic.A" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<p>The compact lie group of type A.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.classic.A.dimension" title="liesym.algebras.classic.A.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>The dimension of the simple Lie algebra A series is one greater than the rank of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.classic.A.roots" title="liesym.algebras.classic.A.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>The number of roots for the simple Lie algebra A is</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.classic.A.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.classic.A.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dimension of the simple Lie algebra A series is
+one greater than the rank of the algebra.</p>
+<div class="math notranslate nohighlight">
+\[n + 1\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.classic.A.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.classic.A.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of roots for the simple Lie algebra A is 
+defined as</p>
+<div class="math notranslate nohighlight">
+\[n(n + 1)\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="liesym.algebras.classic.B">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.classic.</code><code class="sig-name descname">B</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/classic.html#B"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.classic.B" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<p>The compact lie group of type B.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.classic.B.dimension" title="liesym.algebras.classic.B.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>The dimension of the simple Lie algebra B series is equal to the rank of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.classic.B.roots" title="liesym.algebras.classic.B.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>The number of roots for the simple Lie algebra B is</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.classic.B.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.classic.B.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dimension of the simple Lie algebra B series is
+equal to the rank of the algebra.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.classic.B.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.classic.B.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of roots for the simple Lie algebra B is 
+defined as</p>
+<div class="math notranslate nohighlight">
+\[2n^2\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="liesym.algebras.classic.C">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.classic.</code><code class="sig-name descname">C</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/classic.html#C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.classic.C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<p>The compact lie group of type C.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.classic.C.dimension" title="liesym.algebras.classic.C.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>The dimension of the simple Lie algebra C series is equal to the rank of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.classic.C.roots" title="liesym.algebras.classic.C.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>The number of roots for the simple Lie algebra C is</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.classic.C.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.classic.C.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dimension of the simple Lie algebra C series is
+equal to the rank of the algebra.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.classic.C.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.classic.C.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of roots for the simple Lie algebra C is 
+defined as</p>
+<div class="math notranslate nohighlight">
+\[2n^2\]</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="liesym.algebras.classic.D">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.classic.</code><code class="sig-name descname">D</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/classic.html#D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.classic.D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<p>The compact lie group of type C.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.classic.D.dimension" title="liesym.algebras.classic.D.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>The dimension of the simple Lie algebra D series is equal to the rank of the algebra.</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.classic.D.roots" title="liesym.algebras.classic.D.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>The number of roots for the simple Lie algebra D is</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.classic.D.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.classic.D.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dimension of the simple Lie algebra D series is
+equal to the rank of the algebra.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.classic.D.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.classic.D.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of roots for the simple Lie algebra D is 
+defined as</p>
+<div class="math notranslate nohighlight">
+\[2n(n-1)\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-liesym.algebras.exceptionals">
+<span id="liesym-algebras-exceptionals-module"></span><h2>liesym.algebras.exceptionals module<a class="headerlink" href="#module-liesym.algebras.exceptionals" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="liesym.algebras.exceptionals.E">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.exceptionals.</code><code class="sig-name descname">E</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/exceptionals.html#E"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.exceptionals.E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.E.dimension" title="liesym.algebras.exceptionals.E.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>Algebra dimension</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.E.roots" title="liesym.algebras.exceptionals.E.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>Total number of roots in the algebra</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.E.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.exceptionals.E.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.E.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.exceptionals.E.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of roots in the algebra</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="liesym.algebras.exceptionals.F4">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.exceptionals.</code><code class="sig-name descname">F4</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/exceptionals.html#F4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.exceptionals.F4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.F4.dimension" title="liesym.algebras.exceptionals.F4.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>Algebra dimension</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.F4.roots" title="liesym.algebras.exceptionals.F4.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>Total number of roots in the algebra</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.F4.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.exceptionals.F4.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.F4.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.exceptionals.F4.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of roots in the algebra</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="liesym.algebras.exceptionals.G2">
+<em class="property">class </em><code class="sig-prename descclassname">liesym.algebras.exceptionals.</code><code class="sig-name descname">G2</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/algebras/exceptionals.html#G2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.exceptionals.G2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#liesym.algebras.base.LieAlgebra" title="liesym.algebras.base.LieAlgebra"><code class="xref py py-class docutils literal notranslate"><span class="pre">liesym.algebras.base.LieAlgebra</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.G2.dimension" title="liesym.algebras.exceptionals.G2.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>Algebra dimension</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.algebras.exceptionals.G2.roots" title="liesym.algebras.exceptionals.G2.roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">roots</span></code></a></dt><dd><p>Total number of roots in the algebra</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.G2.dimension">
+<em class="property">property </em><code class="sig-name descname">dimension</code><a class="headerlink" href="#liesym.algebras.exceptionals.G2.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algebra dimension</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.exceptionals.G2.roots">
+<em class="property">property </em><code class="sig-name descname">roots</code><a class="headerlink" href="#liesym.algebras.exceptionals.G2.roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of roots in the algebra</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
