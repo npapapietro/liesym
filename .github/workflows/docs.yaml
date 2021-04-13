@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ammaraskar/sphinx-action@master
       with:
-        pre-build-command: python -m pip install sphinx-math-dollar groundwork-sphinx-theme numpydoc
+        pre-build-command: python -m pip install sphinx-math-dollar groundwork-sphinx-theme numpydoc pydata_sphinx_theme
         docs-folder: "docs/"
     - name: check build
       run : |
