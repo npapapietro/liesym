@@ -55,6 +55,10 @@ class _LieAlgebraBackendWrapped:
     @_rust_wrapper
     def root_system(self):
         return self.backend.root_system()
+    
+    @_rust_wrapper
+    def tensor_product_decomposition(self, weights):
+        return self.backend.tensor_product_decomposition(weights)
 
 
 def create_backend(algebra):

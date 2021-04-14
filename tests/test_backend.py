@@ -1,4 +1,5 @@
 import numpy as np
+from sympy import S, Rational, Matrix
 
 from liesym.algebras.backend import _LieAlgebraBackendWrapped
 from liesym.algebras import A, B, C, D
@@ -52,7 +53,25 @@ def testBackendA():
         assert isinstance(cocartan_matrix, np.ndarray)
         assert cocartan_matrix.shape == (3,4,2)
 
-    _LieAlgebraBackendWrapped(*args, backend=_test_backend)
+
+        def orb(w,s):
+            assert isinstance(w, np.ndarray)
+            assert isinstance(s, np.ndarray)
+            return (np.array([[[1,1],[2,2]]]), np.array([[[2,2],[3,3]]]))
+        
+        _test_backend.root_system = lambda: (np.array([[[1,1],[2,2]]]), np.array([[[2,2],[3,3]]]))
+        _test_backend.orbit = orb
+        _test_backend.tensor_product_decomposition = lambda x: orb(x,  np.array([]))
+
+        return _test_backend
+
+
+    obj = _LieAlgebraBackendWrapped(*args, backend=_test_backend)
+    expected = [Matrix([[S.Half, S.Half]]), Matrix([[Rational(2,3), Rational(2,3)]])]
+
+    assert obj.root_system() == expected
+    assert obj.orbit(expected[0], [1,2,3]) == expected
+    assert obj.tensor_product_decomposition(expected) == expected
 
 
 

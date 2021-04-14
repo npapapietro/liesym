@@ -189,6 +189,13 @@ class LieAlgebra(Basic):
         if self._positive_roots is None:
             self._positive_roots = self.root_system()[:self.roots // 2]
         return self._positive_roots
+    
+    @property
+    def _backend_instance(self):
+        if self._backend is None:
+            self._backend = create_backend(self)
+        return self._backend
+
 
     def orbit(self, weight: Matrix, stabilizers=None, **kwargs) -> List[Matrix]:
         """
@@ -207,9 +214,7 @@ class LieAlgebra(Basic):
         - https://en.wikipedia.org/wiki/Group_action#Orbits_and_stabilizers
 
         """
-        if self._backend is None:
-            self._backend = create_backend(self)
-        return self._backend.orbit(weight, stabilizers)
+        return self._backend_instance.orbit(weight, stabilizers)
 
     def root_system(self, **kwargs) -> List[Matrix]:
         """Returns the entire rootsystem of the algebra. This
@@ -219,7 +224,17 @@ class LieAlgebra(Basic):
         Returns:
             List[Matrix]: List of ordered roots.
         """
-        if self._backend is None:
-            self._backend = create_backend(self)
-        return self._backend.root_system()
+        return self._backend_instance.root_system()
 
+    def tensor_product_decomposition(self, weights: List[Matrix], **kwargs) -> List[Matrix]:
+        """Returns the tensor product between irreducible representations
+        as a the tensor sum of the irreducible representations of their
+        highest weights. This algorithm is based on Klimky's formula.
+
+        Args:
+            weights (List[Matrix]): A list of fundamental weights to take the tensor product between
+
+        Returns:
+            List[Matrix]: List of weights decomposed from the tensor product.
+        """
+        return self._backend_instance.tensor_product_decomposition(weights)

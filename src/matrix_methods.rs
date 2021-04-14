@@ -49,6 +49,18 @@ pub fn all_pos<'a>(x: &'a Array2R) -> bool {
     true
 }
 
+/// Returns whether or not the given weight is dominant or not. Dominant weights
+/// are defined by all coefficents being >= 0.
+pub fn all_pos_filter<'a>(x: &'a Array2R, filter: Vec<usize>) -> bool {
+
+    for &i in filter.iter() {
+        if x[[0,i]] < Ratio::new(0, 1) {
+            return false;
+        }
+    }
+    true
+}
+
 ///  Returns a set of unique arrays that are all positive after subtraction by `x`
 fn select_pos_diff<'a>(x: &'a Array2R, arrays: &'a Vec<Array2R>) -> HashSet<Array2R> {
     HashSet::from_iter(

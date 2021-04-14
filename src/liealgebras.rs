@@ -9,8 +9,8 @@ use std::cmp::Ordering;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-use crate::debug::debug_on;
-use crate::matrix_methods::{all_pos, reflect_weights, reflection_matrix, union_new_weights};
+use crate::debug::{debug_on, Frac};
+use crate::matrix_methods::{all_pos, all_pos_filter, reflect_weights, reflection_matrix, union_new_weights};
 use crate::utils::{
     adjacent_find, to_rational_list, to_rational_matrix, to_rational_vector, vecarray_to_pyreturn,
     Array2R,
@@ -26,7 +26,6 @@ pub struct LieAlgebraBackend {
     cartan_matrix: Array2R,
     cartan_matrix_inverse: Array2R,
 
-    #[allow(dead_code)]
     omega_matrix: Array2R,
     omega_matrix_inverse: Array2R,
 
@@ -258,11 +257,10 @@ impl LieAlgebraBackend {
     /// This is done by recursively subtracting positive roots until no new dominant root is
     /// found.
     fn single_dom_weights<'a>(&self, irrep: &'a Array2R) -> Vec<Array2R> {
-        let omega_pr: Vec<Array2R> = self
-            .get_postive_roots()
-            .iter()
-            .map(|x| self.ortho_to_omega(x))
-            .collect();
+        let omega_pr: Vec<Array2R> = self.get_postive_roots();
+        // .iter()
+        // .map(|x| self.ortho_to_omega(x))
+        // .collect();
 
         let mut tower = HashSet::new();
         tower.insert(irrep.clone());
@@ -328,13 +326,12 @@ impl LieAlgebraBackend {
                 .map(|(i, _)| i)
                 .into_iter(),
         );
-
         let mut xi_multiplicity = Vec::new();
         let positive_roots = self.get_postive_roots();
         let xis = positive_roots
             .iter()
-            .map(|s| self.ortho_to_omega(s))
-            .filter(all_pos);
+            .cloned()
+            .filter(|x| all_pos_filter(x, stabs.iter().cloned().collect()));
 
         for xi in xis {
             let mut xi_stab = HashSet::new();
@@ -380,7 +377,9 @@ impl LieAlgebraBackend {
                 }
             }
         }
-
+        for i in highest_weights.iter(){
+            println!("Dom: {}, Xi: {}, Mul: {}", Frac::format(i.0.clone()), Frac::format(i.1.clone()), i.2);
+        }
         let mut multiplicity = 0;
         let rho = Array2R::ones((1, self.rank));
         // Freudenthal's Recursion formula
@@ -412,10 +411,15 @@ impl LieAlgebraBackend {
 
         for (w, m) in dom_weight_system.iter() {
             for _ in 0..*m {
-                let orbit = self.orbit_no_stabilizers(w.clone());
+                let orbit = self.orbit_no_stabilizers(self.omega_to_ortho(w.clone()));
                 weight_system.extend(orbit.iter().cloned());
             }
         }
+
+        weight_system = weight_system
+            .iter()
+            .map(|v| self.ortho_to_omega(v))
+            .collect::<Vec<Array2R>>();
         weight_system.sort_by(|a, b| {
             let k1 = self.k_level(irrep.clone() - a);
             let k2 = self.k_level(irrep.clone() - b);
@@ -426,16 +430,16 @@ impl LieAlgebraBackend {
         weight_system
     }
     fn tensor_product_decomp_double(&self, irrep1: Array2R, irrep2: Array2R) -> Vec<Array2R> {
-        let o1 = self.ortho_to_omega(&irrep1);
-        let o2 = self.ortho_to_omega(&irrep2);
+        // let o1 = self.ortho_to_omega(&irrep1);
+        // let o2 = self.ortho_to_omega(&irrep2);
 
-        let tower1 = self.weight_system(o1);
+        let tower1 = self.weight_system(irrep1);
         let rho = Array2R::ones((1, self.rank));
 
         let mut weight_parities = Vec::new();
 
         for w in tower1.iter() {
-            let (mut t, p) = self.chamber_rotate(w.clone() + o2.clone() + rho.clone());
+            let (mut t, p) = self.chamber_rotate(w.clone() + irrep2.clone() + rho.clone());
             if t.iter().filter(|x| **x == Ratio::new(0, 1)).count() > 0 {
                 t -= &rho;
                 weight_parities.push((p, t.clone()));
@@ -443,7 +447,10 @@ impl LieAlgebraBackend {
         }
 
         weight_parities.sort_by(|a, b| Vec::from_iter(a.1.iter()).cmp(&Vec::from_iter(b.1.iter())));
-
+        // for (m, w) in weight_parities.iter() {
+        //     println!("Parity count: {:?}", m);
+        //     Frac::print(w.clone());
+        // }
         for &i in adjacent_find(weight_parities.clone()).iter() {
             weight_parities[i + 1].0 += weight_parities[i].0;
             weight_parities[i].0 = 0;
@@ -457,6 +464,9 @@ impl LieAlgebraBackend {
         }
 
         tensor_decomp
+            .iter()
+            .map(|x| self.omega_to_alpha(x))
+            .collect()
     }
 }
 
@@ -664,5 +674,48 @@ mod test {
             to_ratio(array![[-1, 0, -1]]),
         ];
         assert_eq!(results, expected)
+    }
+
+    // #[test]
+    // fn test_tensorproduct() {
+    //     let algebra = helper_liealgebra();
+    //     let results = algebra
+    //         .tensor_product_decomp_double(to_ratio(array![[1, 0, 0]]), to_ratio(array![[0, 0, 1]]));
+    //     let expected = vec![to_ratio(array![[0, 0, 0]]), to_ratio(array![[1, 0, 1]])];
+    //     for i in results.iter() {
+    //         Frac::print(i.clone());
+    //     }
+    //     // assert_eq!(results, expected)
+    // }
+
+    #[test]
+    fn test_weight_system() {
+        let algebra = helper_liealgebra();
+        let results = algebra.weight_system(to_ratio(array![[1, 0, 0]]));
+        let expected = vec![
+            to_ratio(array![[1, 0, 0]]),
+            to_ratio(array![[-1, 1, 0]]),
+            to_ratio(array![[0, -1, 1]]),
+            to_ratio(array![[0, 0, -1]]),
+        ];
+        assert_eq!(results, expected)
+    }
+
+    #[test]
+    fn test_xi_multiplicity() {
+        let algebra = helper_liealgebra();
+        let results = algebra.xi_multiplicity(to_ratio(array![[0, 1, 0]]));
+        assert_eq!(results, vec![
+            (to_ratio(array![[1, 0, 1]]), 8),
+            (to_ratio(array![[0, -1, 2]]), 4),
+            (to_ratio(array![[2, -1, 0]]), 4),
+        ])
+    }
+
+    #[test]
+    fn test_weight_multiplicity() {
+        let algebra = helper_liealgebra();
+        let result = algebra.weight_multiplicity(to_ratio(array![[0, 0, 2]]),to_ratio(array![[1, 1, 1]]));
+        assert_eq!(result, 1)
     }
 }
