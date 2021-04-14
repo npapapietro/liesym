@@ -209,6 +209,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.root_system" title="liesym.algebras.base.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>(**kwargs)</p></td>
 <td><p>Returns the entire rootsystem of the algebra.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.tensor_product_decomposition" title="liesym.algebras.base.LieAlgebra.tensor_product_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_product_decomposition</span></code></a>(weights, **kwargs)</p></td>
+<td><p>Returns the tensor product between irreducible representations as a the tensor sum of the irreducible representations of their highest weights.</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
@@ -366,6 +369,20 @@ the entire representation of the algebra.</p>
 <span class="n">algebra</span><span class="o">.</span><span class="n">simple_roots</span> <span class="o">=</span> <span class="n">my_simple_roots</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.tensor_product_decomposition">
+<code class="sig-name descname">tensor_product_decomposition</code><span class="sig-paren">(</span><em class="sig-param">weights: List[sympy.matrices.dense.MutableDenseMatrix], **kwargs</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/base.html#LieAlgebra.tensor_product_decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.tensor_product_decomposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the tensor product between irreducible representations
+as a the tensor sum of the irreducible representations of their
+highest weights. This algorithm is based on Klimky’s formula.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>weights (List[Matrix]): A list of fundamental weights to take the tensor product between</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Matrix]: List of weights decomposed from the tensor product.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
