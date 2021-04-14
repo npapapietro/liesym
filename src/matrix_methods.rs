@@ -2,8 +2,9 @@
 /// in pyo3, numpy, or ndarray. Additionally this should be seen as a separate
 /// mod than the utils as these are are more extentions than utilies.
 use crate::utils::Array2R;
-
+use std::collections::HashSet;
 use itertools::Itertools;
+use std::iter::FromIterator;
 use ndarray::Array2;
 use num::rational::Ratio;
 
@@ -46,6 +47,26 @@ pub fn all_pos<'a>(x: &'a Array2R) -> bool {
         }
     }
     true
+}
+
+///  Returns a set of unique arrays that are all positive after subtraction by `x`
+fn select_pos_diff<'a>(x: &'a Array2R, arrays: &'a Vec<Array2R>) -> HashSet<Array2R> {
+    HashSet::from_iter(
+        arrays
+            .iter()
+            .filter(|y| all_pos(&(x - *y)))
+            .cloned()
+            .into_iter(),
+    )
+}
+
+/// Returns the unique set of positive arrays being subtracted by `arrays`
+pub fn union_new_weights<'a>(x: &'a HashSet<Array2R>, arrays: &'a Vec<Array2R>) -> HashSet<Array2R> {
+    let mut res = HashSet::new();
+    for w in x.iter() {
+        res = res.union(&select_pos_diff(w, arrays)).cloned().collect();
+    }
+    res.iter().cloned().collect()
 }
 
 #[cfg(test)]

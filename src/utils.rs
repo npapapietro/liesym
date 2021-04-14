@@ -3,6 +3,7 @@ use num::rational::Ratio;
 use numpy::PyReadonlyArray3;
 use std::iter::FromIterator;
 
+
 // use crate::debug::Logger;
 
 /// Typedef for rational integer matrix
@@ -76,7 +77,7 @@ pub fn vecarray_to_pyreturn(ary: Vec<Array2R>) -> (Array3<i64>, Array3<i64>) {
     (s.mapv(|x| x.numer().clone()), s.mapv(|x| x.denom().clone()))
 }
 
-#[allow(dead_code)]
+
 pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
     let mut v = Vec::new();
     for (idx, i) in it.iter().enumerate() {
@@ -89,6 +90,9 @@ pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
     }
     v
 }
+
+
+
 
 #[cfg(test)]
 pub mod test {
