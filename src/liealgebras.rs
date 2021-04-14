@@ -208,6 +208,9 @@ impl LieAlgebraBackend {
         roots
     }
 
+    /// Sorting functor between two roots using omega basis.
+    /// Conventions for same level roots to be sorted by convetion
+    /// such as (1,1,2) > (1,1,1).
     fn sort_by_omega<'a>(&self, a: &'a Array2R, b: &'a Array2R) -> Ordering {
         let root_level_cmp = self.root_level(b).cmp(&self.root_level(a));
         let convention_ordering = Vec::from_iter(a.iter()).cmp(&Vec::from_iter(b.iter()));
@@ -215,6 +218,7 @@ impl LieAlgebraBackend {
         root_level_cmp.then(convention_ordering)
     }
 
+    /// Sorting functor between two roots using orthogonal basis
     fn sort_by_ortho<'a>(&self, a: &'a Array2R, b: &'a Array2R) -> Ordering {
         let x = self.ortho_to_omega(a);
         let y = self.ortho_to_omega(b);

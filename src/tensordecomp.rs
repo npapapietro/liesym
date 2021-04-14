@@ -131,6 +131,9 @@ impl TensorDecomposition {
         weight_system
     }
 
+    /// Returns the single dominant weights of the irreducible representation.
+    /// This is done by recursively subtracting positive roots until no new dominant root is
+    /// found.
     fn single_dom_weights<'a>(&self, irrep: &'a Array2R) -> Vec<Array2R> {
         let omega_pr: Vec<Array2R> = self
             .positive_roots
@@ -171,6 +174,7 @@ impl TensorDecomposition {
         self.omega_to_alpha(&x).sum()
     }
 
+    /// Generates the positive roots of the algebra
     fn generate_positive_roots<'a>(orbitmethods: &'a OrbitMethods) -> Vec<Array2R> {
         let mut roots = Vec::new();
 
@@ -181,6 +185,7 @@ impl TensorDecomposition {
         roots
     }
 
+    /// Rotate weight or root to a positive chamber
     fn chamber_rotate(&self, weight: Array2R) -> (Array2R, i64) {
         if all_pos(&weight) {
             return (weight, 1);
@@ -207,6 +212,7 @@ impl TensorDecomposition {
         }
     }
 
+    /// Returns the weight multiplicity in the irreducible representation
     fn weight_multiplicity(&self, weight: Array2R, irrep: Array2R) -> i64 {
         let (dom, _) = self.chamber_rotate(weight.clone());
         let dom_irrep = self.single_dom_weights(&irrep);
@@ -245,10 +251,16 @@ impl TensorDecomposition {
         multiplicity
     }
 
+    /// Scalar product between two weights or roots
     fn scalar_product(&self, a: Array2R, b: Array2R) -> i64 {
         self.omega_to_ortho(a).dot(&self.omega_to_ortho(b))[[0, 0]].to_integer()
     }
 
+    /// Returns a list of tuples that are the multiplicty and xi of
+    /// each the weight. Xi is defined to be a member of the
+    /// positive roots where each coeffcient is positive
+    /// nonzero. The multiplicity is the dimension of that
+    /// xi's orbit.
     fn xi_multiplicity(&self, weight: Array2R) -> Vec<(Array2R, usize)> {
         let stabs: HashSet<usize> = HashSet::from_iter(
             weight
