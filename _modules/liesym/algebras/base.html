@@ -112,20 +112,6 @@
           
           <div class="d-none d-xl-block col-xl-2 bd-toc">
             
-              
-              <div class="toc-item">
-                
-
-<nav id="bd-toc-nav">
-    
-</nav>
-              </div>
-              
-              <div class="toc-item">
-                
-              </div>
-              
-            
           </div>
           
 
@@ -138,10 +124,12 @@
               <div>
                 
   <h1>Source code for liesym.algebras.base</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">Basic</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy.lib.arraysetops</span> <span class="kn">import</span> <span class="n">isin</span>
+<span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">Basic</span>
 <span class="kn">from</span> <span class="nn">sympy.core.sympify</span> <span class="kn">import</span> <span class="n">_sympify</span>
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">from</span> <span class="nn">.methods</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">_cartan_matrix</span><span class="p">,</span>
@@ -213,7 +201,7 @@
 <span class="sd">        ========</span>
 
 <span class="sd">        .. code-block:: python</span>
-<span class="sd">        </span>
+
 <span class="sd">            from liesym import F4</span>
 
 <span class="sd">            algebra = F4()</span>
@@ -229,7 +217,8 @@
     <span class="k">def</span> <span class="nf">simple_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;Overrides the default representation of the algebras simple_roots</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_simple_roots</span><span class="p">),</span> <span class="s2">&quot;Incorrect number of simple roots&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_simple_roots</span><span class="p">),</span> <span class="s2">&quot;Incorrect number of simple roots&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_simple_roots</span> <span class="o">=</span> <span class="n">val</span>
 
     <span class="nd">@property</span>
@@ -329,13 +318,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_positive_roots</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_positive_roots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_system</span><span class="p">()[:</span><span class="bp">self</span><span class="o">.</span><span class="n">roots</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_positive_roots</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_backend_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">create_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span>
-
 
 <div class="viewcode-block" id="LieAlgebra.orbit"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">stabilizers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -377,7 +365,22 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            List[Matrix]: List of weights decomposed from the tensor product.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span></div></div>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="n">decomp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">decomp</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                <span class="c1"># print(&quot;Count&quot;, idx, &quot;for&quot;,i,&quot;result&quot;, result)</span>
+                <span class="n">results</span> <span class="o">+=</span> <span class="n">result</span>
+            <span class="n">decomp</span> <span class="o">=</span> <span class="n">results</span>
+        <span class="k">return</span> <span class="n">decomp</span></div></div>
 </pre></div>
 
               </div>
@@ -393,11 +396,10 @@
 
       </div>
     </div>
-    
+  
   <script src="../../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-
-    <footer class="footer mt-5 mt-md-0">
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
