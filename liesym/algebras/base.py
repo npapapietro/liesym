@@ -1,7 +1,9 @@
+from numpy.lib.arraysetops import isin
 from sympy.core import Basic
 from sympy.core.sympify import _sympify
 from sympy import Matrix
 from typing import List
+from copy import deepcopy
 
 from .methods import (
     _cartan_matrix,
@@ -73,7 +75,7 @@ class LieAlgebra(Basic):
         ========
 
         .. code-block:: python
-        
+
             from liesym import F4
 
             algebra = F4()
@@ -89,7 +91,8 @@ class LieAlgebra(Basic):
     def simple_roots(self, val: List[Matrix]):
         """Overrides the default representation of the algebras simple_roots
         """
-        assert len(val) == len(self._simple_roots), "Incorrect number of simple roots"
+        assert len(val) == len(
+            self._simple_roots), "Incorrect number of simple roots"
         self._simple_roots = val
 
     @property
@@ -189,13 +192,12 @@ class LieAlgebra(Basic):
         if self._positive_roots is None:
             self._positive_roots = self.root_system()[:self.roots // 2]
         return self._positive_roots
-    
+
     @property
     def _backend_instance(self):
         if self._backend is None:
             self._backend = create_backend(self)
         return self._backend
-
 
     def orbit(self, weight: Matrix, stabilizers=None, **kwargs) -> List[Matrix]:
         """
@@ -237,4 +239,19 @@ class LieAlgebra(Basic):
         Returns:
             List[Matrix]: List of weights decomposed from the tensor product.
         """
-        return self._backend_instance.tensor_product_decomposition(weights)
+        w = deepcopy(weights)
+        i = w.pop()
+        j = w.pop()
+
+        decomp = self._backend_instance.tensor_product_decomposition(i, j)
+
+
+        while len(w) > 0:
+            j = w.pop()
+            results = []
+            for idx,i in enumerate(decomp):
+                result = self._backend_instance.tensor_product_decomposition(i, j)
+                # print("Count", idx, "for",i,"result", result)
+                results += result
+            decomp = results
+        return decomp

@@ -61,7 +61,7 @@ def testBackendA():
         
         _test_backend.root_system = lambda: (np.array([[[1,1],[2,2]]]), np.array([[[2,2],[3,3]]]))
         _test_backend.orbit = orb
-        _test_backend.tensor_product_decomposition = lambda x: orb(x,  np.array([]))
+        _test_backend.tensor_product_decomposition = lambda x,_: orb(x,  np.array([]))
 
         return _test_backend
 
@@ -71,7 +71,7 @@ def testBackendA():
 
     assert obj.root_system() == expected
     assert obj.orbit(expected[0], [1,2,3]) == expected
-    assert obj.tensor_product_decomposition(expected) == expected
+    assert obj.tensor_product_decomposition(*expected) == expected
 
 
 

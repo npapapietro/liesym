@@ -17,13 +17,6 @@ fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
         }
     }
 
-    #[pyfn(m, "test")]
-    fn test_none<'py>(_py: Python<'py>, num: Option<i64>) {
-        match num {
-            None => println!("None passed"),
-            Some(x) => println!("{} passed", x),
-        }
-    }
     m.add_class::<LieAlgebraBackend>()?;
 
     Ok(())

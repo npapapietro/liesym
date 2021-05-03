@@ -9,7 +9,7 @@ use std::cmp::Ordering;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-use crate::debug::{debug_on};
+use crate::debug::{debug_on, Frac};
 use crate::matrix_methods::{
     all_pos, all_pos_filter, reflect_weights, reflection_matrix, union_new_weights,
 };
@@ -90,9 +90,11 @@ impl LieAlgebraBackend {
     pub fn tensor_product_decomposition<'py>(
         &self,
         py: Python<'py>,
-        weights: PyReadonlyArray3<i64>,
+        irrep1: PyReadonlyArray3<i64>,
+        irrep2: PyReadonlyArray3<i64>,
     ) -> (&'py PyArray3<i64>, &'py PyArray3<i64>) {
-        let results = self.tensor_product_decomp(to_rational_list(weights));
+        let results =
+            self.tensor_product_decomp(to_rational_vector(irrep1), to_rational_vector(irrep2));
         let (numer, denom) = vecarray_to_pyreturn(results);
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
@@ -100,16 +102,6 @@ impl LieAlgebraBackend {
 
 /// Private implementations not exposed in python
 impl LieAlgebraBackend {
-    fn tensor_product_decomp(&self, weights: Vec<Array2R>) -> Vec<Array2R> {
-        let mut decomp = Vec::new();
-        let n = weights.len();
-        for i in 0..(n - 1) {
-            decomp.extend(
-                self.tensor_product_decomp_double(weights[i].clone(), weights[i + 1].clone()),
-            );
-        }
-        decomp
-    }
     fn get_postive_roots(&self) -> Vec<Array2R> {
         self.root_system_backend()[..(self.roots / 2)].to_vec()
     }
@@ -260,9 +252,6 @@ impl LieAlgebraBackend {
     /// found.
     fn single_dom_weights<'a>(&self, irrep: &'a Array2R) -> Vec<Array2R> {
         let omega_pr: Vec<Array2R> = self.get_postive_roots();
-        // .iter()
-        // .map(|x| self.ortho_to_omega(x))
-        // .collect();
 
         let mut tower = HashSet::new();
         tower.insert(irrep.clone());
@@ -288,18 +277,18 @@ impl LieAlgebraBackend {
         let reflection_matrices = self.reflection_matrices();
         let mut reflected = vec![self.omega_to_ortho(weight)];
 
-        let mut parity = 1;
+        let mut num_reflections = 0;
         loop {
             let mut temp = Vec::new();
             for m in reflection_matrices.iter() {
                 for r in reflected.iter() {
                     let t = r.dot(m);
-                    parity *= -1;
                     let ref_omega = self.ortho_to_omega(&t);
                     if all_pos(&ref_omega) {
-                        return (ref_omega, parity);
+                        return (ref_omega, (-1i64).pow(num_reflections));
                     }
                     temp.push(t);
+                    num_reflections+=1;
                 }
             }
             reflected.append(&mut temp)
@@ -367,15 +356,6 @@ impl LieAlgebraBackend {
         let (dom, _) = self.chamber_rotate(weight.clone());
         let dom_irrep = self.single_dom_weights(&irrep);
 
-        // println!(
-        //     "{:?}",
-        //     dom_irrep
-        //         .clone()
-        //         .iter()
-        //         .map(|x| Frac::format(x.clone()))
-        //         .collect::<Vec<String>>()
-        // );
-
         let k = self.k_level(irrep.clone() - weight).to_integer();
 
         let mut highest_weights = Vec::new();
@@ -430,22 +410,22 @@ impl LieAlgebraBackend {
 
         let mut weight_system = Vec::new();
 
-        for (w, m) in dom_weight_system.iter() {
-            for _ in 0..*m {
+        for (w, _) in dom_weight_system.iter() {
+            // for _ in 0..*m {
                 let orbit = self.orbit_no_stabilizers(self.omega_to_ortho(w.clone()));
                 weight_system.extend(orbit.iter().cloned());
-            }
+            // }
         }
 
         weight_system = weight_system
             .iter()
             .map(|v| self.ortho_to_omega(v))
             .collect::<Vec<Array2R>>();
-        weight_system.sort_by(|a, b| {
+
+        weight_system.sort_by(|a, b| -> Ordering {
             let k1 = self.k_level(irrep.clone() - a);
             let k2 = self.k_level(irrep.clone() - b);
-
-            k1.cmp(&k2)
+            k1.cmp(&k2).then( Vec::from_iter(a.iter()).cmp(&Vec::from_iter(b.iter())))
         });
 
         weight_system
@@ -457,9 +437,9 @@ impl LieAlgebraBackend {
         let mut weight_parities = Vec::new();
 
         fn any<'a>(x: &'a Array2R) -> bool {
-            for &i in x.iter(){
-                if i == Ratio::new(0, 1){
-                    return true
+            for &i in x.iter() {
+                if i == Ratio::new(0, 1) {
+                    return true;
                 }
             }
             false
@@ -475,10 +455,7 @@ impl LieAlgebraBackend {
         weight_parities
     }
 
-    fn tensor_product_decomp_double(&self, irrep1: Array2R, irrep2: Array2R) -> Vec<Array2R> {
-        // let o1 = self.ortho_to_omega(&irrep1);
-        // let o2 = self.ortho_to_omega(&irrep2);
-
+    fn tensor_product_decomp(&self, irrep1: Array2R, irrep2: Array2R) -> Vec<Array2R> {
         let tower = self.weight_system(irrep1);
 
         let mut weight_parities = self.weight_parities(tower, irrep2.clone());
@@ -498,9 +475,6 @@ impl LieAlgebraBackend {
         }
 
         tensor_decomp
-            // .iter()
-            // .map(|x| self.omega_to_alpha(x))
-            // .collect()
     }
 }
 
@@ -720,7 +694,23 @@ mod test {
             to_ratio(array![[0, -1, 1]]),
             to_ratio(array![[0, 0, -1]]),
         ];
-        assert_eq!(results, expected)
+        assert_eq!(results, expected);
+
+        let results2 = algebra.weight_system(to_ratio(array![[2, 0, 0]]));
+        let expected2 = vec![
+            to_ratio(array![[2, 0, 0]]),
+            to_ratio(array![[0, 1, 0]]),
+            to_ratio(array![[-2, 2, 0]]),
+            to_ratio(array![[1, -1, 1]]),
+            to_ratio(array![[-1, 0, 1]]),
+            to_ratio(array![[1, 0, -1]]),
+            to_ratio(array![[-1, 1, -1]]),
+            to_ratio(array![[0, -2, 2]]),
+            to_ratio(array![[0, -1, 0]]),
+            to_ratio(array![[0, 0, -2]]),
+        ];
+
+        assert_eq!(results2, expected2);
     }
 
     #[test]
@@ -738,7 +728,7 @@ mod test {
     }
 
     #[test]
-    fn test_highest_weight() {
+    fn test_weight_multiplicity_highest_weight() {
         let algebra = helper_liealgebra();
         let result = algebra.weight_multiplicity_highest_weight(
             to_ratio(array![[0, 0, 2]]),
@@ -750,26 +740,51 @@ mod test {
         assert_eq!(result, expected)
     }
 
+
+
     #[test]
     fn test_single_dom_weights() {
         let algebra = helper_liealgebra();
-        let result: HashSet<Array2R> = HashSet::from_iter(
-            algebra
-                .single_dom_weights(&to_ratio(array![[1, 1, 1]]))
+
+        {
+            let result: HashSet<Array2R> = HashSet::from_iter(
+                algebra
+                    .single_dom_weights(&to_ratio(array![[1, 1, 1]]))
+                    .into_iter(),
+            );
+    
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![
+                    to_ratio(array![[1, 1, 1]]),
+                    to_ratio(array![[2, 0, 0]]),
+                    to_ratio(array![[0, 0, 2]]),
+                    to_ratio(array![[0, 1, 0]]),
+                ]
                 .into_iter(),
-        );
+            );
+    
+            assert_eq!(result, expected)
+        }
 
-        let expected: HashSet<Array2R> = HashSet::from_iter(
-            vec![
-                to_ratio(array![[1, 1, 1]]),
-                to_ratio(array![[2, 0, 0]]),
-                to_ratio(array![[0, 0, 2]]),
-                to_ratio(array![[0, 1, 0]]),
-            ]
-            .into_iter(),
-        );
-
-        assert_eq!(result, expected)
+        {
+            let result: HashSet<Array2R> = HashSet::from_iter(
+                algebra
+                    .single_dom_weights(&to_ratio(array![[2, 0, 0]]))
+                    .into_iter(),
+            );
+    
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![
+                    to_ratio(array![[0, 1, 0]]),
+                    to_ratio(array![[2, 0, 0]]),
+     
+                ]
+                .into_iter(),
+            );
+    
+            assert_eq!(result, expected)
+        }
+        
     }
 
     #[test]
@@ -806,10 +821,13 @@ mod test {
                 .into_iter(),
         );
 
-        let expected: HashSet<_> = HashSet::from_iter(vec![
+        let expected: HashSet<_> = HashSet::from_iter(
+            vec![
                 (1, to_ratio(array![[1, 0, 1]])),
                 (1, to_ratio(array![[0, 0, 0]])),
-            ].into_iter());
+            ]
+            .into_iter(),
+        );
 
         assert_eq!(results, expected)
     }
@@ -817,13 +835,34 @@ mod test {
     #[test]
     fn test_tensorproduct() {
         let algebra = helper_liealgebra();
-        let results: HashSet<_> = HashSet::from_iter(
-            algebra
-            .tensor_product_decomp_double(
-                to_ratio(array![[1, 0, 0]]), to_ratio(array![[0, 0, 1]])).into_iter());
-        let expected: HashSet<_> = HashSet::from_iter(
-            vec![to_ratio(array![[0, 0, 0]]), to_ratio(array![[1, 0, 1]])].into_iter());
 
-        assert_eq!(results, expected)
+        let decomp =
+            algebra.tensor_product_decomp(to_ratio(array![[1, 0, 0]]), to_ratio(array![[1, 0, 0]]));
+        let results: HashSet<_> = HashSet::from_iter(decomp.clone().into_iter());
+        let expected: HashSet<_> = HashSet::from_iter(
+            vec![to_ratio(array![[2, 0, 0]]), to_ratio(array![[0, 1, 0]])].into_iter(),
+        );
+
+        assert_eq!(results, expected, "Two term tensordecmop is not correct");
+
+        let mut n_results = Vec::new();
+        for r in decomp.iter() {
+            n_results.extend(algebra.tensor_product_decomp(r.clone(), to_ratio(array![[1, 0, 0]])))
+        }
+
+        assert_eq!(n_results.len(), 4, "Three term tensordecomp is not correct");
     }
+
+    // #[test]
+    // fn test_adsad(){
+    //     let irrep1 = to_ratio(array![[2, 0, 0]]);
+    //     let irrep2 = to_ratio(array![[1, 0, 0]]);
+    //     let algebra = helper_liealgebra();
+    //     let tower = algebra.weight_system(irrep1);
+
+    //     let weight_parities = algebra.weight_parities(tower, irrep2.clone());
+    //     for (idx, w) in weight_parities.iter(){
+    //         println!("Weight: {:?}, mul: {:?}", Frac::format(w.clone()), idx.clone());
+    //     }
+    // }
 }

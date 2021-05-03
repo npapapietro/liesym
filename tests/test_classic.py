@@ -158,6 +158,18 @@ def test_B():
     ]
 
 
+    decomp = B3.tensor_product_decomposition([Matrix([[1,0,0]]), Matrix([[1,0,0]]), Matrix([[1,0,0]])])
+
+    assert sorted([tuple(x.tolist()) for x in decomp]) == sorted([
+        tuple(x.tolist()) for x in [
+        Matrix([[0,0,1]]),
+        Matrix([[3,0,0]]),
+        Matrix([[1,1,0]]),
+        Matrix([[1,1,0]]),
+    ]])
+
+
+
 def test_C():
     C2 = C(2)
 
