@@ -249,9 +249,7 @@ class LieAlgebra(Basic):
         while len(w) > 0:
             j = w.pop()
             results = []
-            for idx,i in enumerate(decomp):
-                result = self._backend_instance.tensor_product_decomposition(i, j)
-                # print("Count", idx, "for",i,"result", result)
-                results += result
+            for i in decomp:
+                results += self._backend_instance.tensor_product_decomposition(j, i)
             decomp = results
         return decomp

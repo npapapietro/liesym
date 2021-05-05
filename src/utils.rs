@@ -1,9 +1,7 @@
-
 use ndarray::{Array, Array2, Array3, Ix1};
 use num::rational::Ratio;
 use numpy::PyReadonlyArray3;
-use std::iter::FromIterator;
-
+use std::{cmp, collections::HashSet, hash::Hash, iter::FromIterator, slice::Iter};
 
 // use crate::debug::Logger;
 
@@ -92,8 +90,29 @@ pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
     v
 }
 
+pub fn pos_where(ary: Array2R, gt0: bool) -> Vec<usize> {
+    ary.iter()
+        .enumerate()
+        .filter(|(_, &x)| {
+            if gt0 {
+                x > Ratio::new(0, 1)
+            } else {
+                x == Ratio::new(0, 1)
+            }
+        })
+        .map(|(i, _)| i)
+        .collect()
+}
 
+pub fn set_diff<'a, T>(a: Iter<'a, T>, b: Iter<'a, T>) -> Vec<T>
+where
+    T: cmp::Eq + Hash + Clone,
+{
+    let hash_a = HashSet::<T>::from_iter(a.cloned());
+    let hash_b = HashSet::<T>::from_iter(b.cloned());
 
+    hash_a.difference(&hash_b).into_iter().cloned().collect()
+}
 
 #[cfg(test)]
 pub mod test {
@@ -119,10 +138,7 @@ pub mod test {
             .unwrap()
     }
 
-    pub fn to_ratio<D>(x: Array<i64, D>) -> Array<Ratio<i64>, D>
-    where
-        D: Dimension,
-    {
+    pub fn to_ratio<D: Dimension>(x: Array<i64, D>) -> Array<Ratio<i64>, D> {
         x.mapv(|x| Ratio::new(x, 1))
     }
 

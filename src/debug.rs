@@ -39,6 +39,12 @@ impl Frac {
     }
 
     #[allow(dead_code)]
+    pub fn print_vec_r<D:Dimension>(v: Vec<Array<Ratio<i64>, D>>) {
+        for i in v.iter(){
+            Frac::print(i.clone());
+        }
+    }
+    #[allow(dead_code)]
     pub fn format<D:Dimension>(m: Array<Ratio<i64>, D>) -> String {
         "(".to_string() + &m.iter().map(|x| Frac { 0: x.clone() }.formatter()).collect::<Vec<String>>().join(",") + ")"
     }
