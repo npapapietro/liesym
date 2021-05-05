@@ -9,7 +9,7 @@ use std::cmp::Ordering;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
-use crate::debug::{debug_on, Frac};
+use crate::debug::debug_on;
 use crate::matrix_methods::{
     all_pos, all_pos_filter, reflect_weights, reflection_matrix, union_new_weights,
 };
