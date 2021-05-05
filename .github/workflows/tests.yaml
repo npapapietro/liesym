@@ -2,9 +2,8 @@
 
 name: Test Module
 on:
-  push:
-    branches:
-      - fakebranch
+  pull_request:
+    branches: [main, develop]
 env:
   CARGO_TERM_COLOR: always
 

@@ -72,6 +72,14 @@ def test_A():
         Matrix([[2, -1, 0]]),
     ]
 
+    fund = Matrix([[1,0,0]])
+    antifund = Matrix([[0,0,1]])
+    decomp = A3.tensor_product_decomposition([fund, antifund])
+
+    assert set([x.as_immutable() for x in decomp]) == set([
+        Matrix([[1,0,1]]).as_immutable(),
+        Matrix([[0,0,0]]).as_immutable(),
+    ])
 
 def test_B():
     B2 = B(2)
@@ -148,6 +156,20 @@ def test_B():
         Matrix([[0, -1, 2]]),
         Matrix([[2, -1, 0]]),
     ]
+
+
+    decomp = B3.tensor_product_decomposition([Matrix([[1,0,0]]), Matrix([[1,0,0]]), Matrix([[1,0,0]])])
+    assert sorted([tuple(x.tolist()) for x in decomp]) == sorted([
+        tuple(x.tolist()) for x in [
+        Matrix([[1,0,0]]),
+        Matrix([[1,0,0]]),
+        Matrix([[1,0,0]]),
+        Matrix([[3,0,0]]),
+        Matrix([[0,0,2]]),
+        Matrix([[1,1,0]]),
+        Matrix([[1,1,0]]),
+    ]])
+
 
 
 def test_C():

@@ -32,10 +32,17 @@ def _rust_wrapper(func):
         cls = args[0]
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
+
         numer, denom = (x.squeeze() for x in result)
         shape = numer.shape
+        
+        vectorlike = len(shape) == 1
+
         plain_values = [Rational(f"{x}/{y}")
                         for x, y in zip(numer.flatten(), denom.flatten())]
+        if vectorlike:            
+            shape = (1, shape[0])
+
         m = Matrix(*shape, plain_values)
         return [m.row(i) for i in range(m.shape[0])]
     return inner
@@ -55,6 +62,11 @@ class _LieAlgebraBackendWrapped:
     @_rust_wrapper
     def root_system(self):
         return self.backend.root_system()
+
+    @_rust_wrapper
+    def tensor_product_decomposition(self, irrepA, irrepB):
+        rust_result = self.backend.tensor_product_decomposition(irrepA, irrepB)
+        return rust_result
 
 
 def create_backend(algebra):

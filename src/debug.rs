@@ -17,23 +17,40 @@ pub struct Frac(Ratio<i64>);
 
 impl Display for Frac {
     fn fmt(&self, f: &mut Formatter) -> Result {
-        if self.0.numer() == &0 {
-            write!(f, "0")
-        } else if self.0.denom() == &1 {
-            write!(f, "{}", self.0.numer())
-        } else {
-            write!(f, "{}/{}", self.0.numer(), self.0.denom())
-        }
+        write!(f, "{}", self.formatter())
     }
 }
 
 impl Frac {
+    fn formatter(&self) -> String {
+        if self.0.numer() == &0 {
+            "0".to_string()
+        } else if self.0.denom() == &1 {
+            format!("{}", self.0.numer())
+        } else {
+            format!("{}/{}", self.0.numer(), self.0.denom())
+        }
+    }
+
     #[allow(dead_code)]
-    pub fn print<D>(m: Array<Ratio<i64>, D>)
-    where
-        D: Dimension,
-    {
+    pub fn print<D: Dimension>(m: Array<Ratio<i64>, D>) {
         println!("{}", m.mapv(|x| Frac { 0: x }))
+    }
+
+    #[allow(dead_code)]
+    pub fn print_vec_r<D: Dimension>(v: Vec<Array<Ratio<i64>, D>>) {
+        for i in v.iter() {
+            Frac::print(i.clone());
+        }
+    }
+    #[allow(dead_code)]
+    pub fn format<D: Dimension>(m: Array<Ratio<i64>, D>) -> String {
+        "(".to_string()
+            + &m.iter()
+                .map(|x| Frac { 0: x.clone() }.formatter())
+                .collect::<Vec<String>>()
+                .join(",")
+            + ")"
     }
 }
 

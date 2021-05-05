@@ -6,12 +6,16 @@ use num::rational::Ratio;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
 use std::cmp::Ordering;
+use std::collections::HashSet;
 use std::iter::FromIterator;
 
 use crate::debug::debug_on;
-use crate::matrix_methods::{all_pos, reflect_weights, reflection_matrix};
+use crate::matrix_methods::{
+    all_pos, all_pos_filter, reflect_weights, reflection_matrix, union_new_weights,
+};
 use crate::utils::{
-    to_rational_list, to_rational_matrix, to_rational_vector, vecarray_to_pyreturn, Array2R,
+    adjacent_find, pos_where, set_diff, to_rational_list, to_rational_matrix, to_rational_vector,
+    vecarray_to_pyreturn, Array2R,
 };
 
 #[pyclass]
@@ -24,15 +28,11 @@ pub struct LieAlgebraBackend {
     cartan_matrix: Array2R,
     cartan_matrix_inverse: Array2R,
 
-    #[allow(dead_code)]
     omega_matrix: Array2R,
     omega_matrix_inverse: Array2R,
 
     #[allow(dead_code)]
     cocartan_matrix: Array2R,
-
-    #[allow(dead_code)]
-    positive_roots: Option<Vec<Array2R>>,
 }
 // Public implementations exposed in python
 #[pymethods]
@@ -57,7 +57,6 @@ impl LieAlgebraBackend {
             omega_matrix: to_rational_matrix(omega_matrix),
             omega_matrix_inverse: to_rational_matrix(omega_matrix_inverse),
             cocartan_matrix: to_rational_matrix(cocartan_matrix),
-            positive_roots: None,
         }
     }
 
@@ -83,7 +82,19 @@ impl LieAlgebraBackend {
             println!("Made it to root_system")
         }
 
-        let results = self.root_system_backend();
+        let results = self.root_system_full();
+        let (numer, denom) = vecarray_to_pyreturn(results);
+        (numer.into_pyarray(py), denom.into_pyarray(py))
+    }
+
+    pub fn tensor_product_decomposition<'py>(
+        &self,
+        py: Python<'py>,
+        irrep1: PyReadonlyArray3<i64>,
+        irrep2: PyReadonlyArray3<i64>,
+    ) -> (&'py PyArray3<i64>, &'py PyArray3<i64>) {
+        let results =
+            self.tensor_product_decomp(to_rational_vector(irrep1), to_rational_vector(irrep2));
         let (numer, denom) = vecarray_to_pyreturn(results);
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
@@ -91,6 +102,10 @@ impl LieAlgebraBackend {
 
 /// Private implementations not exposed in python
 impl LieAlgebraBackend {
+    fn get_postive_roots(&self) -> Vec<Array2R> {
+        self.root_system_full()[..(self.roots / 2)].to_vec()
+    }
+
     fn orbit_no_stabilizers(&self, weight: Array2R) -> Vec<Array2R> {
         if debug_on() {
             println!("Starting orbit calculated");
@@ -104,6 +119,7 @@ impl LieAlgebraBackend {
     }
 
     /// Returns the orbit for weight stabilized around some simple roots.
+    /// Returned basis is orthogonal.
     ///
     /// # Arguments
     /// * `weight` - The weight to generate the orbit about.
@@ -149,6 +165,13 @@ impl LieAlgebraBackend {
         x.dot(&self.omega_matrix_inverse)
     }
 
+    fn omega_to_ortho(&self, x: Array2R) -> Array2R {
+        x.dot(&self.omega_matrix)
+    }
+
+    fn omega_to_alpha<'a>(&self, x: &'a Array2R) -> Array2R {
+        x.dot(&self.cartan_matrix_inverse)
+    }
     /// Returns a list of either count 1 or 0 with the dominant weight
     /// if it exists in the list
     fn find_dom<'a>(&self, arrays: &'a Vec<Array2R>) -> Option<Array2R> {
@@ -187,7 +210,9 @@ impl LieAlgebraBackend {
     /// unique roots in those orbits and ordering them via root level.
     /// Roots of the same level are conventionally ordered by index value,
     /// which is how rust sorts vec![Vec<Integer/Rational>]
-    fn root_system_backend(&self) -> Vec<Array2R> {
+    ///
+    /// Returns in the omega basis
+    fn root_system_full(&self) -> Vec<Array2R> {
         let mut roots = self
             .simple_roots
             .clone()
@@ -224,6 +249,243 @@ impl LieAlgebraBackend {
         let y = self.ortho_to_omega(b);
         self.sort_by_omega(&x, &y)
     }
+
+    /// Returns the single dominant weights of the irreducible representation.
+    /// This is done by recursively subtracting positive roots until no new dominant root is
+    /// found.
+    fn single_dom_weights<'a>(&self, irrep: &'a Array2R) -> Vec<Array2R> {
+        let omega_pr: Vec<Array2R> = self.get_postive_roots();
+
+        let mut tower = HashSet::new();
+        tower.insert(irrep.clone());
+        loop {
+            let temp: HashSet<Array2R> = union_new_weights(&tower, &omega_pr);
+
+            let diff = temp.difference(&tower);
+            if diff.count() == 0 {
+                break;
+            }
+
+            tower = tower.union(&temp).cloned().collect();
+        }
+        tower.into_iter().collect()
+    }
+
+    /// Rotate weight or root to a positive (dominant) chamber.
+    /// # Arguments
+    /// * `weight` - Weight in omega basis
+    fn reflect_to_dominant(&self, weight: Array2R, mul: Option<i64>) -> (Array2R, i64) {
+        if all_pos(&weight) {
+            return (weight, 1);
+        }
+
+        let reflection_matrices = self.reflection_matrices();
+        let mut reflected = vec![self.omega_to_ortho(weight)];
+
+        let mut num_reflections = 0;
+        loop {
+            let mut temp = Vec::new();
+            for m in reflection_matrices.iter() {
+                for r in reflected.iter() {
+                    // algorithm counts before the reflections
+                    num_reflections += 1;
+
+                    let t = r.dot(m);
+                    let ref_omega = self.ortho_to_omega(&t);
+                    if all_pos(&ref_omega) {
+                        return (
+                            ref_omega,
+                            mul.unwrap_or(1i64) * (-1i64).pow(num_reflections),
+                        );
+                    }
+                    temp.push(t);
+                }
+            }
+            reflected.append(&mut temp)
+        }
+    }
+
+    /// Returns the k level for an irrep, root, or weight
+    /// # Arguments
+    /// * `s` - Weight in omega basis
+    fn k_level(&self, x: Array2R) -> Ratio<i64> {
+        self.omega_to_alpha(&x).sum()
+    }
+
+    /// Scalar product between two weights or roots
+    /// # Arguments
+    /// * `a` - Weight in omega basis
+    /// * `b` - Weight in omega basis
+    fn scalar_product(&self, a: Array2R, b: Array2R) -> Ratio<i64> {
+        self.omega_to_ortho(a).dot(&self.omega_to_ortho(b).t())[[0, 0]]
+    }
+
+    fn xis<'a>(&self, stabs: &'a Vec<usize>) -> Vec<Array2R> {
+        return self
+            .get_postive_roots()
+            .iter()
+            .cloned()
+            .filter(|x| all_pos_filter(x, stabs.clone()))
+            .collect();
+    }
+
+    /// Returns a list of tuples that are the multiplicty and xi of
+    /// each the weight. Xi is defined to be a member of the
+    /// positive roots where each coeffcient is positive
+    /// nonzero. The multiplicity is the dimension of that
+    /// xi's orbit.
+    fn xi_multiplicity(&self, weight: Array2R) -> Vec<(Array2R, usize)> {
+        let stabs: Vec<usize> = pos_where(weight.clone(), false);
+
+        let mut xi_multiplicity = Vec::new();
+
+        let xis = self.xis(&stabs.clone());
+
+        for xi in xis {
+            let w = self.omega_to_ortho(xi.clone());
+
+            let orbit = self.full_orbit(w.clone(), Some(stabs.clone()));
+
+            let diff = set_diff(
+                pos_where(self.omega_to_alpha(&xi).clone(), true).iter(),
+                stabs.iter(),
+            );
+            if diff.len() == 0 {
+                xi_multiplicity.push((xi, orbit.len()));
+            } else {
+                xi_multiplicity.push((xi, 2 * orbit.len()));
+            }
+        }
+        return xi_multiplicity;
+    }
+
+    pub fn weight_multiplicity_highest_weight(
+        &self,
+        weight: Array2R,
+        irrep: Array2R,
+    ) -> Vec<(Array2R, Array2R, usize)> {
+        let (dom, _) = self.reflect_to_dominant(weight.clone(), None);
+        let dom_irrep = self.single_dom_weights(&irrep);
+
+        let k = self.k_level(irrep.clone() - weight).to_integer();
+
+        let mut highest_weights = Vec::new();
+        for i in 0..k {
+            for (xi, mul) in self.xi_multiplicity(dom.clone()).iter() {
+                let d = dom.clone() + xi.mapv(|x| x * (i + 1));
+                if dom_irrep.contains(&d) {
+                    highest_weights.push((d.clone(), xi.clone(), mul.clone()))
+                }
+            }
+        }
+        highest_weights
+    }
+
+    /// Returns the weight multiplicity in the irreducible representation
+    fn weight_multiplicity(&self, weight: Array2R, irrep: Array2R) -> i64 {
+        let (dom, _) = self.reflect_to_dominant(weight.clone(), None);
+
+        if dom == irrep {
+            return 1;
+        }
+
+        let highest_weights =
+            self.weight_multiplicity_highest_weight(weight.clone(), irrep.clone());
+
+        let mut multiplicity = Ratio::new(0, 1);
+        let rho = Array2R::ones((1, self.rank));
+
+        // // Freudenthal's Recursion formula
+        for (w, xi, m) in highest_weights.iter() {
+            let (d, _) = self.reflect_to_dominant(w.clone(), None);
+
+            let num = self.scalar_product(w.clone(), xi.clone()).clone()
+                * self.weight_multiplicity(d.clone(), irrep.clone())
+                * (*m as i64);
+
+            let d1 = self.scalar_product(irrep.clone() + rho.clone(), irrep.clone() + rho.clone());
+            let d2 = self.scalar_product(dom.clone() + rho.clone(), dom.clone() + rho.clone());
+
+            multiplicity += num / (d1 - d2);
+        }
+
+        multiplicity.to_integer()
+    }
+
+    fn weight_system_with_mul(&self, irrep: Array2R) -> Vec<(Array2R, i64)> {
+        let dom_weight_system: Vec<_> = self
+            .single_dom_weights(&irrep)
+            .iter()
+            .map(|x| {
+                (
+                    x.clone(),
+                    self.weight_multiplicity(x.clone(), irrep.clone()),
+                )
+            })
+            .collect();
+
+        let mut weight_system_with_mul: Vec<_> = dom_weight_system
+            .iter()
+            .flat_map(|(w, m)| {
+                let ortho = self.omega_to_ortho(w.clone());
+                let result: Vec<_> = self
+                    .orbit_no_stabilizers(ortho)
+                    .iter()
+                    .map(|x| (x.clone(), m.clone()))
+                    .collect();
+                result
+            })
+            .map(|(w, m)| (self.ortho_to_omega(&w), m))
+            .collect();
+
+        weight_system_with_mul.sort_by(|a, b| -> Ordering {
+            let k1 = self.k_level(irrep.clone() - a.clone().0);
+            let k2 = self.k_level(irrep.clone() - b.clone().0);
+            k1.cmp(&k2)
+                .then(Vec::from_iter(a.0.iter()).cmp(&Vec::from_iter(b.0.iter())))
+        });
+
+        weight_system_with_mul
+    }
+
+    fn weight_parities(
+        &self,
+        tower_with_mul: Vec<(Array2R, i64)>,
+        weight: Array2R,
+    ) -> Vec<(i64, Array2R)> {
+        let rho = Array2R::ones((1, self.rank));
+
+        tower_with_mul
+            .iter()
+            .map(|(w, m)| {
+                self.reflect_to_dominant(w.clone() + weight.clone() + rho.clone(), Some(m.clone()))
+            })
+            .filter(|(t, _)| !t.iter().any(|&x| x == Ratio::new(0, 1)))
+            .map(|(x, y)| (y, x - &rho))
+            .collect()
+    }
+
+    fn tensor_product_decomp(&self, irrep1: Array2R, irrep2: Array2R) -> Vec<Array2R> {
+        let tower = self.weight_system_with_mul(irrep1);
+
+        let mut weight_parities = self.weight_parities(tower, irrep2.clone());
+
+        weight_parities.sort_by(|a, b| Vec::from_iter(a.1.iter()).cmp(&Vec::from_iter(b.1.iter())));
+
+        for &i in adjacent_find(weight_parities.clone()).iter() {
+            weight_parities[i + 1].0 += weight_parities[i].0;
+            weight_parities[i].0 = 0;
+        }
+
+        let mut tensor_decomp = Vec::new();
+        for (m, w) in weight_parities.iter() {
+            for _ in 0..*m {
+                tensor_decomp.push(w.clone());
+            }
+        }
+
+        tensor_decomp
+    }
 }
 
 #[cfg(test)]
@@ -235,40 +497,78 @@ mod test {
 
     use crate::utils::test::{py3darray, to_ratio};
 
-    /// Generate A3 algebra
-    fn python_strings() -> (usize, usize, String, String, String, String, String, String) {
-        let rank = 3;
-        let roots = 12;
-        let simple_roots_str =
-            "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
-                .to_string();
-        let cartan_matrix_str =
-            "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-1,1]],[[0,1],[-1,1],[2,1]]]".to_string();
-        let cartan_matrix_inv_str =
-            "[[[3,4],[1,2],[1,4]],[[1,2],[1,1],[1,2]],[[1,4],[1,2],[3,4]]]".to_string();
-        let omega_matrix_str =
-            "[[[3,4],[-1,4],[-1,4],[-1,4]],[[1,2],[1,2],[-1,2],[-1,2]],[[1,4],[1,4],[1,4],[-3,4]]]"
-                .to_string();
-        let omega_matrix_inv_str =
-            "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[1,1]],[[0,1],[0,1],[-1,1]]]"
-                .to_string();
-        let cocartan_matrix_str =
-            "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
-                .to_string();
-
-        (
-            rank,
-            roots,
-            simple_roots_str,
-            cartan_matrix_str,
-            cartan_matrix_inv_str,
-            omega_matrix_str,
-            omega_matrix_inv_str,
-            cocartan_matrix_str,
-        )
+    enum GroupTestType {
+        A,
+        B,
     }
 
-    fn helper_liealgebra() -> LieAlgebraBackend {
+    /// Generate A3 algebra
+    fn python_strings(
+        group_type: GroupTestType,
+    ) -> (usize, usize, String, String, String, String, String, String) {
+        match group_type {
+            GroupTestType::A => {
+                let rank = 3;
+                let roots = 12;
+                let simple_roots_str =
+                    "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
+                        .to_string();
+                let cartan_matrix_str =
+                    "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-1,1]],[[0,1],[-1,1],[2,1]]]".to_string();
+                let cartan_matrix_inv_str =
+                    "[[[3,4],[1,2],[1,4]],[[1,2],[1,1],[1,2]],[[1,4],[1,2],[3,4]]]".to_string();
+                let omega_matrix_str =
+                    "[[[3,4],[-1,4],[-1,4],[-1,4]],[[1,2],[1,2],[-1,2],[-1,2]],[[1,4],[1,4],[1,4],[-3,4]]]"
+                        .to_string();
+                let omega_matrix_inv_str =
+                    "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[1,1]],[[0,1],[0,1],[-1,1]]]"
+                        .to_string();
+                let cocartan_matrix_str =
+                    "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
+                        .to_string();
+
+                (
+                    rank,
+                    roots,
+                    simple_roots_str,
+                    cartan_matrix_str,
+                    cartan_matrix_inv_str,
+                    omega_matrix_str,
+                    omega_matrix_inv_str,
+                    cocartan_matrix_str,
+                )
+            }
+            GroupTestType::B => {
+                let rank = 3;
+                let roots = 18;
+                let simple_roots_str =
+                    "[[[1,1],[-1,1],[0,1]],[[0,1],[1,1],[-1,1]],[[0,1],[0,1],[1,1]]]".to_string();
+                let cartan_matrix_str =
+                    "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-2,1]],[[0,1],[-1,1],[2,1]]]".to_string();
+                let cartan_matrix_inv_str =
+                    "[[[1,1],[1,1],[1,1]],[[1,1],[2,1],[2,1]],[[1,2],[1,1],[3,2]]]".to_string();
+                let omega_matrix_str =
+                    "[[[1,1],[0,1],[0,1]],[[1,1],[1,1],[0,1]],[[1,2],[1,2],[1,2]]]".to_string();
+                let omega_matrix_inv_str =
+                    "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[2,1]]]".to_string();
+                let cocartan_matrix_str =
+                    "[[[1,1],[-1,1],[0,1]],[[0,1],[1,1],[-1,1]],[[0,1],[0,1],[2,1]]]".to_string();
+
+                (
+                    rank,
+                    roots,
+                    simple_roots_str,
+                    cartan_matrix_str,
+                    cartan_matrix_inv_str,
+                    omega_matrix_str,
+                    omega_matrix_inv_str,
+                    cocartan_matrix_str,
+                )
+            }
+        }
+    }
+
+    fn helper_liealgebra(group_type: GroupTestType) -> LieAlgebraBackend {
         let gil = Python::acquire_gil();
         let py = gil.python();
 
@@ -281,7 +581,7 @@ mod test {
             omega_matrix_str,
             omega_matrix_inv_str,
             cocartan_matrix_str,
-        ) = python_strings();
+        ) = python_strings(group_type);
 
         let simple_roots = py3darray(py, simple_roots_str).readonly();
         let cartan_matrix = py3darray(py, cartan_matrix_str).readonly();
@@ -304,22 +604,45 @@ mod test {
     #[test]
     fn test_liealgebrabackend_new() {
         // asserts no panics
-        helper_liealgebra();
+        helper_liealgebra(GroupTestType::A);
+
+        helper_liealgebra(GroupTestType::B);
     }
 
     #[test]
     fn test_to_dom() {
-        let algebra = helper_liealgebra();
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
 
-        let non_dom = to_ratio(array![[1, 0, 1, 0]]);
-        let result = algebra.to_dominant(non_dom);
+            let non_dom = to_ratio(array![[1, 0, 1, 0]]);
+            let result = algebra.to_dominant(non_dom);
 
-        assert_eq!(result, to_ratio(array![[1, 1, 0, 0]]));
+            assert_eq!(result, to_ratio(array![[1, 1, 0, 0]]));
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+
+            let non_dom = array![[
+                Ratio::<i64>::new(1, 2),
+                Ratio::<i64>::new(-1, 2),
+                Ratio::<i64>::new(-1, 2)
+            ]];
+            let result = algebra.to_dominant(non_dom);
+
+            assert_eq!(
+                result,
+                array![[
+                    Ratio::<i64>::new(1, 2),
+                    Ratio::<i64>::new(1, 2),
+                    Ratio::<i64>::new(1, 2)
+                ]]
+            );
+        }
     }
 
     #[test]
     fn test_root_level() {
-        let algebra = helper_liealgebra();
+        let algebra = helper_liealgebra(GroupTestType::A);
         let tests = vec![
             to_ratio(array![[1, -1, 0, 0]]),
             to_ratio(array![[1, 0, -1, 0]]),
@@ -337,8 +660,42 @@ mod test {
     }
 
     #[test]
+    fn test_reflect_weights() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let stabs = vec![0, 1];
+            let root = to_ratio(array![[1, 0, 0, 0]]);
+
+            let results = algebra.reflect_weights(vec![root], Option::Some(stabs));
+
+            assert_eq!(
+                results,
+                vec![
+                    to_ratio(array![[0, 1, 0, 0]]),
+                    to_ratio(array![[1, 0, 0, 0]])
+                ],
+                "Group A reflect_weights error"
+            );
+        }
+
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let stabs = vec![0, 1];
+            let root = to_ratio(array![[1, 0, 0]]);
+
+            let results = algebra.reflect_weights(vec![root], Option::Some(stabs));
+
+            assert_eq!(
+                results,
+                vec![to_ratio(array![[0, 1, 0]]), to_ratio(array![[1, 0, 0]])],
+                "Group B reflect_weights error"
+            );
+        }
+    }
+
+    #[test]
     fn test_ortho_to_omega() {
-        let algebra = helper_liealgebra();
+        let algebra = helper_liealgebra(GroupTestType::A);
         let tests = vec![
             to_ratio(array![[1, -1, 0, 0]]),
             to_ratio(array![[1, 0, -1, 0]]),
@@ -359,30 +716,50 @@ mod test {
 
     #[test]
     fn test_full_orbit() {
-        let algebra = helper_liealgebra();
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
 
-        let non_dom = to_ratio(array![[1, 0, 1, 0]]);
-        let result: HashSet<Array2R> =
-            HashSet::from_iter(algebra.full_orbit(non_dom, None).into_iter());
+            let non_dom = to_ratio(array![[1, 0, 1, 0]]);
+            let result: HashSet<Array2R> =
+                HashSet::from_iter(algebra.full_orbit(non_dom, None).into_iter());
 
-        let expected: HashSet<Array2R> = HashSet::from_iter(
-            vec![
-                to_ratio(array![[1, 0, 1, 0]]),
-                to_ratio(array![[1, 0, 0, 1]]),
-                to_ratio(array![[1, 1, 0, 0]]),
-                to_ratio(array![[0, 1, 1, 0]]),
-                to_ratio(array![[0, 1, 0, 1]]),
-                to_ratio(array![[0, 0, 1, 1]]),
-            ]
-            .into_iter(),
-        );
-        // order doesn't matter
-        assert_eq!(result, expected);
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![
+                    to_ratio(array![[1, 0, 1, 0]]),
+                    to_ratio(array![[1, 0, 0, 1]]),
+                    to_ratio(array![[1, 1, 0, 0]]),
+                    to_ratio(array![[0, 1, 1, 0]]),
+                    to_ratio(array![[0, 1, 0, 1]]),
+                    to_ratio(array![[0, 0, 1, 1]]),
+                ]
+                .into_iter(),
+            );
+            // order doesn't matter
+            assert_eq!(result, expected, "Type A error");
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let non_dom = to_ratio(array![[0, 1, 0]]);
+            let result: HashSet<Array2R> =
+                HashSet::from_iter(algebra.full_orbit(non_dom, Option::Some(vec![1, 2])));
+
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![
+                    to_ratio(array![[0, 1, 0]]),
+                    to_ratio(array![[0, 0, 1]]),
+                    to_ratio(array![[0, 0, -1]]),
+                    to_ratio(array![[0, -1, 0]]),
+                ]
+                .into_iter(),
+            );
+
+            assert_eq!(result, expected, "Type B error")
+        }
     }
 
     #[test]
     fn test_orbit_no_stabilizers() {
-        let algebra = helper_liealgebra();
+        let algebra = helper_liealgebra(GroupTestType::A);
         let sr = to_ratio(array![[1, -1, 0, 0]]);
 
         let results: HashSet<Array2R> =
@@ -410,8 +787,8 @@ mod test {
 
     #[test]
     fn test_rootsystem_backend() {
-        let algebra = helper_liealgebra();
-        let results = algebra.root_system_backend();
+        let algebra = helper_liealgebra(GroupTestType::A);
+        let results = algebra.root_system_full();
         let expected = vec![
             to_ratio(array![[1, 0, 1]]),
             to_ratio(array![[-1, 1, 1]]),
@@ -430,5 +807,296 @@ mod test {
             to_ratio(array![[-1, 0, -1]]),
         ];
         assert_eq!(results, expected)
+    }
+
+    #[test]
+    fn test_weight_system_with_mul() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let results = algebra.weight_system_with_mul(to_ratio(array![[1, 0, 0]]));
+            let expected = vec![
+                (to_ratio(array![[1, 0, 0]]), 1),
+                (to_ratio(array![[-1, 1, 0]]), 1),
+                (to_ratio(array![[0, -1, 1]]), 1),
+                (to_ratio(array![[0, 0, -1]]), 1),
+            ];
+            assert_eq!(set_diff(results.iter(), expected.iter()).len(), 0);
+
+            let results2 = algebra.weight_system_with_mul(to_ratio(array![[2, 0, 0]]));
+            let expected2 = vec![
+                (to_ratio(array![[2, 0, 0]]), 1),
+                (to_ratio(array![[0, 1, 0]]), 1),
+                (to_ratio(array![[-2, 2, 0]]), 1),
+                (to_ratio(array![[1, -1, 1]]), 1),
+                (to_ratio(array![[-1, 0, 1]]), 1),
+                (to_ratio(array![[1, 0, -1]]), 1),
+                (to_ratio(array![[-1, 1, -1]]), 1),
+                (to_ratio(array![[0, -2, 2]]), 1),
+                (to_ratio(array![[0, -1, 0]]), 1),
+                (to_ratio(array![[0, 0, -2]]), 1),
+            ];
+
+            assert_eq!(set_diff(results2.iter(), expected2.iter()).len(), 0);
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let results = algebra.weight_system_with_mul(to_ratio(array![[2, 0, 0]]));
+
+            let expected = vec![
+                (to_ratio(array![[2, 0, 0]]), 1),
+                (to_ratio(array![[-2, 2, 0]]), 1),
+                (to_ratio(array![[0, -2, 4]]), 1),
+                (to_ratio(array![[0, 2, -4]]), 1),
+                (to_ratio(array![[2, -2, 0]]), 1),
+                (to_ratio(array![[-2, 0, 0]]), 1),
+                (to_ratio(array![[0, 1, 0]]), 1),
+                (to_ratio(array![[1, -1, 2]]), 1),
+                (to_ratio(array![[-1, 0, 2]]), 1),
+                (to_ratio(array![[1, 1, -2]]), 1),
+                (to_ratio(array![[-1, 2, -2]]), 1),
+                (to_ratio(array![[2, -1, 0]]), 1),
+                (to_ratio(array![[-2, 1, 0]]), 1),
+                (to_ratio(array![[1, -2, 2]]), 1),
+                (to_ratio(array![[-1, -1, 2]]), 1),
+                (to_ratio(array![[1, 0, -2]]), 1),
+                (to_ratio(array![[-1, 1, -2]]), 1),
+                (to_ratio(array![[0, -1, 0]]), 1),
+                (to_ratio(array![[1, 0, 0]]), 1),
+                (to_ratio(array![[-1, 1, 0]]), 1),
+                (to_ratio(array![[0, -1, 2]]), 1),
+                (to_ratio(array![[0, 1, -2]]), 1),
+                (to_ratio(array![[1, -1, 0]]), 1),
+                (to_ratio(array![[-1, 0, 0]]), 1),
+                (to_ratio(array![[0, 0, 0]]), 3),
+            ];
+
+            assert_eq!(set_diff(results.iter(), expected.iter()).len(), 0);
+        }
+    }
+
+    #[test]
+    fn test_xis() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let stabs = vec![1, 2];
+            let xis = algebra.xis(&stabs);
+
+            let expected = vec![to_ratio(array![[1, 0, 1]]), to_ratio(array![[-1, 1, 1]])];
+
+            assert_eq!(xis, expected, "Group A xi error");
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let stabs = vec![1, 2];
+            let xis = algebra.xis(&stabs);
+
+            let expected = vec![
+                to_ratio(array![[0, 1, 0]]),
+                to_ratio(array![[-1, 0, 2]]),
+                to_ratio(array![[1, 0, 0]]),
+                to_ratio(array![[-1, 1, 0]]),
+            ];
+
+            assert_eq!(xis, expected, "Group B xi error");
+        }
+    }
+
+    #[test]
+    fn test_xi_multiplicity() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let results = algebra.xi_multiplicity(to_ratio(array![[0, 1, 0]]));
+            assert_eq!(
+                results,
+                vec![
+                    (to_ratio(array![[1, 0, 1]]), 8),
+                    (to_ratio(array![[0, -1, 2]]), 2),
+                    (to_ratio(array![[2, -1, 0]]), 2),
+                ],
+                "Group A incorrecnt xi_mul"
+            )
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let results = algebra.xi_multiplicity(to_ratio(array![[1, 0, 0]]));
+
+            assert_eq!(
+                results,
+                vec![
+                    (to_ratio(array![[0, 1, 0]]), 8),
+                    (to_ratio(array![[-1, 0, 2]]), 4),
+                    (to_ratio(array![[1, 0, 0]]), 2),
+                    (to_ratio(array![[-1, 1, 0]]), 4),
+                ],
+                "Group B incorrecnt xi_mul"
+            )
+        }
+    }
+
+    #[test]
+    fn test_weight_multiplicity_highest_weight() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let result = algebra.weight_multiplicity_highest_weight(
+                to_ratio(array![[0, 1, 0]]),
+                to_ratio(array![[0, 0, 2]]),
+            );
+            let expected: Vec<(Array2R, Array2R, usize)> =
+                vec![(to_ratio(array![[0, 0, 2]]), to_ratio(array![[0, -1, 2]]), 2)];
+
+            assert_eq!(result, expected);
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let result = algebra.weight_multiplicity_highest_weight(
+                to_ratio(array![[1, 0, 0]]),
+                to_ratio(array![[0, 0, 2]]),
+            );
+            let expected: Vec<(Array2R, Array2R, usize)> = vec![
+                (to_ratio(array![[0, 0, 2]]), to_ratio(array![[-1, 0, 2]]), 4),
+                (to_ratio(array![[0, 1, 0]]), to_ratio(array![[-1, 1, 0]]), 4),
+            ];
+
+            assert_eq!(result, expected);
+        }
+    }
+
+    #[test]
+    fn test_single_dom_weights() {
+        let algebra = helper_liealgebra(GroupTestType::A);
+
+        {
+            let result: HashSet<Array2R> = HashSet::from_iter(
+                algebra
+                    .single_dom_weights(&to_ratio(array![[1, 1, 1]]))
+                    .into_iter(),
+            );
+
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![
+                    to_ratio(array![[1, 1, 1]]),
+                    to_ratio(array![[2, 0, 0]]),
+                    to_ratio(array![[0, 0, 2]]),
+                    to_ratio(array![[0, 1, 0]]),
+                ]
+                .into_iter(),
+            );
+
+            assert_eq!(result, expected)
+        }
+
+        {
+            let result: HashSet<Array2R> = HashSet::from_iter(
+                algebra
+                    .single_dom_weights(&to_ratio(array![[2, 0, 0]]))
+                    .into_iter(),
+            );
+
+            let expected: HashSet<Array2R> = HashSet::from_iter(
+                vec![to_ratio(array![[0, 1, 0]]), to_ratio(array![[2, 0, 0]])].into_iter(),
+            );
+
+            assert_eq!(result, expected)
+        }
+    }
+
+    #[test]
+    fn test_positive_roots() {
+        let algebra = helper_liealgebra(GroupTestType::A);
+        let result = algebra.get_postive_roots();
+        let expected = vec![
+            to_ratio(array![[1, 0, 1]]),
+            to_ratio(array![[-1, 1, 1]]),
+            to_ratio(array![[1, 1, -1]]),
+            to_ratio(array![[-1, 2, -1]]),
+            to_ratio(array![[0, -1, 2]]),
+            to_ratio(array![[2, -1, 0]]),
+        ];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_weight_multiplicity() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+
+            let result = algebra
+                .weight_multiplicity(to_ratio(array![[1, 1, 1]]), to_ratio(array![[0, 0, 2]]));
+            assert_eq!(result, 0);
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+
+            let result = algebra
+                .weight_multiplicity(to_ratio(array![[1, 0, 0]]), to_ratio(array![[0, 0, 2]]));
+            assert_eq!(result, 2);
+        }
+    }
+
+    #[test]
+    fn test_weight_parities() {
+        let algebra = helper_liealgebra(GroupTestType::A);
+        let tower = algebra.weight_system_with_mul(to_ratio(array![[1, 0, 0]]));
+        let results: Vec<_> = algebra.weight_parities(tower, to_ratio(array![[0, 0, 1]]));
+
+        let expected: Vec<_> = vec![
+            (1, to_ratio(array![[1, 0, 1]])),
+            (1, to_ratio(array![[0, 0, 0]])),
+        ];
+
+        assert_eq!(set_diff(results.iter(), expected.iter()).len(), 0)
+    }
+
+    #[test]
+    fn test_tensorproduct() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+
+            let decomp = algebra
+                .tensor_product_decomp(to_ratio(array![[1, 0, 0]]), to_ratio(array![[1, 0, 0]]));
+            let results: HashSet<_> = HashSet::from_iter(decomp.clone().into_iter());
+            let expected: HashSet<_> = HashSet::from_iter(
+                vec![to_ratio(array![[2, 0, 0]]), to_ratio(array![[0, 1, 0]])].into_iter(),
+            );
+
+            assert_eq!(
+                results, expected,
+                "Group A\nTwo term tensordecmop is not correct"
+            );
+        }
+
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let expected = algebra
+                .tensor_product_decomp(to_ratio(array![[1, 0, 0]]), to_ratio(array![[1, 0, 0]]));
+
+            let results = vec![
+                to_ratio(array![[0, 0, 0]]),
+                to_ratio(array![[0, 1, 0]]),
+                to_ratio(array![[2, 0, 0]]),
+            ];
+
+            assert_eq!(
+                set_diff(results.iter(), expected.iter()).len(),
+                0,
+                "Group B\nTwo term tensordecmop is not correct"
+            );
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+            let expected = algebra
+                .tensor_product_decomp(to_ratio(array![[2, 0, 0]]), to_ratio(array![[1, 0, 0]]));
+
+            let results = vec![
+                to_ratio(array![[1, 0, 0]]),
+                to_ratio(array![[3, 0, 0]]),
+                to_ratio(array![[1, 1, 0]]),
+            ];
+            assert_eq!(
+                set_diff(results.iter(), expected.iter()).len(),
+                0,
+                "Group B\nTwo term tensordecmop is not correct"
+            );
+        }
     }
 }
