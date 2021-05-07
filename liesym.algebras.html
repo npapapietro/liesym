@@ -203,13 +203,16 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.orbit" title="liesym.algebras.base.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.dim" title="liesym.algebras.base.LieAlgebra.dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim</span></code></a>(irrep)</p></td>
+<td><p>Returns the dimension of the weight, root or irreducible representations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.orbit" title="liesym.algebras.base.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers])</p></td>
 <td><p>Returns the orbit of the weight or root by reflecting it a plane.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.root_system" title="liesym.algebras.base.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>(**kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.root_system" title="liesym.algebras.base.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>(**kwargs)</p></td>
 <td><p>Returns the entire rootsystem of the algebra.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.tensor_product_decomposition" title="liesym.algebras.base.LieAlgebra.tensor_product_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_product_decomposition</span></code></a>(weights, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.algebras.base.LieAlgebra.tensor_product_decomposition" title="liesym.algebras.base.LieAlgebra.tensor_product_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_product_decomposition</span></code></a>(weights, **kwargs)</p></td>
 <td><p>Returns the tensor product between irreducible representations as a the tensor sum of the irreducible representations of their highest weights.</p></td>
 </tr>
 </tbody>
@@ -243,6 +246,25 @@ generate a row of the cartan matrix.</p>
 <dt>Returns:</dt><dd><p>Matrix: Cocartan Matrix as a Sympy object</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.algebras.base.LieAlgebra.dim">
+<code class="sig-name descname">dim</code><span class="sig-paren">(</span><em class="sig-param">irrep</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/liesym/algebras/base.html#LieAlgebra.dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.algebras.base.LieAlgebra.dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the dimension of the weight, root or irreducible representations.
+This follows Weyl’s dimension formula:</p>
+<div class="math notranslate nohighlight">
+\[dim(w) = \prod_{\alpha\in\Delta^{+}} \frac{\langle \alpha, w + \rho\rangle}{\langle\alpha,\rho\rangle}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta^{+}\)</span> are the positive roots and <span class="math notranslate nohighlight">\(rho\)</span> is the sum of
+the positive roots: <cite>[1] * rank</cite>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
+<span class="go">3</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">

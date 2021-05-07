@@ -344,6 +344,26 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">stabilizers</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the dimension of the weight, root or irreducible representations.</span>
+<span class="sd">        This follows Weyl&#39;s dimension formula:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            dim(w) = \prod_{\alpha\in\Delta^{+}} \frac{\langle \alpha, w + \rho\rangle}{\langle\alpha,\rho\rangle}</span>
+
+<span class="sd">        where $\Delta^{+}$ are the positive roots and $rho$ is the sum of</span>
+<span class="sd">        the positive roots: `[1] * rank`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        ========</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import A</span>
+<span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
+<span class="sd">        &gt;&gt;&gt; a2 = A(2)</span>
+<span class="sd">        &gt;&gt;&gt; a2.dim(Matrix([[1,0]])) # fundamental rep</span>
+<span class="sd">        3</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="LieAlgebra.root_system"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.root_system">[docs]</a>    <span class="k">def</span> <span class="nf">root_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the entire rootsystem of the algebra. This</span>
 <span class="sd">        includes the positive, negative and zeros of the algebra.</span>
@@ -376,6 +396,7 @@
             <span class="n">j</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
             <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">decomp</span><span class="p">:</span>
+                <span class="c1"># i,j reversed because pop takes from -1 index</span>
                 <span class="n">results</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="n">decomp</span> <span class="o">=</span> <span class="n">results</span>
         <span class="k">return</span> <span class="n">decomp</span></div></div>
