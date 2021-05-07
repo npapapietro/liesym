@@ -33,6 +33,9 @@ def _rust_wrapper(func):
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
 
+        if isinstance(result, (int, str, float, bool)) or result is None:
+            return result
+
         numer, denom = (x.squeeze() for x in result)
         shape = numer.shape
         
@@ -67,6 +70,10 @@ class _LieAlgebraBackendWrapped:
     def tensor_product_decomposition(self, irrepA, irrepB):
         rust_result = self.backend.tensor_product_decomposition(irrepA, irrepB)
         return rust_result
+
+    @_rust_wrapper
+    def dim(self, irrep):
+        return self.backend.dim(irrep)
 
 
 def create_backend(algebra):
