@@ -9,8 +9,6 @@ Welcome to liesym's documentation!
 .. toctree::
    :maxdepth: 4
 
-   liesym.algebras
-
 
 Module contents
 ---------------

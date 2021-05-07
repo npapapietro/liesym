@@ -1,7 +1,7 @@
 from sympy.core.sympify import _sympify
 from sympy import Matrix
 
-from .base import LieAlgebra
+from ._base import LieAlgebra
 
 
 def _euclidean_root(i, n):
@@ -15,7 +15,12 @@ def _euclidean_root(i, n):
 
 
 class A(LieAlgebra):
-    r"""The compact lie group of type A.
+    r"""The compact lie group of type A. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_A.png
+           :width: 300px
+           :align: center
+
     """
     def __new__(cls, n):
         return super().__new__(cls, "A", _sympify(n))
@@ -47,7 +52,12 @@ class A(LieAlgebra):
 
 
 class B(LieAlgebra):
-    r"""The compact lie group of type B.
+    r"""The compact lie group of type B. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_B.png
+           :width: 300px
+           :align: center
+
     """
     def __new__(cls, n):
         return super().__new__(cls, "B", _sympify(n))
@@ -77,7 +87,11 @@ class B(LieAlgebra):
 
 
 class C(LieAlgebra):
-    r"""The compact lie group of type C.
+    r"""The compact lie group of type C. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_C.png
+           :width: 300px
+           :align: center
     """
 
     def __new__(cls, n):
@@ -112,7 +126,11 @@ class C(LieAlgebra):
 
 
 class D(LieAlgebra):
-    r"""The compact lie group of type C.
+    r"""The compact lie group of type D. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_D.png
+           :width: 300px
+           :align: center
     """
 
     def __new__(cls, n):

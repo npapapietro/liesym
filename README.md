@@ -64,3 +64,7 @@ assert prg == [
     Matrix([[2, -1]])
 ]
 ```
+
+## Docs
+
+Read the documentation at https://npapapietro.github.io/liesym/

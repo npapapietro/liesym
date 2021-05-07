@@ -5,17 +5,23 @@ from sympy import Matrix
 from typing import List
 from copy import deepcopy
 
-from .methods import (
+from ._methods import (
     _cartan_matrix,
     _cocartan_matrix,
     _quadratic_form,
     _reflection_matricies,
 )
 
-from .backend import create_backend
+from ._backend import create_backend
 
 
 class LieAlgebra(Basic):
+    """The base class for all lie algebras. The methods and properties
+    in this class are basis independent and apply in a general sense. In
+    order to write down the roots as matricies and vectors, we choose a 
+    representation.
+    
+    """
     def __new__(cls, series: str, rank: int):
         """
         Returns a new instance of a Sympy object
@@ -199,9 +205,8 @@ class LieAlgebra(Basic):
             self._backend = create_backend(self)
         return self._backend
 
-    def orbit(self, weight: Matrix, stabilizers=None, **kwargs) -> List[Matrix]:
-        """
-        Returns the orbit of the weight or root by reflecting it
+    def orbit(self, weight: Matrix, stabilizers=None) -> List[Matrix]:
+        """Returns the orbit of the weight or root by reflecting it
         a plane. A stabilizer may be passed to calculate the orbit using
         the Orbit-Stabilizer theorem.
 
@@ -210,15 +215,14 @@ class LieAlgebra(Basic):
             stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer
             theorem, integer iterable of simple root indexes. Defaults to None.
 
-        Sources
-        =======
+        Sources:
         - https://en.wikipedia.org/wiki/Coadjoint_representation#Coadjoint_orbit
         - https://en.wikipedia.org/wiki/Group_action#Orbits_and_stabilizers
 
         """
         return self._backend_instance.orbit(weight, stabilizers)
 
-    def dim(self, irrep) -> int:
+    def dim(self, irrep: Matrix) -> int:
         r"""Returns the dimension of the weight, root or irreducible representations.
         This follows Weyl's dimension formula:
 
@@ -238,7 +242,7 @@ class LieAlgebra(Basic):
         """
         return self._backend_instance.dim(irrep)
 
-    def root_system(self, **kwargs) -> List[Matrix]:
+    def root_system(self) -> List[Matrix]:
         """Returns the entire rootsystem of the algebra. This
         includes the positive, negative and zeros of the algebra.
 
@@ -248,7 +252,7 @@ class LieAlgebra(Basic):
         """
         return self._backend_instance.root_system()
 
-    def tensor_product_decomposition(self, weights: List[Matrix], **kwargs) -> List[Matrix]:
+    def tensor_product_decomposition(self, weights: List[Matrix]) -> List[Matrix]:
         """Returns the tensor product between irreducible representations
         as a the tensor sum of the irreducible representations of their
         highest weights. This algorithm is based on Klimky's formula.
