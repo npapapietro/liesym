@@ -1,10 +1,18 @@
 from sympy import Matrix, S
 from sympy.core.sympify import _sympify
 
-from .base import LieAlgebra
+from ._base import LieAlgebra
 
 
 class F4(LieAlgebra):
+    r"""The compact lie group of type F4. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_F4.png
+           :height: 50px
+           :align: center
+
+    """
+
     def __new__(cls):
         return super().__new__(cls, "F", _sympify(4))
 
@@ -27,6 +35,13 @@ class F4(LieAlgebra):
 
 
 class G2(LieAlgebra):
+    r"""The compact lie group of type G2. The dynkin diagram for this algebra is
+
+        .. image:: ../../docs/source/images/type_G2.png
+           :height: 50px
+           :align: center
+
+    """
     def __new__(cls):
         return super().__new__(cls, "G", _sympify(2))
 
@@ -64,6 +79,31 @@ def _e_series_default_roots(n):
 
 
 class E(LieAlgebra):
+    r"""The compact lie group of type E. There are only three defined for
+    type E.
+    
+   
+        .. figure:: ../../docs/source/images/type_E6.png
+           :height: 100px
+           :align: center
+
+           E6
+
+
+        .. figure:: ../../docs/source/images/type_E7.png
+           :height: 100px
+           :align: center
+
+           E7
+
+
+        .. figure:: ../../docs/source/images/type_E8.png
+           :height: 100px
+           :align: center
+
+           E8
+  
+    """
     def __new__(cls, n):
         if n not in [6,7,8]:
             raise ValueError("Algebra series E only defined for 6, 7 and 8}")

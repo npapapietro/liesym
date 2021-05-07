@@ -1,7 +1,7 @@
 import numpy as np
 from sympy import S, Rational, Matrix
 
-from liesym.algebras.backend import _LieAlgebraBackendWrapped
+from liesym.algebras._backend import _LieAlgebraBackendWrapped
 from liesym.algebras import A, B, C, D
 
 
