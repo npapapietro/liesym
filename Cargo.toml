@@ -17,5 +17,3 @@ num = "0.3"
 itertools = "0.10.0"
 [dependencies.pyo3]
 version = "0.13.1"
-# extension-module = ["extension-module"]
-# default = ["extension-module"]
