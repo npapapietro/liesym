@@ -81,6 +81,10 @@ def test_A():
         Matrix([[0,0,0]]).as_immutable(),
     ])
 
+    assert A3.dim(fund) == 4
+    assert A3.dim(Matrix([[1,0,1]])) == 15
+
+
 def test_B():
     B2 = B(2)
 

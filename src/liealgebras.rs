@@ -49,8 +49,8 @@ impl LieAlgebraBackend {
         cocartan_matrix: PyReadonlyArray3<i64>,
     ) -> Self {
         LieAlgebraBackend {
-            rank: rank,
-            roots: roots,
+            rank,
+            roots,
             simple_roots: to_rational_list(simple_roots),
             cartan_matrix: to_rational_matrix(cartan_matrix),
             cartan_matrix_inverse: to_rational_matrix(cartan_matrix_inverse),
@@ -98,12 +98,29 @@ impl LieAlgebraBackend {
         let (numer, denom) = vecarray_to_pyreturn(results);
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
+
+    pub fn dim<'py>(&self, _py: Python<'py>, irrep: PyReadonlyArray3<i64>) -> i64 {
+        self.irrep_dim(to_rational_vector(irrep))
+    }
 }
 
 /// Private implementations not exposed in python
 impl LieAlgebraBackend {
     fn get_postive_roots(&self) -> Vec<Array2R> {
         self.root_system_full()[..(self.roots / 2)].to_vec()
+    }
+
+    fn irrep_dim(&self, irrep: Array2R) -> i64 {
+        let rho = Array2R::ones((1, self.rank));
+
+        let mut dim = Ratio::new(1, 1);
+
+        for root in self.get_postive_roots().iter() {
+            dim *= self.scalar_product(irrep.clone() + rho.clone(), root.clone())
+                / self.scalar_product(rho.clone(), root.clone());
+        }
+
+        dim.to_integer()
     }
 
     fn orbit_no_stabilizers(&self, weight: Array2R) -> Vec<Array2R> {

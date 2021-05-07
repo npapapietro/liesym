@@ -218,6 +218,26 @@ class LieAlgebra(Basic):
         """
         return self._backend_instance.orbit(weight, stabilizers)
 
+    def dim(self, irrep) -> int:
+        r"""Returns the dimension of the weight, root or irreducible representations.
+        This follows Weyl's dimension formula:
+
+        .. math::
+            dim(w) = \prod_{\alpha\in\Delta^{+}} \frac{\langle \alpha, w + \rho\rangle}{\langle\alpha,\rho\rangle}
+
+        where $\Delta^{+}$ are the positive roots and $rho$ is the sum of
+        the positive roots: `[1] * rank`.
+
+        Examples
+        ========
+        >>> from liesym import A
+        >>> from sympy import Matrix
+        >>> a2 = A(2)
+        >>> a2.dim(Matrix([[1,0]])) # fundamental rep
+        3
+        """
+        return self._backend_instance.dim(irrep)
+
     def root_system(self, **kwargs) -> List[Matrix]:
         """Returns the entire rootsystem of the algebra. This
         includes the positive, negative and zeros of the algebra.
@@ -250,6 +270,7 @@ class LieAlgebra(Basic):
             j = w.pop()
             results = []
             for i in decomp:
+                # i,j reversed because pop takes from -1 index
                 results += self._backend_instance.tensor_product_decomposition(j, i)
             decomp = results
         return decomp
