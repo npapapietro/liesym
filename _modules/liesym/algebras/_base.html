@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>liesym.algebras.base &#8212; liesym 0.1.0 documentation</title>
+    <title>liesym.algebras._base &#8212; liesym 0.1.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -67,12 +67,7 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../../../liesym.algebras.html">
-  liesym.algebras package
- </a>
-</li>
-
+    
     
 </ul>
       </div>
@@ -123,7 +118,7 @@
               
               <div>
                 
-  <h1>Source code for liesym.algebras.base</h1><div class="highlight"><pre>
+  <h1>Source code for liesym.algebras._base</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">numpy.lib.arraysetops</span> <span class="kn">import</span> <span class="n">isin</span>
 <span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">Basic</span>
 <span class="kn">from</span> <span class="nn">sympy.core.sympify</span> <span class="kn">import</span> <span class="n">_sympify</span>
@@ -131,17 +126,23 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">from</span> <span class="nn">.methods</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span> <span class="nn">._methods</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">_cartan_matrix</span><span class="p">,</span>
     <span class="n">_cocartan_matrix</span><span class="p">,</span>
     <span class="n">_quadratic_form</span><span class="p">,</span>
     <span class="n">_reflection_matricies</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">.backend</span> <span class="kn">import</span> <span class="n">create_backend</span>
+<span class="kn">from</span> <span class="nn">._backend</span> <span class="kn">import</span> <span class="n">create_backend</span>
 
 
-<div class="viewcode-block" id="LieAlgebra"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra">[docs]</a><span class="k">class</span> <span class="nc">LieAlgebra</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
+<div class="viewcode-block" id="LieAlgebra"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra">[docs]</a><span class="k">class</span> <span class="nc">LieAlgebra</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The base class for all lie algebras. The methods and properties</span>
+<span class="sd">    in this class are basis independent and apply in a general sense. In</span>
+<span class="sd">    order to write down the roots as matricies and vectors, we choose a </span>
+<span class="sd">    representation.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">series</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a new instance of a Sympy object</span>
@@ -325,9 +326,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">create_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span>
 
-<div class="viewcode-block" id="LieAlgebra.orbit"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">stabilizers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the orbit of the weight or root by reflecting it</span>
+<div class="viewcode-block" id="LieAlgebra.orbit"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">stabilizers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the orbit of the weight or root by reflecting it</span>
 <span class="sd">        a plane. A stabilizer may be passed to calculate the orbit using</span>
 <span class="sd">        the Orbit-Stabilizer theorem.</span>
 
@@ -336,15 +336,14 @@
 <span class="sd">            stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer</span>
 <span class="sd">            theorem, integer iterable of simple root indexes. Defaults to None.</span>
 
-<span class="sd">        Sources</span>
-<span class="sd">        =======</span>
+<span class="sd">        Sources:</span>
 <span class="sd">        - https://en.wikipedia.org/wiki/Coadjoint_representation#Coadjoint_orbit</span>
 <span class="sd">        - https://en.wikipedia.org/wiki/Group_action#Orbits_and_stabilizers</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">stabilizers</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the dimension of the weight, root or irreducible representations.</span>
 <span class="sd">        This follows Weyl&#39;s dimension formula:</span>
 
@@ -364,7 +363,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.root_system"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.root_system">[docs]</a>    <span class="k">def</span> <span class="nf">root_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="LieAlgebra.root_system"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.root_system">[docs]</a>    <span class="k">def</span> <span class="nf">root_system</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the entire rootsystem of the algebra. This</span>
 <span class="sd">        includes the positive, negative and zeros of the algebra.</span>
 
@@ -374,7 +373,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">root_system</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.tensor_product_decomposition"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.algebras.base.LieAlgebra.tensor_product_decomposition">[docs]</a>    <span class="k">def</span> <span class="nf">tensor_product_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="LieAlgebra.tensor_product_decomposition"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.tensor_product_decomposition">[docs]</a>    <span class="k">def</span> <span class="nf">tensor_product_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the tensor product between irreducible representations</span>
 <span class="sd">        as a the tensor sum of the irreducible representations of their</span>
 <span class="sd">        highest weights. This algorithm is based on Klimky&#39;s formula.</span>

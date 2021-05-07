@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>liesym.algebras.exceptionals &#8212; liesym 0.1.0 documentation</title>
+    <title>liesym.algebras._exceptionals &#8212; liesym 0.1.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -67,12 +67,7 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../../../liesym.algebras.html">
-  liesym.algebras package
- </a>
-</li>
-
+    
     
 </ul>
       </div>
@@ -123,14 +118,22 @@
               
               <div>
                 
-  <h1>Source code for liesym.algebras.exceptionals</h1><div class="highlight"><pre>
+  <h1>Source code for liesym.algebras._exceptionals</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">S</span>
 <span class="kn">from</span> <span class="nn">sympy.core.sympify</span> <span class="kn">import</span> <span class="n">_sympify</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
+<span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
 
 
-<div class="viewcode-block" id="F4"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.F4">[docs]</a><span class="k">class</span> <span class="nc">F4</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="F4"><a class="viewcode-back" href="../../../index.html#liesym.F4">[docs]</a><span class="k">class</span> <span class="nc">F4</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type F4. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_F4.png</span>
+<span class="sd">           :height: 50px</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">_sympify</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 
@@ -152,7 +155,14 @@
         <span class="k">return</span> <span class="mi">48</span></div>
 
 
-<div class="viewcode-block" id="G2"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.G2">[docs]</a><span class="k">class</span> <span class="nc">G2</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="G2"><a class="viewcode-back" href="../../../index.html#liesym.G2">[docs]</a><span class="k">class</span> <span class="nc">G2</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type G2. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_G2.png</span>
+<span class="sd">           :height: 50px</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="n">_sympify</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 
@@ -189,7 +199,32 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">Matrix</span><span class="p">([</span><span class="n">roots</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
 
 
-<div class="viewcode-block" id="E"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.E">[docs]</a><span class="k">class</span> <span class="nc">E</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="E"><a class="viewcode-back" href="../../../index.html#liesym.E">[docs]</a><span class="k">class</span> <span class="nc">E</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type E. There are only three defined for</span>
+<span class="sd">    type E.</span>
+<span class="sd">    </span>
+<span class="sd">   </span>
+<span class="sd">        .. figure:: ../../docs/source/images/type_E6.png</span>
+<span class="sd">           :height: 100px</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           E6</span>
+
+
+<span class="sd">        .. figure:: ../../docs/source/images/type_E7.png</span>
+<span class="sd">           :height: 100px</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           E7</span>
+
+
+<span class="sd">        .. figure:: ../../docs/source/images/type_E8.png</span>
+<span class="sd">           :height: 100px</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           E8</span>
+<span class="sd">  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Algebra series E only defined for 6, 7 and 8}&quot;</span><span class="p">)</span>

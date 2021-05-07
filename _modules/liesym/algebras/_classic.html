@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>liesym.algebras.classic &#8212; liesym 0.1.0 documentation</title>
+    <title>liesym.algebras._classic &#8212; liesym 0.1.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -67,12 +67,7 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../../../liesym.algebras.html">
-  liesym.algebras package
- </a>
-</li>
-
+    
     
 </ul>
       </div>
@@ -123,11 +118,11 @@
               
               <div>
                 
-  <h1>Source code for liesym.algebras.classic</h1><div class="highlight"><pre>
+  <h1>Source code for liesym.algebras._classic</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">sympy.core.sympify</span> <span class="kn">import</span> <span class="n">_sympify</span>
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
+<span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
 
 
 <span class="k">def</span> <span class="nf">_euclidean_root</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -140,8 +135,13 @@
     <span class="k">return</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">root</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="A"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.A">[docs]</a><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type A.</span>
+<div class="viewcode-block" id="A"><a class="viewcode-back" href="../../../index.html#liesym.A">[docs]</a><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type A. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_A.png</span>
+<span class="sd">           :width: 300px</span>
+<span class="sd">           :align: center</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">_sympify</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
@@ -172,8 +172,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="B"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.B">[docs]</a><span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type B.</span>
+<div class="viewcode-block" id="B"><a class="viewcode-back" href="../../../index.html#liesym.B">[docs]</a><span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type B. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_B.png</span>
+<span class="sd">           :width: 300px</span>
+<span class="sd">           :align: center</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">_sympify</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
@@ -202,8 +207,12 @@
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<div class="viewcode-block" id="C"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.C">[docs]</a><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type C.</span>
+<div class="viewcode-block" id="C"><a class="viewcode-back" href="../../../index.html#liesym.C">[docs]</a><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type C. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_C.png</span>
+<span class="sd">           :width: 300px</span>
+<span class="sd">           :align: center</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -237,8 +246,12 @@
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<div class="viewcode-block" id="D"><a class="viewcode-back" href="../../../liesym.algebras.html#liesym.D">[docs]</a><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type C.</span>
+<div class="viewcode-block" id="D"><a class="viewcode-back" href="../../../index.html#liesym.D">[docs]</a><span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type D. The dynkin diagram for this algebra is</span>
+
+<span class="sd">        .. image:: ../../docs/source/images/type_D.png</span>
+<span class="sd">           :width: 300px</span>
+<span class="sd">           :align: center</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
