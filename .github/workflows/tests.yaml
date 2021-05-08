@@ -56,7 +56,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install setuptools setuptools-rust twine wheel numpy
+          pip install setuptools setuptools-rust twine wheel numpy pytest
 
       - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
