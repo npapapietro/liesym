@@ -3,7 +3,7 @@ from setuptools_rust import RustExtension
 
 setup_requires = ['setuptools-rust>=0.11.6', 'pytest-runner']
 install_requires = [
-    'numpy>=1.19.1', 
+    'numpy>=1.19.1',
     'sympy>=1.7.1'
 ]
 
@@ -23,5 +23,13 @@ setup(
     include_package_data=True,
     test_requires=["pytest"],
     author="Nathan Papapietro <npapapietro95@gmail.com>",
-    url="https://github.com/npapapietro/liesym"
+    url="https://github.com/npapapietro/liesym",
+    classifiers=[
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Physics",
+        "Programming Language :: Rust",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+    ]
 )
