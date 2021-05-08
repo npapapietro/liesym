@@ -55,8 +55,8 @@ jobs:
 
       - name: Install cargo test and setup.py dependencies
         run: |
-          python -m pip install -U pip setuptools
-          pip install setuptools-rust pytest numpy
+          python -m pip install -U pip 
+          pip install setuptools setuptools-rust twine wheel
 
       - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
@@ -66,13 +66,15 @@ jobs:
           python setup.py pytest
 
       - name: Test Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
         run: |
-          python -m pip install maturin
-          maturin publish --no-sdist -u __token__ -r https://test.pypi.org/legacy/
+          python setup.py sdist bdist_wheel
+          twine upload dist/* --repository-url https://test.pypi.org/legacy/
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
-      MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
 
   pypi-test-install:
     needs: [build]

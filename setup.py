@@ -1,5 +1,5 @@
 from setuptools import find_packages, setup
-from setuptools_rust import RustExtension
+from setuptools_rust import RustExtension, Binding
 
 setup_requires = ['setuptools-rust>=0.11.6', 'pytest-runner']
 install_requires = [
@@ -14,6 +14,7 @@ setup(
     rust_extensions=[RustExtension(
         'liesym.liesym',
         './Cargo.toml',
+        binding=Binding.PyO3,
         debug=False
     )],
     install_requires=install_requires,
