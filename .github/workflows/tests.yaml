@@ -12,15 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-      # - run: pip install black==19.10b0
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           profile: minimal
           components: rustfmt
-      # - name: Check python formatting (black)
-        # run: black --check .
       - name: Check rust formatting (rustfmt)
         run: cargo fmt --all -- --check
 
@@ -59,34 +55,27 @@ jobs:
         name: Prepare LD_LIBRARY_PATH (Ubuntu only)
         run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry pytest
-
-      - name: Install package deps
-        run: | 
-          poetry install
-
-      - name: pytest
-        run: poetry run pytest tests
-      # - name: Install cargo test and setup.py dependencies
-      #   run: |
-      #     python -m pip install -U pip setuptools
-      #     pip install setuptools-rust pytest numpy
-
-      # - name: Build docs
-      #   run: cargo doc --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
       - name: Build (no features)
         run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
 
       - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
 
-      - name: Run python tests
+      - name: Install dependencies
         run: |
-          python setup.py test
+          python -m pip install --upgrade pip
+          pip install poetry pytest maturin
+
+      - name: Install package deps
+        run: | 
+          poetry install
+
+      - name: Build Python package
+        run: poetry run maturin develop --release
+
+      - name: pytest
+        run: poetry run pytest tests
+
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"

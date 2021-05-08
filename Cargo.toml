@@ -15,5 +15,9 @@ num-traits = "0.2"
 numpy = "0.13.0"
 num = "0.3"
 itertools = "0.10.0"
+
 [dependencies.pyo3]
 version = "0.13.1"
+
+[features]
+default = ["pyo3/extension-module"]
