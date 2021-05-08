@@ -2,7 +2,10 @@ from setuptools import find_packages, setup
 from setuptools_rust import RustExtension
 
 setup_requires = ['setuptools-rust>=0.11.6', 'pytest-runner']
-install_requires = ['numpy', 'sympy']
+install_requires = [
+    'numpy>=1.19.1', 
+    'sympy>=1.7.1'
+]
 
 setup(
     name='liesym',
@@ -15,8 +18,10 @@ setup(
     )],
     install_requires=install_requires,
     setup_requires=setup_requires,
-    packages=find_packages(exclude=["src", "tests", "notebooks", "target"]),
+    packages=find_packages(include=["liesym"]),
     zip_safe=False,
     include_package_data=True,
     test_requires=["pytest"],
+    author="Nathan Papapietro <npapapietro95@gmail.com>",
+    url="https://github.com/npapapietro/liesym"
 )

@@ -87,7 +87,7 @@ impl LieAlgebraBackend {
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
 
-    pub fn tensor_product_decomposition<'py>(
+    fn tensor_product_decomposition<'py>(
         &self,
         py: Python<'py>,
         irrep1: PyReadonlyArray3<i64>,
@@ -99,13 +99,14 @@ impl LieAlgebraBackend {
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
 
-    pub fn dim<'py>(&self, _py: Python<'py>, irrep: PyReadonlyArray3<i64>) -> i64 {
+    fn dim<'py>(&self, _py: Python<'py>, irrep: PyReadonlyArray3<i64>) -> i64 {
         self.irrep_dim(to_rational_vector(irrep))
     }
 }
 
 /// Private implementations not exposed in python
 impl LieAlgebraBackend {
+
     fn get_postive_roots(&self) -> Vec<Array2R> {
         self.root_system_full()[..(self.roots / 2)].to_vec()
     }
@@ -512,7 +513,7 @@ mod test {
     use std::collections::HashSet;
     use std::iter::FromIterator;
 
-    use crate::utils::test::{py3darray, to_ratio};
+    use crate::utils::test::{to_ratio};
 
     enum GroupTestType {
         A,
@@ -520,102 +521,129 @@ mod test {
     }
 
     /// Generate A3 algebra
-    fn python_strings(
-        group_type: GroupTestType,
-    ) -> (usize, usize, String, String, String, String, String, String) {
-        match group_type {
-            GroupTestType::A => {
-                let rank = 3;
-                let roots = 12;
-                let simple_roots_str =
-                    "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
-                        .to_string();
-                let cartan_matrix_str =
-                    "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-1,1]],[[0,1],[-1,1],[2,1]]]".to_string();
-                let cartan_matrix_inv_str =
-                    "[[[3,4],[1,2],[1,4]],[[1,2],[1,1],[1,2]],[[1,4],[1,2],[3,4]]]".to_string();
-                let omega_matrix_str =
-                    "[[[3,4],[-1,4],[-1,4],[-1,4]],[[1,2],[1,2],[-1,2],[-1,2]],[[1,4],[1,4],[1,4],[-3,4]]]"
-                        .to_string();
-                let omega_matrix_inv_str =
-                    "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[1,1]],[[0,1],[0,1],[-1,1]]]"
-                        .to_string();
-                let cocartan_matrix_str =
-                    "[[[1,1],[-1,1],[0,1],[0,1]],[[0,1],[1,1],[-1,1],[0,1]],[[0,1],[0,1],[1,1],[-1,1]]]"
-                        .to_string();
-
-                (
-                    rank,
-                    roots,
-                    simple_roots_str,
-                    cartan_matrix_str,
-                    cartan_matrix_inv_str,
-                    omega_matrix_str,
-                    omega_matrix_inv_str,
-                    cocartan_matrix_str,
-                )
-            }
-            GroupTestType::B => {
-                let rank = 3;
-                let roots = 18;
-                let simple_roots_str =
-                    "[[[1,1],[-1,1],[0,1]],[[0,1],[1,1],[-1,1]],[[0,1],[0,1],[1,1]]]".to_string();
-                let cartan_matrix_str =
-                    "[[[2,1],[-1,1],[0,1]],[[-1,1],[2,1],[-2,1]],[[0,1],[-1,1],[2,1]]]".to_string();
-                let cartan_matrix_inv_str =
-                    "[[[1,1],[1,1],[1,1]],[[1,1],[2,1],[2,1]],[[1,2],[1,1],[3,2]]]".to_string();
-                let omega_matrix_str =
-                    "[[[1,1],[0,1],[0,1]],[[1,1],[1,1],[0,1]],[[1,2],[1,2],[1,2]]]".to_string();
-                let omega_matrix_inv_str =
-                    "[[[1,1],[0,1],[0,1]],[[-1,1],[1,1],[0,1]],[[0,1],[-1,1],[2,1]]]".to_string();
-                let cocartan_matrix_str =
-                    "[[[1,1],[-1,1],[0,1]],[[0,1],[1,1],[-1,1]],[[0,1],[0,1],[2,1]]]".to_string();
-
-                (
-                    rank,
-                    roots,
-                    simple_roots_str,
-                    cartan_matrix_str,
-                    cartan_matrix_inv_str,
-                    omega_matrix_str,
-                    omega_matrix_inv_str,
-                    cocartan_matrix_str,
-                )
+    fn helper_liealgebra(group_type: GroupTestType) -> LieAlgebraBackend {
+        fn from_values(
+            rank: usize,
+            roots: usize,
+            simple_roots: Vec<Array2R>,
+            cartan_matrix: Array2R,
+            cartan_matrix_inverse: Array2R,
+            omega_matrix: Array2R,
+            omega_matrix_inverse: Array2R,
+            cocartan_matrix: Array2R,
+        ) -> LieAlgebraBackend {
+            LieAlgebraBackend {
+                rank,
+                roots,
+                simple_roots,
+                cartan_matrix,
+                cartan_matrix_inverse,
+                omega_matrix,
+                omega_matrix_inverse,
+                cocartan_matrix,
             }
         }
-    }
-
-    fn helper_liealgebra(group_type: GroupTestType) -> LieAlgebraBackend {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-
-        let (
-            rank,
-            roots,
-            simple_roots_str,
-            cartan_matrix_str,
-            cartan_matrix_inv_str,
-            omega_matrix_str,
-            omega_matrix_inv_str,
-            cocartan_matrix_str,
-        ) = python_strings(group_type);
-
-        let simple_roots = py3darray(py, simple_roots_str).readonly();
-        let cartan_matrix = py3darray(py, cartan_matrix_str).readonly();
-        let cartan_matrix_inv = py3darray(py, cartan_matrix_inv_str).readonly();
-        let omega_matrix = py3darray(py, omega_matrix_str).readonly();
-        let omega_matrix_inv = py3darray(py, omega_matrix_inv_str).readonly();
-        let cocartan_matrix = py3darray(py, cocartan_matrix_str).readonly();
-        LieAlgebraBackend::new(
-            rank,
-            roots,
-            simple_roots,
-            cartan_matrix,
-            cartan_matrix_inv,
-            omega_matrix,
-            omega_matrix_inv,
-            cocartan_matrix,
-        )
+        match group_type {
+            GroupTestType::A => from_values(
+                3,
+                12,
+                vec![
+                    to_ratio(array![[1, -1, 0, 0]]),
+                    to_ratio(array![[0, 1, -1, 0]]),
+                    to_ratio(array![[0, 0, 1, -1]]),
+                ],
+                array![
+                    [Ratio::new(2, 1), Ratio::new(-1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(-1, 1), Ratio::new(2, 1), Ratio::new(-1, 1)],
+                    [Ratio::new(0, 1), Ratio::new(-1, 1), Ratio::new(2, 1)]
+                ],
+                array![
+                    [Ratio::new(3, 4), Ratio::new(1, 2), Ratio::new(1, 4)],
+                    [Ratio::new(1, 2), Ratio::new(1, 1), Ratio::new(1, 2)],
+                    [Ratio::new(1, 4), Ratio::new(1, 2), Ratio::new(3, 4)]
+                ],
+                array![
+                    [
+                        Ratio::new(3, 4),
+                        Ratio::new(-1, 4),
+                        Ratio::new(-1, 4),
+                        Ratio::new(-1, 4)
+                    ],
+                    [
+                        Ratio::new(1, 2),
+                        Ratio::new(1, 2),
+                        Ratio::new(-1, 2),
+                        Ratio::new(-1, 2)
+                    ],
+                    [
+                        Ratio::new(1, 4),
+                        Ratio::new(1, 4),
+                        Ratio::new(1, 4),
+                        Ratio::new(-3, 4)
+                    ]
+                ],
+                array![
+                    [Ratio::new(1, 1), Ratio::new(0, 1), Ratio::new(0, 1)],
+                    [Ratio::new(-1, 1), Ratio::new(1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(0, 1), Ratio::new(-1, 1), Ratio::new(1, 1)],
+                    [Ratio::new(0, 1), Ratio::new(0, 1), Ratio::new(-1, 1)]
+                ],
+                array![
+                    [
+                        Ratio::new(1, 1),
+                        Ratio::new(-1, 1),
+                        Ratio::new(0, 1),
+                        Ratio::new(0, 1)
+                    ],
+                    [
+                        Ratio::new(0, 1),
+                        Ratio::new(1, 1),
+                        Ratio::new(-1, 1),
+                        Ratio::new(0, 1)
+                    ],
+                    [
+                        Ratio::new(0, 1),
+                        Ratio::new(0, 1),
+                        Ratio::new(1, 1),
+                        Ratio::new(-1, 1)
+                    ]
+                ],
+            ),
+            GroupTestType::B => from_values(
+                3,
+                18,
+                vec![
+                    to_ratio(array![[1, -1, 0]]),
+                    to_ratio(array![[0, 1, -1]]),
+                    to_ratio(array![[0, 0, 1,]]),
+                ],
+                array![
+                    [Ratio::new(2, 1), Ratio::new(-1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(-1, 1), Ratio::new(2, 1), Ratio::new(-2, 1)],
+                    [Ratio::new(0, 1), Ratio::new(-1, 1), Ratio::new(2, 1)]
+                ],
+                array![
+                    [Ratio::new(1, 1), Ratio::new(1, 1), Ratio::new(1, 1)],
+                    [Ratio::new(1, 1), Ratio::new(2, 1), Ratio::new(2, 1)],
+                    [Ratio::new(1, 2), Ratio::new(1, 1), Ratio::new(3, 2)]
+                ],
+                array![
+                    [Ratio::new(1, 1), Ratio::new(0, 1), Ratio::new(0, 1)],
+                    [Ratio::new(1, 1), Ratio::new(1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(1, 2), Ratio::new(1, 2), Ratio::new(1, 2)]
+                ],
+                array![
+                    [Ratio::new(1, 1), Ratio::new(0, 1), Ratio::new(0, 1)],
+                    [Ratio::new(-1, 1), Ratio::new(1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(0, 1), Ratio::new(-1, 1), Ratio::new(2, 1)]
+                ],
+                array![
+                    [Ratio::new(1, 1), Ratio::new(-1, 1), Ratio::new(0, 1)],
+                    [Ratio::new(0, 1), Ratio::new(1, 1), Ratio::new(-1, 1)],
+                    [Ratio::new(0, 1), Ratio::new(0, 1), Ratio::new(2, 1)]
+                ],
+            ),
+        }
     }
 
     #[test]

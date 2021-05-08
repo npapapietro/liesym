@@ -12,15 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-      # - run: pip install black==19.10b0
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           profile: minimal
           components: rustfmt
-      # - name: Check python formatting (black)
-        # run: black --check .
       - name: Check rust formatting (rustfmt)
         run: cargo fmt --all -- --check
 
@@ -29,19 +25,16 @@ jobs:
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
-      fail-fast: false  # If one platform fails, allow the rest to keep testing.
       matrix:
         rust: [stable]
-        python-version: [3.6, 3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
+        python-version: [3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
         platform: [
           { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
           { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
           { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-          { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
         ]
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -76,10 +69,82 @@ jobs:
 
       - name: Run python tests
         run: |
-          python setup.py test
+          python setup.py pytest
+
+      - name: Test Publish
+        run: |
+          python -m pip install maturin
+          maturin publish --no-sdist -u __token__ -r https://test.pypi.org/legacy/
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
-      # TODO: this is a hack to workaround compile_error! warnings about auto-initialize on PyPy
-      # Once cargo's `resolver = "2"` is stable (~ MSRV Rust 1.52), remove this.
-      PYO3_CI: 1
+      MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+
+  pypi-test-install:
+    needs: [build]
+    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      matrix:
+        rust: stable
+        python-version: [3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
+        platform: [
+          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
+          { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
+          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
+        ]
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.platform.python-architecture }}
+      - name: Running pip install
+        run: |
+          pip install --index-url https://test.pypi.org/simple/ liesym
+          python -c "import liesym; liesym.A(2).positive_roots"
+
+  # pypi-test-install:
+  #   needs: [build]
+  #   name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+  #   runs-on: ${{ matrix.platform.os }}
+  #   strategy:
+  #     matrix:
+  #       rust: stable
+  #       python-version: [3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
+  #       platform: [
+  #         { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
+  #         { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
+  #         { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
+  #       ]
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #         architecture: ${{ matrix.platform.python-architecture }}
+
+  #     - name: Install Rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: ${{ matrix.rust }}
+  #         target: ${{ matrix.platform.rust-target }}
+  #         profile: minimal
+  #         default: true
+
+  #     - if: matrix.platform.os == 'ubuntu-latest'
+  #       name: Prepare LD_LIBRARY_PATH (Ubuntu only)
+  #       run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
+
+  #     - name: Install cargo test and setup.py dependencies
+  #       run: |
+  #         python -m pip install maturin
+  #         maturin publish --no-sdist -u __token__
+  #   env:
+  #     RUST_BACKTRACE: 1
+  #     RUSTFLAGS: "-D warnings"
+  #     MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD }}
+
+  
