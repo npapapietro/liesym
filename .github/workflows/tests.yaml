@@ -71,7 +71,7 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
         run: |
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
           twine upload dist/* --repository-url https://test.pypi.org/legacy/
       - if: matrix.platform.os == 'ubuntu-latest'
         name: Ubuntu
@@ -79,7 +79,7 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
         run: |
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
           for whl in dist/*.whl; do
             auditwheel repair "$whl" -w dist/
           done

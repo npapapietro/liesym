@@ -14,7 +14,7 @@ install_requires = [
 
 setup(
     name='liesym',
-    version='0.1.2',
+    version='0.1.3',
     description='Sympy Lie Algebra extensions powered by rust.',
     rust_extensions=[RustExtension(
         'liesym.liesym',
