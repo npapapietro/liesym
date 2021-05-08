@@ -8,22 +8,23 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          components: rustfmt
-      - name: Check rust formatting (rustfmt)
-        run: cargo fmt --all -- --check
+  # fmt:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #         profile: minimal
+  #         components: rustfmt
+  #     - name: Check rust formatting (rustfmt)
+  #       run: cargo fmt --all -- --check
 
   build:
-    needs: [fmt]
+    # needs: [fmt]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
+    fail-fast: false
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
@@ -57,12 +58,6 @@ jobs:
           python -m pip install -U pip setuptools
           pip install setuptools-rust pytest numpy
 
-      - name: Build docs
-        run: cargo doc --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
-      - name: Build (no features)
-        run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
       - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
 
@@ -83,6 +78,7 @@ jobs:
     needs: [build]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
+    fail-fast: false
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
