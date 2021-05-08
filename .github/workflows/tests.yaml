@@ -66,7 +66,7 @@ jobs:
           python setup.py pytest
       
       - if: matrix.platform.os != 'ubuntu-latest'
-      - name: Test Publish Win/Mac
+        name: Test Publish Win/Mac
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
@@ -74,6 +74,7 @@ jobs:
           python setup.py sdist bdist_wheel
           twine upload dist/* --repository-url https://test.pypi.org/legacy/
       - if: matrix.platform.os == 'ubuntu-latest'
+        name: Ubuntu
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
