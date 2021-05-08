@@ -55,12 +55,6 @@ jobs:
         name: Prepare LD_LIBRARY_PATH (Ubuntu only)
         run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
 
-      - name: Build (no features)
-        run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
-      - name: Test
-        run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -69,6 +63,12 @@ jobs:
       - name: Install package deps
         run: | 
           poetry install
+
+      - name: Build (no features)
+        run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
+
+      - name: Test
+        run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
 
       - name: Build Python package
         run: poetry run maturin develop --release
