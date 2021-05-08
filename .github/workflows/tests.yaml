@@ -64,14 +64,26 @@ jobs:
       - name: Run python tests
         run: |
           python setup.py pytest
-
-      - name: Test Publish
+      
+      - if: matrix.platform.os != 'ubuntu-latest'
+      - name: Test Publish Win/Mac
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
         run: |
           python setup.py sdist bdist_wheel
           twine upload dist/* --repository-url https://test.pypi.org/legacy/
+      - if: matrix.platform.os == 'ubuntu-latest'
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+        run: |
+          python setup.py sdist bdist_wheel
+          for whl in dist/*.whl; do
+            auditwheel repair "$whl" -w dist/
+          done
+          twine upload dist/* --repository-url https://test.pypi.org/legacy/
+
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
