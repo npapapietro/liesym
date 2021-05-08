@@ -106,7 +106,6 @@ impl LieAlgebraBackend {
 
 /// Private implementations not exposed in python
 impl LieAlgebraBackend {
-
     fn get_postive_roots(&self) -> Vec<Array2R> {
         self.root_system_full()[..(self.roots / 2)].to_vec()
     }
@@ -513,7 +512,7 @@ mod test {
     use std::collections::HashSet;
     use std::iter::FromIterator;
 
-    use crate::utils::test::{to_ratio};
+    use crate::utils::test::to_ratio;
 
     enum GroupTestType {
         A,
