@@ -19,7 +19,7 @@ FROM npapapietro/pythonbundles:py38rust
 WORKDIR /app
 COPY . .
 RUN pip install -U pip
-RUN pip install -U setuptools setuptools-rust twine wheel numpy pytest auditwheel maturin
+RUN pip install -U wheel numpy pytest auditwheel maturin
 ENV MATURIN_PASSWORD=pypi-AgENdGVzdC5weXBpLm9yZwIkZDZkZGNhMDMtMmM0Mi00Nzg4LTg0MGItOTM0MDliZjkxM2UxAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiDpCyQTXGg8Bqlq9AicNfB3RAcwfAUHYmx2BK7hruofoA
 RUN maturin publish --no-sdist -u __token__ -r https://test.pypi.org/legacy/
 

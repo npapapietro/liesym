@@ -49,61 +49,36 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install wheel numpy pytest maturin
-      - name: Test
-        run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
-      - name: Run python tests
-        run: |
-          pytest
-      - name: Ubuntu
+          pip install wheel numpy pytest setuptools wheel setuptools-rust
+      # - name: Test
+      #   run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
+      # - name: Run python tests
+      #   run: |
+      #     python setup.py pytest
+      - name: publish
         env:
-          MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
-          VER: ${{ matrix.python-version }}
+          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+          TWINE_USERNAME: __token__
         run: |
-          maturin publish --no-sdist -u __token__ -r https://test.pypi.org/legacy/
-    env:
+          python setup.py bdist_wheel 
+          twine upload dist/* --repository-url https://test.pypi.org/legacy/    env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
 
   build-linux:
     # needs: [fmt]
-    name: python${{ matrix.python-version }}-x64 ubuntu-latest ${{ matrix.msrv }}
+    name: Publish linux
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.7, 3.8, 3.9] 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: x86_64-unknown-linux-gnu
-          profile: minimal
-          default: true
-      - name: Prepare LD_LIBRARY_PATH (Ubuntu only)
-        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
-      - name: Install cargo test and setup.py dependencies
-        run: |
-          python -m pip install -U pip 
-          pip install wheel numpy pytest maturin
-      - name: Test
-        run: cargo test --no-default-features --target x86_64-unknown-linux-gnu
-      - name: Run python tests
-        run: |
-          pytest
-      - name: Ubuntu
+      - name: Publish
         env:
-          MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
-          VER: ${{ matrix.python-version }}
-        run: |          
-          maturin publish $([ $VER == "3.7"] && echo "--no-sdist" || echo "") -u __token__ -r https://test.pypi.org/legacy/
+          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+          TWINE_USERNAME: __token__
+        run: |
+          docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
+          twine upload dist/* --repository-url https://test.pypi.org/legacy/
+
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
