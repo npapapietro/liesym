@@ -1,6 +1,6 @@
 [tools.poetry]
 name='liesym'
-version='0.1.1'
+version='0.1.5'
 description='Sympy Lie Algebra extensions powered by rust.'
 authors= "Nathan Papapietro <npapapietro95@gmail.com>"
 readme="README.md"
@@ -25,4 +25,6 @@ packages= [
 ]
 
 [build-system]
-requires = ["setuptools", "wheel", "setuptools-rust"]
+requires = ["maturin>=0.10,<0.11"]
+build-backend = "maturin"
+

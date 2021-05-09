@@ -1,8 +1,12 @@
 [package]
 name = "liesym"
-version = "0.1.0"
+version = "0.1.5"
 authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
 edition = "2018"
+license-file = "LICENSE"
+documentation = "https://npapapietro.github.io/liesym"
+repository = "https://github.com/npapapietro/liesym"
+description = "Sympy Lie Algebra extensions powered by rust."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -21,3 +25,17 @@ version = "0.13.1"
 [features]
 default = ["pyo3/extension-module"]
 
+[package.metadata.maturin]
+requires-dist=[
+    'numpy>=1.19.1',
+    'sympy>=1.7.1']
+
+
+classifiers=[
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
