@@ -12,74 +12,86 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-      # - run: pip install black==19.10b0
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           profile: minimal
           components: rustfmt
-      # - name: Check python formatting (black)
-        # run: black --check .
       - name: Check rust formatting (rustfmt)
         run: cargo fmt --all -- --check
 
-  build:
+  build-mac-win:
     needs: [fmt]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
-      fail-fast: false  # If one platform fails, allow the rest to keep testing.
+      fail-fast: false
       matrix:
-        rust: [stable]
-        python-version: [3.6, 3.7, 3.8, 3.9] #, 3.10-dev, pypy-3.6]
+        python-version: [3.7, 3.8, 3.9]
         platform: [
           { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
-          { os: "ubuntu-latest", python-architecture: "x64", rust-target: "x86_64-unknown-linux-gnu" },
           { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-          { os: "windows-latest", python-architecture: "x86", rust-target: "i686-pc-windows-msvc" },
         ]
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.platform.python-architecture }}
-
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
           target: ${{ matrix.platform.rust-target }}
           profile: minimal
           default: true
-
-      - if: matrix.platform.os == 'ubuntu-latest'
-        name: Prepare LD_LIBRARY_PATH (Ubuntu only)
-        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
-
       - name: Install cargo test and setup.py dependencies
         run: |
-          python -m pip install -U pip setuptools
-          pip install setuptools-rust pytest numpy
-
-      - name: Build docs
-        run: cargo doc --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
-      - name: Build (no features)
-        run: cargo build --no-default-features --verbose --target ${{ matrix.platform.rust-target }}
-
+          python -m pip install -U pip 
+          pip install wheel numpy sympy pytest setuptools wheel setuptools-rust twine
       - name: Test
         run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
-
       - name: Run python tests
         run: |
-          python setup.py test
+          python setup.py pytest
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
-      # TODO: this is a hack to workaround compile_error! warnings about auto-initialize on PyPy
-      # Once cargo's `resolver = "2"` is stable (~ MSRV Rust 1.52), remove this.
-      PYO3_CI: 1
+
+  test-linux:
+    needs: [fmt]
+    name: Test linux
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+    env:
+      RUST_BACKTRACE: 1
+      RUSTFLAGS: "-D warnings"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          default: true
+      - name: Prepare LD_LIBRARY_PATH
+        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
+      - name: Install cargo test and setup.py dependencies
+        run: |
+          python -m pip install -U pip 
+          pip install wheel numpy sympy pytest setuptools wheel setuptools-rust
+      - name: Test
+        run: cargo test --no-default-features --target x86_64-unknown-linux-gnu
+      - name: Run python tests
+        run: |
+          python setup.py pytest
+

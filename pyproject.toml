@@ -1,0 +1,29 @@
+[tools.poetry]
+name='liesym'
+version='0.1.5'
+description='Sympy Lie Algebra extensions powered by rust.'
+authors= "Nathan Papapietro <npapapietro95@gmail.com>"
+readme="README.md"
+documentations="https://npapapietro.github.io/liesym"
+classifiers=[
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+url="https://github.com/npapapietro/liesym"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+numpy="^1.19"
+sympy="^1.7.1"
+
+packages= [
+    {include="liesym"}
+]
+
+[build-system]
+requires = ["setuptools", "wheel", "setuptools-rust"]
+build-backend = "setuptools.build_meta"
