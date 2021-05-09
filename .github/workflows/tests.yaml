@@ -49,7 +49,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install wheel numpy pytest setuptools wheel setuptools-rust
+          pip install wheel numpy pytest setuptools wheel setuptools-rust twine
       # - name: Test
       #   run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
       # - name: Run python tests
@@ -77,8 +77,9 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
           TWINE_USERNAME: __token__
         run: |
+          python -m pip install twine
           docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
-          twine upload dist/* --repository-url https://test.pypi.org/legacy/
+          python -m twine upload dist/* --repository-url https://test.pypi.org/legacy/
 
     env:
       RUST_BACKTRACE: 1
