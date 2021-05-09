@@ -61,7 +61,8 @@ jobs:
           TWINE_USERNAME: __token__
         run: |
           python setup.py bdist_wheel 
-          twine upload dist/* --repository-url https://test.pypi.org/legacy/    env:
+          twine upload dist/* --repository-url https://test.pypi.org/legacy/    
+    env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
 
