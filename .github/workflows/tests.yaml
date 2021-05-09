@@ -54,13 +54,6 @@ jobs:
       - name: Run python tests
         run: |
           python setup.py pytest
-      - name: publish
-        env:
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          TWINE_USERNAME: __token__
-        run: |
-          python setup.py bdist_wheel 
-          twine upload dist/*  
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
