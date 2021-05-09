@@ -1,6 +1,6 @@
 # Largely taken from https://github.com/PyO3/pyo3/blob/master/.github/workflows/ci.yml
 
-name: Test Module
+name: Publish Module
 on:
   push:
     tag: ["v*"]
