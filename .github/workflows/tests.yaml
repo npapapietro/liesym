@@ -8,20 +8,19 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  # fmt:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #         profile: minimal
-  #         components: rustfmt
-  #     - name: Check rust formatting (rustfmt)
-  #       run: cargo fmt --all -- --check
-
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          components: rustfmt
+      - name: Check rust formatting (rustfmt)
+        run: cargo fmt --all -- --check
   build-mac-win:
-    # needs: [fmt]
+    needs: [fmt]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
@@ -49,46 +48,75 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install wheel numpy pytest setuptools wheel setuptools-rust twine
-      # - name: Test
-      #   run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
-      # - name: Run python tests
-      #   run: |
-      #     python setup.py pytest
+          pip install wheel numpy sympy pytest setuptools wheel setuptools-rust twine
+      - name: Test
+        run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
+      - name: Run python tests
+        run: |
+          python setup.py pytest
       - name: publish
         env:
-          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           TWINE_USERNAME: __token__
         run: |
           python setup.py bdist_wheel 
-          twine upload dist/* --repository-url https://test.pypi.org/legacy/    
+          twine upload dist/*  
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
 
-  build-linux:
-    # needs: [fmt]
+  test-linux:
+    needs: [fmt]
+    name: Test linux
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+    env:
+      RUST_BACKTRACE: 1
+      RUSTFLAGS: "-D warnings"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          profile: minimal
+          default: true
+      - name: Prepare LD_LIBRARY_PATH (Ubuntu only)
+        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
+      - name: Install cargo test and setup.py dependencies
+        run: |
+          python -m pip install -U pip 
+          pip wheel numpy sympy pytest setuptools wheel setuptools-rust twine
+      - name: Test
+        run: cargo test --no-default-features --target x86_64-unknown-linux-gnu
+      - name: Run python tests
+        run: |
+          python setup.py pytest
+  publish-linux:
+    needs: [test-linux]
     name: Publish linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Publish
         env:
-          TWINE_PASSWORD: ${{ secrets.MATURIN_PASSWORD_TEST }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           TWINE_USERNAME: __token__
         run: |
           python -m pip install twine
           docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
-          python -m twine upload dist/* --repository-url https://test.pypi.org/legacy/
-
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
-
-
+          python -m twine upload dist/*
   pypi-test-install:
     needs: [build-linux, build-mac-win]
-    name: python ${{ matrix.platform.os }} ${{ matrix.msrv }}
+    name: python test install ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
       fail-fast: false
@@ -106,6 +134,6 @@ jobs:
           architecture: x64
       - name: Running pip install
         run: |
-          pip install --index-url https://test.pypi.org/simple/ liesym
+          pip install liesym
           python -c "import liesym; liesym.A(2).positive_roots"
 
