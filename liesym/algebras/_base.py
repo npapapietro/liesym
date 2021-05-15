@@ -1,8 +1,7 @@
 from sympy.core import Basic
-from sympy import Matrix, ones, Symbol, sympify
+from sympy import Matrix, Symbol, sympify
 from typing import List, Tuple, Union
 from copy import deepcopy
-from itertools import product
 from functools import cmp_to_key
 import re
 
