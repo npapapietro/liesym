@@ -5,7 +5,6 @@ use ndarray::Array;
 use num::rational::Ratio;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
-use pyo3::types::PyTuple;
 use std::cmp::Ordering;
 use std::collections::HashSet;
 use std::iter::FromIterator;
@@ -111,14 +110,25 @@ impl LieAlgebraBackend {
         self.irrep_dim(to_rational_vector(irrep))
     }
 
-    fn scalar_product_tuple<'py>(
+    fn irrep_by_dim<'py>(
         &self,
         py: Python<'py>,
-        irrep1: PyReadonlyArray3<i64>,
-        irrep2: PyReadonlyArray3<i64>,
-    ) -> &'py PyTuple {
-        let sp = self.scalar_product(to_rational_vector(irrep1), to_rational_vector(irrep2));
-        PyTuple::new(py, vec![sp.numer(), sp.denom()])
+        dim: i64,
+        max_dynkin_digit: i64,
+    ) -> (&'py PyArray3<i64>, &'py PyArray3<i64>) {
+        let results = self.get_irrep_by_dim(dim, max_dynkin_digit);
+        let (numer, denom) = vecarray_to_pyreturn(results);
+        (numer.into_pyarray(py), denom.into_pyarray(py))
+    }
+
+    fn index_irrep<'py>(
+        &self,
+        _py: Python<'py>,
+        irrep: PyReadonlyArray3<i64>,
+        dim: i64
+    ) -> (i64, i64) {
+        let result = self.get_index_irrep(to_rational_vector(irrep), dim);
+        (*result.numer(), *result.denom())
     }
 }
 
@@ -516,35 +526,36 @@ impl LieAlgebraBackend {
         tensor_decomp
     }
 
-    // fn index_irrep(&self, irrep: Array2R, dim: i64) -> Ratio<i64> {
-    //     let delta = Array2R::ones((1, self.rank));
+    fn get_index_irrep(&self, irrep: Array2R, dim: i64) -> Ratio<i64> {
+        let delta = Array2R::ones((1, self.rank));
+        self.scalar_product(irrep.clone(), irrep + delta * 2) * dim / (self.roots as i64)
+    }
 
-    //     self.scalar_product(irrep.clone(), irrep + delta * 2) * dim / (self.roots as i64)
-    // }
-
-    // fn get_irrep_by_dim(&self, dim: i64, max_dyn_digit: i64) -> Vec<Array2R> {
-    //     let mut v = (0..(max_dyn_digit + 1))
-    //         .map(|_| 0..self.rank)
-    //         .multi_cartesian_product()
-    //         .map(|i| {
-    //             Array::from(
-    //                 i.iter()
-    //                     .map(|j| Ratio::new(j.clone() as i64, 1))
-    //                     .collect::<Vec<_>>(),
-    //             )
-    //             .into_shape((1, self.rank))
-    //             .unwrap()
-    //         })
-    //         .filter(|i| self.irrep_dim(i.clone()) == dim)
-    //         .collect::<Vec<_>>();
-    //     v.sort_by(|a, b| {
-    //         let i1 = self.index_irrep(a.clone(), dim);
-    //         let i2 = self.index_irrep(b.clone(), dim);
-    //         i1.cmp(&i2)
-    //             .then(Vec::from_iter(a.iter()).cmp(&Vec::from_iter(b.iter())))
-    //     });
-    //     v
-    // }
+    fn get_irrep_by_dim(&self, dim: i64, max_dyn_digit: i64) -> Vec<Array2R> {
+        let mut v = (0..self.rank)
+            .map(|_| 0..(max_dyn_digit + 1))
+            .multi_cartesian_product()
+            .collect::<Vec<_>>()
+            .into_par_iter()
+            .map(|i| {
+                Array::from(
+                    i.iter()
+                        .map(|j| Ratio::new(j.clone() as i64, 1))
+                        .collect::<Vec<_>>(),
+                )
+                .into_shape((1, self.rank))
+                .unwrap()
+            })
+            .filter(|i| self.irrep_dim(i.clone()) == dim)
+            .collect::<Vec<_>>();
+        v.sort_by(|a, b| {
+            let i1 = self.get_index_irrep(a.clone(), dim);
+            let i2 = self.get_index_irrep(b.clone(), dim);
+            i1.cmp(&i2)
+                .then(Vec::from_iter(b.iter()).cmp(&Vec::from_iter(a.iter())))
+        });
+        v
+    }
 }
 
 #[cfg(test)]
@@ -1182,6 +1193,36 @@ mod test {
                 set_diff(results.iter(), expected.iter()).len(),
                 0,
                 "Group B\nTwo term tensordecmop is not correct"
+            );
+        }
+    }
+
+    #[test]
+    fn test_get_irrep_by_dim() {
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+
+            let irreps = algebra.get_irrep_by_dim(20, 3);
+            let expected = vec![
+                to_ratio(array![[1, 1, 0]]),
+                to_ratio(array![[0, 1, 1]]),
+                to_ratio(array![[0, 2, 0]]),
+                to_ratio(array![[3, 0, 0]]),
+                to_ratio(array![[0, 0, 3]]),
+            ];
+            assert_eq!(
+                irreps, expected,
+                "Group A\nTwo term get_irrep_by_dim is not correct"
+            );
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::B);
+
+            let irreps = algebra.get_irrep_by_dim(2800, 3);
+            let expected = vec![to_ratio(array![[1, 2, 1]])];
+            assert_eq!(
+                irreps, expected,
+                "Group B\nTwo term get_irrep_by_dim is not correct"
             );
         }
     }

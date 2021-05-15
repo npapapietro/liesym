@@ -30,11 +30,15 @@ def _rust_new(func):
 def _rust_wrapper(func):
     def inner(*args, **kwargs):
         cls = args[0]
+        
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
 
         if isinstance(result, (int, str, float, bool)) or result is None:
             return result
+
+        if not isinstance(result, tuple):
+            return
 
         # Tuple of ints
         if isinstance(result[0], int) and isinstance(result[1], int):
@@ -79,8 +83,12 @@ class _LieAlgebraBackendWrapped:
         return self.backend.dim(irrep)
 
     @_rust_wrapper
-    def scalar_product(self, irrepA, irrepB):
-        return self.backend.scalar_product_tuple(irrepA, irrepB)
+    def get_irrep_by_dim(self, dim, max_dd):
+        return self.backend.irrep_by_dim(dim, max_dd)
+
+    @_rust_wrapper
+    def index_irrep(self, irrep, dim):
+        return self.backend.index_irrep(irrep, dim)
 
 
 def create_backend(algebra):

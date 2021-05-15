@@ -40,29 +40,6 @@ imported in `./liesym/__init__.py`
 └── ...                 # other stuff
 ```
 
-## Example use
-
-```python
-from liesym import A, G2
-
-su3 = A(2)
-pr3 = su3.positive_roots
-
-assert pr3 == [Matrix([[1, 1]]), Matrix([[-1, 2]]), Matrix([[2, -1]])]
-
-g2 = G2()
-prg = g2.positive_roots
-
-assert prg == [
-    Matrix([[0, 1]]),
-    Matrix([[3, -1]]),
-    Matrix([[1, 0]]),
-    Matrix([[-1, 1]]),
-    Matrix([[-3, 2]]),
-    Matrix([[2, -1]])
-]
-```
-
 ## Docs
 
 Read the documentation at https://npapapietro.github.io/liesym/
