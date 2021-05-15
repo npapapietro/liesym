@@ -125,7 +125,7 @@ impl LieAlgebraBackend {
         &self,
         _py: Python<'py>,
         irrep: PyReadonlyArray3<i64>,
-        dim: i64
+        dim: i64,
     ) -> (i64, i64) {
         let result = self.get_index_irrep(to_rational_vector(irrep), dim);
         (*result.numer(), *result.denom())
