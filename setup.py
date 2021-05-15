@@ -13,7 +13,7 @@ setup_requires = [
 
 install_requires = [
     'numpy>=1.16',
-    'sympy>=1.5'
+    'sympy>=1.5',
 ]
 
 setup(
@@ -28,6 +28,7 @@ setup(
     )],
     install_requires=install_requires,
     setup_requires=setup_requires,
+    python_requires=">=3.7",
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

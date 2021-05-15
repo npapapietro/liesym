@@ -1,9 +1,10 @@
-from numpy.lib.arraysetops import isin
 from sympy.core import Basic
-from sympy.core.sympify import _sympify
-from sympy import Matrix
-from typing import List
+from sympy import Matrix, ones, Symbol, sympify
+from typing import List, Tuple, Union
 from copy import deepcopy
+from itertools import product
+from functools import cmp_to_key
+import re
 
 from ._methods import (
     _cartan_matrix,
@@ -14,13 +15,37 @@ from ._methods import (
 
 from ._backend import create_backend
 
+class NumericSymbol(Symbol):
+    """Extension of Sympy symbol that allows
+    latex formatting but also tracks the underlying 
+    integer value. Useful for dimension representations
+    of irreps"""
+    def __new__(cls, dim: int, fmtted_dim: str):
+        obj = super().__new__(cls, fmtted_dim)
+        obj.numeric_dim = int(dim)
+        return obj
+
+    @classmethod
+    def from_symbol(cls, symbol: Symbol):
+        """Converts from sympy.Symbol into NumericSymbol by
+        regex search for digits from latex display pattern and 
+        returns a NumericSymbol. Will raise if no numeric is 
+        present in the symbol.
+        """
+        try:
+            s = symbol.__str__()
+            num = re.findall(r"\d+", s)[0]
+            return cls(int(num), s)
+        except (IndexError,ValueError):
+            raise ValueError("Could not extract numerical from sympy.Symbol")
+
 
 class LieAlgebra(Basic):
     """The base class for all lie algebras. The methods and properties
     in this class are basis independent and apply in a general sense. In
     order to write down the roots as matricies and vectors, we choose a 
     representation.
-    
+
     """
     def __new__(cls, series: str, rank: int):
         """
@@ -30,7 +55,7 @@ class LieAlgebra(Basic):
             series (str): The series type
             rank (int): The rank of the algebra
         """
-        return super().__new__(cls, series, _sympify(rank))
+        return super().__new__(cls, series, sympify(rank))
 
     def __init__(self, *args, **kwargs):
         """Used to set lazy properties
@@ -63,9 +88,13 @@ class LieAlgebra(Basic):
         """
 
     @property
-    def roots(self) -> int:
-        """Total number of roots in the algebra
+    def n_pos_roots(self) -> int:
+        """Total number of positive roots in the algebra
         """
+    @property
+    def n_roots(self) -> int:
+        """Total number of roots in the algebra"""
+        return 2 * self.n_pos_roots + self.rank
 
     @property
     def simple_roots(self) -> List[Matrix]:
@@ -196,7 +225,7 @@ class LieAlgebra(Basic):
             List[Matrix]: List of Sympy Matrices
         """
         if self._positive_roots is None:
-            self._positive_roots = self.root_system()[:self.roots // 2]
+            self._positive_roots = self.root_system()[:self.n_pos_roots]
         return self._positive_roots
 
     @property
@@ -221,6 +250,135 @@ class LieAlgebra(Basic):
 
         """
         return self._backend_instance.orbit(weight, stabilizers)
+
+    def dim_name(self, irrep: Matrix) -> NumericSymbol:
+        r"""Returns a sympy formatted symbol for the irrep.
+        This is commonly used in physics literature. Returns
+        a NumericSymbol object that is a simple extension of 
+        sympy.Symbol.      
+        
+        
+        Examples
+        =======
+        >>> from liesym import A
+        >>> from sympy import Matrix
+        >>> a3 = A(3)
+        >>> str(a3.dim_name(Matrix([[1, 1, 0]])))
+        '\\bar{20}'        
+        """
+        dim = self.dim(irrep)
+        max_dd = self.max_dynkin_digit(irrep)
+        same_dim_irreps: List[Matrix] = self.get_irrep_by_dim(dim, max_dd)
+        num_primes = 0
+        conjugate = 0
+        so8label = ""
+
+        if len(same_dim_irreps) > 1:
+            # group by index
+            index_pairs = {}
+            for i in same_dim_irreps:
+                index = self._backend_instance.index_irrep(i, dim)
+                index_pairs[index] = index_pairs.get(index, []) + [i]
+
+            groups = [sorted(dimindex,key=cmp_to_key(self._dimindexsort)) for dimindex in index_pairs.values()]
+            positions = []
+            for id1, grps in enumerate(groups):
+                for id2, g in enumerate(grps):
+                    if g == irrep:
+                        positions.append([id1, id2])
+            [num_primes, conjugate] = positions[0]
+            so8label = self._is_s08(irrep)
+        has_conjugate = conjugate == 1 if so8label == "" else False
+        return self._dim_name_fmt(dim, has_conjugate, num_primes, so8label)
+
+    def irrep_lookup(self, dim: Symbol) -> Matrix:
+        """Returns the irrep for the symbol"""
+        if isinstance(dim, Symbol) and not isinstance(dim, NumericSymbol):
+            dim = NumericSymbol.from_symbol(dim)
+        n_dim = dim.numeric_dim
+        
+        max_dynkin_digit = 3
+        dd = 0
+        while dd < max_dynkin_digit:
+            dd += 1
+            for c in self.get_irrep_by_dim(n_dim,dd):
+                if self.dim_name(c) == dim:
+                    return c
+        raise KeyError(f"Irrep {dim} not found.")
+
+    def _is_s08(self, irrep):
+        return ""
+
+    def _dimindexsort(self, irrep1, irrep2):
+        cong1 = self._congruency_class(irrep1)
+        cong2 = self._congruency_class(irrep2)
+        if isinstance(cong1, tuple):
+            return 1 if cong1[-1] <= cong2[-1] else -1
+        else:
+            return -1 if cong1 <= cong2 else 1
+
+    def _congruency_class(self, irrep):
+        return 0
+
+    def max_dynkin_digit(self, irrep: Matrix) -> int:
+        """Returns the max Dynkin Digit for the representations"""
+        pass
+
+    def _dim_name_fmt(self, dim: int, conj=False, primes=0, sub="") -> NumericSymbol:
+        if conj:
+            irrep = r"\bar{" + str(dim) + "}"
+        else:
+            irrep = str(dim)
+
+        if primes > 0:
+            irrep += r"^{" + " ".join([r"\prime"] * primes) + r"}"
+
+        if sub != "":
+            irrep += r"_{" + str(sub) + r"}"
+
+        return NumericSymbol(dim, irrep)
+
+    def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> List[Union[Matrix, Tuple[Matrix,NumericSymbol]]]:
+        r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by
+        ```
+        from itertools import product
+        combos = product(range(max_dd+1), repeat=self.rank)
+        ```
+        which can become expensive for large so searching max_dd > 3 will be 
+        very expensive
+
+        Args:
+            dim (int): Dimension to query
+            max_dd (int, optional): The max dynkin digit to use. Defaults to 3.
+            with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defaults to False.
+
+        Returns:
+            List[Union[Matrix, Tuple[Matrix,NumericSymbol]]]: If `with_symbols=True` will return a list of tuples.
+
+
+        Examples
+        ========
+        >>> from liesym import A
+        >>> from sympy import Matrix
+        >>> a3 = A(3)
+        >>> a3.get_irrep_by_dim(20)
+        [Matrix([[1, 1, 0]]),
+         Matrix([[0, 1, 1]]),
+         Matrix([[0, 2, 0]]),
+         Matrix([[3, 0, 0]]),
+         Matrix([[0, 0, 3]])]
+        >>> a3.get_irrep_by_dim(20, with_symbols=True)
+        [(Matrix([[1, 1, 0]]), '\bar{20}'),
+         (Matrix([[0, 1, 1]]), '20'),
+         (Matrix([[0, 2, 0]]), '20^{\prime}'),
+         (Matrix([[3, 0, 0]]), '\bar{20}^{\prime \prime}'),
+         (Matrix([[0, 0, 3]]), '20^{\prime \prime}')]
+        """ 
+        results: List[Matrix] = self._backend_instance.get_irrep_by_dim(dim, max_dd)
+        if with_symbols:
+            results = [(x, self.dim_name(x)) for x in results]
+        return results
+
 
     def dim(self, irrep: Matrix) -> int:
         r"""Returns the dimension of the weight, root or irreducible representations.
@@ -262,6 +420,24 @@ class LieAlgebra(Basic):
 
         Returns:
             List[Matrix]: List of weights decomposed from the tensor product.
+
+
+        Examples
+        =======
+        .. code-block:: python
+
+            from liesym import A
+            from sympy import Matrix
+            a2 = A(2)
+            results = a2.tensor_product_decomposition([
+                Matrix([[1,0]]), 
+                Matrix([[1,0]])
+            ])
+            for i in results:
+                print("Dim", a2.dim_name(i), "Rep", i)
+            # Dim \bar{3} Rep Matrix([[0, 1]])
+            # Dim 6 Rep Matrix([[2, 0]])
+            
         """
         w = deepcopy(weights)
         i = w.pop()
@@ -269,12 +445,13 @@ class LieAlgebra(Basic):
 
         decomp = self._backend_instance.tensor_product_decomposition(i, j)
 
-
         while len(w) > 0:
             j = w.pop()
             results = []
             for i in decomp:
                 # i,j reversed because pop takes from -1 index
-                results += self._backend_instance.tensor_product_decomposition(j, i)
+                results += self._backend_instance.tensor_product_decomposition(
+                    j, i)
             decomp = results
         return decomp
+

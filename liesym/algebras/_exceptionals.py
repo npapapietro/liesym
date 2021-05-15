@@ -1,4 +1,4 @@
-from sympy import Matrix, S
+from sympy import Matrix, S, flatten
 from sympy.core.sympify import _sympify
 
 from ._base import LieAlgebra
@@ -30,8 +30,13 @@ class F4(LieAlgebra):
         return 4
 
     @property
-    def roots(self) -> int:
-        return 48
+    def n_pos_roots(self) -> int:
+        return 24
+
+    def max_dynkin_digit(self, irrep: Matrix) -> int:
+        """Returns the max Dynkin Digit for the representation"""
+        l = flatten(irrep.tolist())
+        return max(l) + 1
 
 
 class G2(LieAlgebra):
@@ -57,9 +62,13 @@ class G2(LieAlgebra):
         return 3
 
     @property
-    def roots(self) -> int:
-        return 12
+    def n_pos_roots(self) -> int:
+        return 6
 
+    def max_dynkin_digit(self, irrep: Matrix) -> int:
+        """Returns the max Dynkin Digit for the representation"""
+        l = flatten(irrep.tolist())
+        return max(l) + 3
 
 def _e_series_default_roots(n):
     e8 = [
@@ -118,6 +127,24 @@ class E(LieAlgebra):
         return self.rank
 
     @property
-    def roots(self) -> int:
-        return [72, 126, 240][self.rank-6]
+    def n_pos_roots(self) -> int:
+        return [36, 63, 120][self.rank-6]
 
+    def max_dynkin_digit(self, irrep: Matrix) -> int:
+        """Returns the max Dynkin Digit for the representation"""
+        l = flatten(irrep).tolist()
+        if self.rank == 6:
+            return max(l) + 3
+        return max(l)
+    
+    def _congruency_class(self, irrep):
+        n = self.rank
+        if n == 8:
+            return 0
+
+        l = flatten(irrep.tolist())
+        if n == 7:
+            return (l[3] + l[5] + l[6]) % 2
+        
+        if n == 6:
+            return (l[0] - l[1] + l[3] - l[4]) % 3

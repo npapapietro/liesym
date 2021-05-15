@@ -7,7 +7,7 @@ def test_A():
 
     # test subclass items
     assert A2.dimension == 3
-    assert A2.roots == 6
+    assert A2.n_pos_roots == 3
 
     assert A2.simple_roots == [
         Matrix([[1, -1, 0]]),
@@ -72,17 +72,23 @@ def test_A():
         Matrix([[2, -1, 0]]),
     ]
 
-    fund = Matrix([[1,0,0]])
-    antifund = Matrix([[0,0,1]])
+    fund = Matrix([[1, 0, 0]])
+    antifund = Matrix([[0, 0, 1]])
     decomp = A3.tensor_product_decomposition([fund, antifund])
 
     assert set([x.as_immutable() for x in decomp]) == set([
-        Matrix([[1,0,1]]).as_immutable(),
-        Matrix([[0,0,0]]).as_immutable(),
+        Matrix([[1, 0, 1]]).as_immutable(),
+        Matrix([[0, 0, 0]]).as_immutable(),
     ])
 
     assert A3.dim(fund) == 4
-    assert A3.dim(Matrix([[1,0,1]])) == 15
+
+    adj = Matrix([[1, 0, 1]])
+    assert A3.dim(adj) == 15
+
+    assert A3.max_dynkin_digit(adj) == 2
+
+    assert A3.get_irrep_by_dim(15) == [adj]
 
 
 def test_B():
@@ -90,7 +96,7 @@ def test_B():
 
     # test subclass items
     assert B2.dimension == 2
-    assert B2.roots == 8
+    assert B2.n_pos_roots == 4
 
     assert B2.simple_roots == [
         Matrix([[1, -1]]),
@@ -161,19 +167,25 @@ def test_B():
         Matrix([[2, -1, 0]]),
     ]
 
-
-    decomp = B3.tensor_product_decomposition([Matrix([[1,0,0]]), Matrix([[1,0,0]]), Matrix([[1,0,0]])])
+    decomp = B3.tensor_product_decomposition(
+        [Matrix([[1, 0, 0]]), Matrix([[1, 0, 0]]), Matrix([[1, 0, 0]])])
     assert sorted([tuple(x.tolist()) for x in decomp]) == sorted([
         tuple(x.tolist()) for x in [
-        Matrix([[1,0,0]]),
-        Matrix([[1,0,0]]),
-        Matrix([[1,0,0]]),
-        Matrix([[3,0,0]]),
-        Matrix([[0,0,2]]),
-        Matrix([[1,1,0]]),
-        Matrix([[1,1,0]]),
-    ]])
+            Matrix([[1, 0, 0]]),
+            Matrix([[1, 0, 0]]),
+            Matrix([[1, 0, 0]]),
+            Matrix([[3, 0, 0]]),
+            Matrix([[0, 0, 2]]),
+            Matrix([[1, 1, 0]]),
+            Matrix([[1, 1, 0]]),
+        ]])
 
+    adj = Matrix([[1, 0, 1]])
+    assert B3.dim(adj) == 48
+
+    assert B3.max_dynkin_digit(adj) == 2
+
+    assert B3.get_irrep_by_dim(48) == [adj]
 
 
 def test_C():
@@ -181,7 +193,7 @@ def test_C():
 
     # test subclass items
     assert C2.dimension == 2
-    assert C2.roots == 8
+    assert C2.n_pos_roots == 4
 
     assert C2.simple_roots == [
         Matrix([[1, -1]]),
@@ -215,47 +227,53 @@ def test_C():
     ]
     # backend
     assert C3.root_system() == [
-        Matrix([[ 2, 0, 0 ]]),
-        Matrix([[ 0, 1, 0 ]]),
-        Matrix([[ -2, 2, 0 ]]),
-        Matrix([[ 1, -1, 1 ]]),
-        Matrix([[ -1, 0, 1 ]]),
-        Matrix([[ 1, 1, -1 ]]),
-        Matrix([[ -1, 2, -1 ]]),
-        Matrix([[ 0, -2, 2 ]]),
-        Matrix([[ 2, -1, 0 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ -2, 1, 0 ]]),
-        Matrix([[ 0, 2, -2 ]]),
-        Matrix([[ 1, -2, 1 ]]),
-        Matrix([[ -1, -1, 1 ]]),
-        Matrix([[ 1, 0, -1 ]]),
-        Matrix([[ -1, 1, -1 ]]),
-        Matrix([[ 2, -2, 0 ]]),
-        Matrix([[ 0, -1, 0 ]]),
-        Matrix([[ -2, 0, 0 ]]),
+        Matrix([[2, 0, 0]]),
+        Matrix([[0, 1, 0]]),
+        Matrix([[-2, 2, 0]]),
+        Matrix([[1, -1, 1]]),
+        Matrix([[-1, 0, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -2, 2]]),
+        Matrix([[2, -1, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 0]]),
+        Matrix([[0, 2, -2]]),
+        Matrix([[1, -2, 1]]),
+        Matrix([[-1, -1, 1]]),
+        Matrix([[1, 0, -1]]),
+        Matrix([[-1, 1, -1]]),
+        Matrix([[2, -2, 0]]),
+        Matrix([[0, -1, 0]]),
+        Matrix([[-2, 0, 0]]),
     ]
 
     assert C3.positive_roots == [
-        Matrix([[ 2, 0, 0 ]]),
-        Matrix([[ 0, 1, 0 ]]),
-        Matrix([[ -2, 2, 0 ]]),
-        Matrix([[ 1, -1, 1 ]]),
-        Matrix([[ -1, 0, 1 ]]),
-        Matrix([[ 1, 1, -1 ]]),
-        Matrix([[ -1, 2, -1 ]]),
-        Matrix([[ 0, -2, 2 ]]),
-        Matrix([[ 2, -1, 0 ]]),
+        Matrix([[2, 0, 0]]),
+        Matrix([[0, 1, 0]]),
+        Matrix([[-2, 2, 0]]),
+        Matrix([[1, -1, 1]]),
+        Matrix([[-1, 0, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -2, 2]]),
+        Matrix([[2, -1, 0]]),
     ]
+
+    adj = Matrix([[1, 0, 1]])
+    assert C3.dim(adj) == 70
+    assert C3.max_dynkin_digit(adj) == 2
+    assert C3.get_irrep_by_dim(70) == [adj]
+
 
 def test_D():
     D2 = D(2)
 
     # test subclass items
     assert D2.dimension == 2
-    assert D2.roots == 4
+    assert D2.n_pos_roots == 2
 
     assert D2.simple_roots == [
         Matrix([[1, -1]]),
@@ -291,28 +309,37 @@ def test_D():
 
     # backend
     assert D3.root_system() == [
-        Matrix([[ 0, 1, 1 ]]),
-        Matrix([[ 1, -1, 1 ]]),
-        Matrix([[ 1, 1, -1 ]]),
-        Matrix([[ -1, 0, 2 ]]),
-        Matrix([[ -1, 2, 0 ]]),
-        Matrix([[ 2, -1, -1 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ 0, 0, 0 ]]),
-        Matrix([[ -2, 1, 1 ]]),
-        Matrix([[ 1, -2, 0 ]]),
-        Matrix([[ 1, 0, -2 ]]),
-        Matrix([[ -1, -1, 1 ]]),
-        Matrix([[ -1, 1, -1 ]]),
-        Matrix([[ 0, -1, -1 ]]),
+        Matrix([[0, 1, 1]]),
+        Matrix([[1, -1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[-1, 2, 0]]),
+        Matrix([[2, -1, -1]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 1]]),
+        Matrix([[1, -2, 0]]),
+        Matrix([[1, 0, -2]]),
+        Matrix([[-1, -1, 1]]),
+        Matrix([[-1, 1, -1]]),
+        Matrix([[0, -1, -1]]),
     ]
 
     assert D3.positive_roots == [
-        Matrix([[ 0, 1, 1 ]]),
-        Matrix([[ 1, -1, 1 ]]),
-        Matrix([[ 1, 1, -1 ]]),
-        Matrix([[ -1, 0, 2 ]]),
-        Matrix([[ -1, 2, 0 ]]),
-        Matrix([[ 2, -1, -1 ]]),
+        Matrix([[0, 1, 1]]),
+        Matrix([[1, -1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[-1, 2, 0]]),
+        Matrix([[2, -1, -1]]),
     ]
+
+    adj = Matrix([[1, 0, 1]])
+    assert D3.dim(adj) == 20
+    assert D3.max_dynkin_digit(adj) == 2
+    assert D3.get_irrep_by_dim(20) == [Matrix([[1, 1, 0]]),
+                                       Matrix([[1, 0, 1]]),
+                                       Matrix([[2, 0, 0]]),
+                                       Matrix([[0, 3, 0]]),
+                                       Matrix([[0, 0, 3]])]

@@ -114,6 +114,18 @@ where
     hash_a.difference(&hash_b).into_iter().cloned().collect()
 }
 
+// stolen from https://github.com/rust-lang/rfcs/issues/2178#issuecomment-600368883
+pub trait Tap {
+    fn tap(self, f: impl FnMut(&mut Self)) -> Self;
+}
+
+impl<T> Tap for T {
+    fn tap(mut self, mut f: impl FnMut(&mut Self)) -> Self {
+        f(&mut self);
+        self
+    }
+}
+
 #[cfg(test)]
 pub mod test {
     use super::*;

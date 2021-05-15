@@ -30,20 +30,28 @@ def _rust_new(func):
 def _rust_wrapper(func):
     def inner(*args, **kwargs):
         cls = args[0]
+        
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
 
         if isinstance(result, (int, str, float, bool)) or result is None:
             return result
 
+        if not isinstance(result, tuple):
+            return
+
+        # Tuple of ints
+        if isinstance(result[0], int) and isinstance(result[1], int):
+            return Rational(*result)
+
+        # tuple of ndarrays
         numer, denom = (x.squeeze() for x in result)
         shape = numer.shape
-        
-        vectorlike = len(shape) == 1
 
         plain_values = [Rational(f"{x}/{y}")
                         for x, y in zip(numer.flatten(), denom.flatten())]
-        if vectorlike:            
+        # vectorlike
+        if len(shape) == 1:
             shape = (1, shape[0])
 
         m = Matrix(*shape, plain_values)
@@ -68,18 +76,25 @@ class _LieAlgebraBackendWrapped:
 
     @_rust_wrapper
     def tensor_product_decomposition(self, irrepA, irrepB):
-        rust_result = self.backend.tensor_product_decomposition(irrepA, irrepB)
-        return rust_result
+        return self.backend.tensor_product_decomposition(irrepA, irrepB)
 
     @_rust_wrapper
     def dim(self, irrep):
         return self.backend.dim(irrep)
 
+    @_rust_wrapper
+    def get_irrep_by_dim(self, dim, max_dd):
+        return self.backend.irrep_by_dim(dim, max_dd)
+
+    @_rust_wrapper
+    def index_irrep(self, irrep, dim):
+        return self.backend.index_irrep(irrep, dim)
+
 
 def create_backend(algebra):
     return _LieAlgebraBackendWrapped(
         algebra.rank,
-        algebra.roots,
+        algebra.n_pos_roots,
         algebra.simple_roots,
         algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),

@@ -21,7 +21,7 @@ numpy="^1.19"
 sympy="^1.7.1"
 
 packages= [
-    {include="liesym"}
+    {include="liesym/*"}
 ]
 
 [build-system]

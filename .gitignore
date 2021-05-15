@@ -149,3 +149,4 @@ dmypy.json
 config.toml
 *.npy
 docsrc/_build
+notesbooks/Notebook.ipynb
