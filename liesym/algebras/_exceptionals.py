@@ -1,5 +1,4 @@
-from sympy import Matrix, S, flatten
-from sympy.core.sympify import _sympify
+from sympy import Matrix, S, flatten, sympify
 
 from ._base import LieAlgebra
 
@@ -14,7 +13,7 @@ class F4(LieAlgebra):
     """
 
     def __new__(cls):
-        return super().__new__(cls, "F", _sympify(4))
+        return super().__new__(cls, "F", sympify(4))
 
     def __init__(self, *args, **kwargs):
         super().__init__()
@@ -48,7 +47,7 @@ class G2(LieAlgebra):
 
     """
     def __new__(cls):
-        return super().__new__(cls, "G", _sympify(2))
+        return super().__new__(cls, "G", sympify(2))
 
     def __init__(self, *args, **kwargs):
         super().__init__()
@@ -116,7 +115,7 @@ class E(LieAlgebra):
     def __new__(cls, n):
         if n not in [6,7,8]:
             raise ValueError("Algebra series E only defined for 6, 7 and 8}")
-        return super().__new__(cls, "E", _sympify(n))
+        return super().__new__(cls, "E", sympify(n))
 
     def __init__(self, *args, **kwargs):
         super().__init__()
