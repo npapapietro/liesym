@@ -1,7 +1,8 @@
 name: "Pull Request Docs Check"
 on:
-  push:
-    branches: [main]
+  release:
+    types: 
+      - created
 
 jobs:
   docs:

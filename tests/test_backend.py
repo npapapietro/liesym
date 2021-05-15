@@ -12,7 +12,7 @@ def testBackendA():
 
     args = (
         algebra.rank,
-        algebra.roots,
+        algebra.n_pos_roots,
         algebra.simple_roots,
         algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),
@@ -62,6 +62,7 @@ def testBackendA():
         _test_backend.root_system = lambda: (np.array([[[1,1],[2,2]]]), np.array([[[2,2],[3,3]]]))
         _test_backend.orbit = orb
         _test_backend.tensor_product_decomposition = lambda x,_: orb(x,  np.array([]))
+        _test_backend.scalar_product_tuple = lambda *_: (1,2)
 
         return _test_backend
 
@@ -72,6 +73,7 @@ def testBackendA():
     assert obj.root_system() == expected
     assert obj.orbit(expected[0], [1,2,3]) == expected
     assert obj.tensor_product_decomposition(*expected) == expected
+    assert obj.scalar_product(*expected) == Rational(1,2)
 
 
 
@@ -81,7 +83,7 @@ def testBackendBCD():
 
         args = (
             algebra.rank,
-            algebra.roots,
+            algebra.n_pos_roots,
             algebra.simple_roots,
             algebra.cartan_matrix,
             algebra.cartan_matrix.pinv(),

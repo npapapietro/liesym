@@ -19,5 +19,5 @@ from .liesym import (
 from .algebras import *
 
 __all__ = [
-    "A", "B", "C", "D", "F4", "G2", "E", "LieAlgebra"
+    "A", "B", "C", "D", "F4", "G2", "E", "LieAlgebra", "NumericSymbol"
 ]

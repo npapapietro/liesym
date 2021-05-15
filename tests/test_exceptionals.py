@@ -7,7 +7,7 @@ def test_F4():
 
     # test subclass items
     assert F4_.dimension == 4
-    assert F4_.roots == 48
+    assert F4_.n_pos_roots == 24
 
     assert F4_.simple_roots == [
         Matrix([[1, -1, 0, 0]]),
@@ -111,7 +111,7 @@ def test_E6():
 
     # test subclass items
     assert E6.dimension == 6
-    assert E6.roots == 72
+    assert E6.n_pos_roots == 36
 
     assert E6.simple_roots == [
         Matrix([[S.Half, -S.Half, -S.Half, -S.Half, -

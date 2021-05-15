@@ -7,7 +7,7 @@ def test_A():
 
     # test subclass items
     assert A2.dimension == 3
-    assert A2.roots == 6
+    assert A2.n_pos_roots == 3
 
     assert A2.simple_roots == [
         Matrix([[1, -1, 0]]),
@@ -82,7 +82,13 @@ def test_A():
     ])
 
     assert A3.dim(fund) == 4
-    assert A3.dim(Matrix([[1,0,1]])) == 15
+
+    adj = Matrix([[1,0,1]])
+    assert A3.dim(adj) == 15
+
+    assert A3.max_dynkin_digit(adj) == 2
+
+    # assert A3._get_irrep_by_dim(15, 2) == [adj]
 
 
 def test_B():
@@ -90,7 +96,7 @@ def test_B():
 
     # test subclass items
     assert B2.dimension == 2
-    assert B2.roots == 8
+    assert B2.n_pos_roots == 4
 
     assert B2.simple_roots == [
         Matrix([[1, -1]]),
@@ -174,6 +180,13 @@ def test_B():
         Matrix([[1,1,0]]),
     ]])
 
+    adj = Matrix([[1,0,1]])
+    assert B3.dim(adj) == 48
+
+    assert B3.max_dynkin_digit(adj) == 2
+
+    # assert B3._get_irrep_by_dim(48, 2) == [adj]
+
 
 
 def test_C():
@@ -181,7 +194,7 @@ def test_C():
 
     # test subclass items
     assert C2.dimension == 2
-    assert C2.roots == 8
+    assert C2.n_pos_roots == 4
 
     assert C2.simple_roots == [
         Matrix([[1, -1]]),
@@ -250,12 +263,17 @@ def test_C():
         Matrix([[ 2, -1, 0 ]]),
     ]
 
+    adj = Matrix([[1,0,1]])
+    assert C3.dim(adj) == 70
+    assert C3.max_dynkin_digit(adj) == 2
+    # assert C3._get_irrep_by_dim(70, 2) == [adj]
+
 def test_D():
     D2 = D(2)
 
     # test subclass items
     assert D2.dimension == 2
-    assert D2.roots == 4
+    assert D2.n_pos_roots == 2
 
     assert D2.simple_roots == [
         Matrix([[1, -1]]),
@@ -316,3 +334,9 @@ def test_D():
         Matrix([[ -1, 2, 0 ]]),
         Matrix([[ 2, -1, -1 ]]),
     ]
+
+    
+    adj = Matrix([[1,0,1]])
+    assert D3.dim(adj) == 20
+    assert D3.max_dynkin_digit(adj) == 2
+    # assert D3._get_irrep_by_dim(20, 2) == [Matrix([[1,1,0]]),Matrix([[1,0,1]]),Matrix([[2,0,0]])]
