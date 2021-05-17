@@ -170,6 +170,8 @@ class D(LieAlgebra):
     """
 
     def __new__(cls, n):
+        if n < 2:
+            raise ValueError("Min dimension for type 'D' is 2")
         return super().__new__(cls, "D", _sympify(n))
 
     def __init__(self, *args, **kwargs):
