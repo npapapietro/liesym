@@ -28,8 +28,13 @@ def _rust_new(func):
 
 
 def _rust_wrapper(func):
+    """Wraps the rust methods to and from. Formats the calls
+    to rust by turning either a 2d matrix to 3d matrix of (x,y) => (x,y,[numerator,denominator])
+    for preserving rational numbers. Rust returns objects as a tuple of (numerator-matrix, denominator-matrix)
+    """
     def inner(*args, **kwargs):
         cls = args[0]
+        rank = cls.rank
         
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
@@ -52,7 +57,7 @@ def _rust_wrapper(func):
                         for x, y in zip(numer.flatten(), denom.flatten())]
         # vectorlike
         if len(shape) == 1:
-            shape = (1, shape[0])
+            shape = (shape[0], 1) if rank == 1 else (1, shape[0])
 
         m = Matrix(*shape, plain_values)
         return [m.row(i) for i in range(m.shape[0])]
@@ -64,6 +69,7 @@ class _LieAlgebraBackendWrapped:
     def __init__(self, *args, **kwargs):
         # obscuring this option
         backend = kwargs.get("backend", _LieAlgebraBackend)
+        self.rank = args[0]
         self.backend = backend(*args)
 
     @_rust_wrapper

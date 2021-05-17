@@ -263,7 +263,7 @@ class LieAlgebra(Basic):
         >>> from sympy import Matrix
         >>> a3 = A(3)
         >>> str(a3.dim_name(Matrix([[1, 1, 0]])))
-        '\\bar{20}'        
+        \bar{20}       
         """
         dim = self.dim(irrep)
         max_dd = self.max_dynkin_digit(irrep)

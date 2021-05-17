@@ -90,6 +90,13 @@ def test_A():
 
     assert A3.get_irrep_by_dim(15) == [adj]
 
+def test_A1():
+    A2 = A(1)
+
+    # test subclass items
+    assert A2.dimension == 2
+    assert A2.root_system() == [Matrix([[2]]), Matrix([[0]]), Matrix([[-2]])]
+
 
 def test_B():
     B2 = B(2)
