@@ -567,7 +567,7 @@ impl LieAlgebraBackend {
         let dim = self.irrep_dim(irrep.clone());
         let idx = self.get_index_irrep(irrep.clone(), dim);
         match (0..self.rank)
-            .map(|_| 0..max+1)
+            .map(|_| 0..max + 1)
             .multi_cartesian_product()
             .collect::<Vec<_>>()
             .into_par_iter()

@@ -327,12 +327,11 @@ class LieAlgebra(Basic):
             SO10 = D(5)
             irrep_10 = Matrix([[1, 0, 0, 0, 0]])
             assert irrep_10 == SO10.conjugate(irrep_10)
-  
+
 
 
         """
         return self._backend_instance.conjugate(irrep)[0]
-
 
     def _is_s08(self, irrep):
         return ""

@@ -114,8 +114,6 @@ where
     hash_a.difference(&hash_b).into_iter().cloned().collect()
 }
 
-
-
 pub trait Rational {
     fn to_ratio(&self) -> Array2R;
 }
@@ -137,7 +135,10 @@ impl Rational for Vec<i64> {
 
 impl Rational for Vec<usize> {
     fn to_ratio(&self) -> Array2R {
-        self.into_iter().map(|&x| x as i64).collect::<Vec<_>>().to_ratio()
+        self.into_iter()
+            .map(|&x| x as i64)
+            .collect::<Vec<_>>()
+            .to_ratio()
     }
 }
 
