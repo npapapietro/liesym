@@ -68,7 +68,7 @@ class A(LieAlgebra):
     def _congruency_class(self, irrep):
         r = self.rank+1
         v = int(
-            Matrix([range(1,r)]).dot(irrep)
+            Matrix([range(1, r)]).dot(irrep)
         )
         return v % r
 
@@ -114,6 +114,7 @@ class B(LieAlgebra):
 
     def _congruency_class(self, irrep):
         return flatten(irrep.tolist())[-1] % 2
+
 
 class C(LieAlgebra):
     r"""The compact lie group of type C. The dynkin diagram for this algebra is
@@ -161,6 +162,7 @@ class C(LieAlgebra):
     def _congruency_class(self, irrep):
         return sum(flatten(irrep.tolist())[::2]) % 2
 
+
 class D(LieAlgebra):
     r"""The compact lie group of type D. The dynkin diagram for this algebra is
 
@@ -182,7 +184,7 @@ class D(LieAlgebra):
         d_root[-2] = 1
         self._simple_roots = [_euclidean_root(i, n) for i in range(
             n - 1)] + [Matrix([d_root])]
-            
+
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""
         l = flatten(irrep.tolist())
@@ -213,4 +215,4 @@ class D(LieAlgebra):
         n = self.rank
         j = sum(l[:-2][::2]) + (n-2) * l[-2] + n * l[-1]
 
-        return (i,j)
+        return (i, j)

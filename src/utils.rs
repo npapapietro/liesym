@@ -114,6 +114,33 @@ where
     hash_a.difference(&hash_b).into_iter().cloned().collect()
 }
 
+
+
+pub trait Rational {
+    fn to_ratio(&self) -> Array2R;
+}
+
+impl Rational for Array2<i64> {
+    fn to_ratio(&self) -> Array2R {
+        self.mapv(|x| Ratio::new(x, 1))
+    }
+}
+
+impl Rational for Vec<i64> {
+    fn to_ratio(&self) -> Array2R {
+        Array::from(self.clone())
+            .into_shape((1, self.len()))
+            .unwrap()
+            .to_ratio()
+    }
+}
+
+impl Rational for Vec<usize> {
+    fn to_ratio(&self) -> Array2R {
+        self.into_iter().map(|&x| x as i64).collect::<Vec<_>>().to_ratio()
+    }
+}
+
 // stolen from https://github.com/rust-lang/rfcs/issues/2178#issuecomment-600368883
 pub trait Tap {
     fn tap(self, f: impl FnMut(&mut Self)) -> Self;
@@ -136,7 +163,9 @@ pub mod test {
         prelude::Python,
         types::{IntoPyDict, PyDict},
     };
-
+    pub fn to_ratio<D: Dimension>(x: Array<i64, D>) -> Array<Ratio<i64>, D> {
+        x.mapv(|x| Ratio::new(x, 1))
+    }
     fn get_np_locals(py: Python<'_>) -> &'_ PyDict {
         [("np", get_array_module(py).unwrap())].into_py_dict(py)
     }
@@ -148,10 +177,6 @@ pub mod test {
             .unwrap()
             .downcast()
             .unwrap()
-    }
-
-    pub fn to_ratio<D: Dimension>(x: Array<i64, D>) -> Array<Ratio<i64>, D> {
-        x.mapv(|x| Ratio::new(x, 1))
     }
 
     #[test]

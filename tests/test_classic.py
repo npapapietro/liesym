@@ -90,6 +90,8 @@ def test_A():
 
     assert A3.get_irrep_by_dim(15) == [adj]
 
+    assert A3.conjugate(Matrix([[1,1,0]])) == Matrix([[0,1,1]])
+
 def test_A1():
     A2 = A(1)
 
@@ -350,3 +352,7 @@ def test_D():
                                        Matrix([[2, 0, 0]]),
                                        Matrix([[0, 3, 0]]),
                                        Matrix([[0, 0, 3]])]
+
+    D5 = D(5)
+    assert D5.conjugate(Matrix([[1, 0, 0, 0, 0]])) ==  Matrix([[1, 0, 0, 0, 0]])
+                                      
