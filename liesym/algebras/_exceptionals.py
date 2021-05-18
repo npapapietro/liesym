@@ -69,6 +69,7 @@ class G2(LieAlgebra):
         l = flatten(irrep.tolist())
         return max(l) + 3
 
+
 def _e_series_default_roots(n):
     e8 = [
         [S.Half, -S.Half, -S.Half,
@@ -89,8 +90,8 @@ def _e_series_default_roots(n):
 class E(LieAlgebra):
     r"""The compact lie group of type E. There are only three defined for
     type E.
-    
-   
+
+
         .. figure:: ../../docs/source/images/type_E6.png
            :height: 100px
            :align: center
@@ -110,10 +111,10 @@ class E(LieAlgebra):
            :align: center
 
            E8
-  
+
     """
     def __new__(cls, n):
-        if n not in [6,7,8]:
+        if n not in [6, 7, 8]:
             raise ValueError("Algebra series E only defined for 6, 7 and 8}")
         return super().__new__(cls, "E", sympify(n))
 
@@ -135,7 +136,7 @@ class E(LieAlgebra):
         if self.rank == 6:
             return max(l) + 3
         return max(l)
-    
+
     def _congruency_class(self, irrep):
         n = self.rank
         if n == 8:
@@ -144,6 +145,6 @@ class E(LieAlgebra):
         l = flatten(irrep.tolist())
         if n == 7:
             return (l[3] + l[5] + l[6]) % 2
-        
+
         if n == 6:
             return (l[0] - l[1] + l[3] - l[4]) % 3

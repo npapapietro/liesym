@@ -3,6 +3,7 @@ from sympy import Matrix, Symbol, sympify
 from typing import List, Tuple, Union
 from copy import deepcopy
 from functools import cmp_to_key
+from itertools import product
 import re
 
 from ._methods import (
@@ -13,6 +14,7 @@ from ._methods import (
 )
 
 from ._backend import create_backend
+
 
 class NumericSymbol(Symbol):
     """Extension of Sympy symbol that allows
@@ -35,7 +37,7 @@ class NumericSymbol(Symbol):
             s = symbol.__str__()
             num = re.findall(r"\d+", s)[0]
             return cls(int(num), s)
-        except (IndexError,ValueError):
+        except (IndexError, ValueError):
             raise ValueError("Could not extract numerical from sympy.Symbol")
 
 
@@ -255,8 +257,8 @@ class LieAlgebra(Basic):
         This is commonly used in physics literature. Returns
         a NumericSymbol object that is a simple extension of 
         sympy.Symbol.      
-        
-        
+
+
         Examples
         =======
         >>> from liesym import A
@@ -279,7 +281,8 @@ class LieAlgebra(Basic):
                 index = self._backend_instance.index_irrep(i, dim)
                 index_pairs[index] = index_pairs.get(index, []) + [i]
 
-            groups = [sorted(dimindex,key=cmp_to_key(self._dimindexsort)) for dimindex in index_pairs.values()]
+            groups = [sorted(dimindex, key=cmp_to_key(self._dimindexsort))
+                      for dimindex in index_pairs.values()]
             positions = []
             for id1, grps in enumerate(groups):
                 for id2, g in enumerate(grps):
@@ -295,15 +298,40 @@ class LieAlgebra(Basic):
         if isinstance(dim, Symbol) and not isinstance(dim, NumericSymbol):
             dim = NumericSymbol.from_symbol(dim)
         n_dim = dim.numeric_dim
-        
+
         max_dynkin_digit = 3
         dd = 0
         while dd < max_dynkin_digit:
             dd += 1
-            for c in self.get_irrep_by_dim(n_dim,dd):
+            for c in self.get_irrep_by_dim(n_dim, dd):
                 if self.dim_name(c) == dim:
                     return c
         raise KeyError(f"Irrep {dim} not found.")
+
+    def conjugate(self, irrep: Matrix) -> Matrix:
+        """Finds the conjugate irrep. If it is the same
+        as the original irrep, you have a Real Irrep, otherwise
+        it's a Complex Irrep.
+
+        Examples
+        ========
+        .. code-block:: python
+
+            from liesym import A,D
+
+            SU4 = A(3)
+            irrep_20 = Matrix([[0,1,1]])
+            irrep_20bar = Matrix([[1,1,0]])
+            assert irrep_20 == SU4.conjugate(irrep_20bar)
+
+            SO10 = D(5)
+            irrep_10 = Matrix([[1, 0, 0, 0, 0]])
+            assert irrep_10 == SO10.conjugate(irrep_10)
+
+
+
+        """
+        return self._backend_instance.conjugate(irrep)[0]
 
     def _is_s08(self, irrep):
         return ""
@@ -337,7 +365,7 @@ class LieAlgebra(Basic):
 
         return NumericSymbol(dim, irrep)
 
-    def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> List[Union[Matrix, Tuple[Matrix,NumericSymbol]]]:
+    def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> List[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
         r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by
         ```
         from itertools import product
@@ -372,12 +400,12 @@ class LieAlgebra(Basic):
          (Matrix([[0, 2, 0]]), '20^{\prime}'),
          (Matrix([[3, 0, 0]]), '\bar{20}^{\prime \prime}'),
          (Matrix([[0, 0, 3]]), '20^{\prime \prime}')]
-        """ 
-        results: List[Matrix] = self._backend_instance.get_irrep_by_dim(dim, max_dd)
+        """
+        results: List[Matrix] = self._backend_instance.get_irrep_by_dim(
+            dim, max_dd)
         if with_symbols:
             results = [(x, self.dim_name(x)) for x in results]
         return results
-
 
     def dim(self, irrep: Matrix) -> int:
         r"""Returns the dimension of the weight, root or irreducible representations.
@@ -436,7 +464,7 @@ class LieAlgebra(Basic):
                 print("Dim", a2.dim_name(i), "Rep", i)
             # Dim \bar{3} Rep Matrix([[0, 1]])
             # Dim 6 Rep Matrix([[2, 0]])
-            
+
         """
         w = deepcopy(weights)
         i = w.pop()
@@ -453,4 +481,3 @@ class LieAlgebra(Basic):
                     j, i)
             decomp = results
         return decomp
-

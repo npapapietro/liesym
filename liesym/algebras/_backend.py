@@ -35,7 +35,7 @@ def _rust_wrapper(func):
     def inner(*args, **kwargs):
         cls = args[0]
         rank = cls.rank
-        
+
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         result = func(cls, *nargs, **kwargs)
 
@@ -95,6 +95,10 @@ class _LieAlgebraBackendWrapped:
     @_rust_wrapper
     def index_irrep(self, irrep, dim):
         return self.backend.index_irrep(irrep, dim)
+
+    @_rust_wrapper
+    def conjugate(self, irrep):
+        return self.backend.conjugate_irrep(irrep)
 
 
 def create_backend(algebra):
