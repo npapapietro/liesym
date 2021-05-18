@@ -124,6 +124,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cmp_to_key</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">._methods</span> <span class="kn">import</span> <span class="p">(</span>
@@ -134,6 +135,7 @@
 <span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">._backend</span> <span class="kn">import</span> <span class="n">create_backend</span>
+
 
 <div class="viewcode-block" id="NumericSymbol"><a class="viewcode-back" href="../../../index.html#liesym.NumericSymbol">[docs]</a><span class="k">class</span> <span class="nc">NumericSymbol</span><span class="p">(</span><span class="n">Symbol</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extension of Sympy symbol that allows</span>
@@ -156,7 +158,7 @@
             <span class="n">s</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
             <span class="n">num</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="n">s</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span><span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not extract numerical from sympy.Symbol&quot;</span><span class="p">)</span></div></div>
 
 
@@ -376,15 +378,15 @@
 <span class="sd">        This is commonly used in physics literature. Returns</span>
 <span class="sd">        a NumericSymbol object that is a simple extension of </span>
 <span class="sd">        sympy.Symbol.      </span>
-<span class="sd">        </span>
-<span class="sd">        </span>
+
+
 <span class="sd">        Examples</span>
 <span class="sd">        =======</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a3 = A(3)</span>
 <span class="sd">        &gt;&gt;&gt; str(a3.dim_name(Matrix([[1, 1, 0]])))</span>
-<span class="sd">        &#39;\\bar{20}&#39;        </span>
+<span class="sd">        \bar{20}       </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span>
         <span class="n">max_dd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_dynkin_digit</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span>
@@ -400,7 +402,8 @@
                 <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">index_irrep</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
                 <span class="n">index_pairs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">index_pairs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-            <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dimindex</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimindexsort</span><span class="p">))</span> <span class="k">for</span> <span class="n">dimindex</span> <span class="ow">in</span> <span class="n">index_pairs</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+            <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dimindex</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimindexsort</span><span class="p">))</span>
+                      <span class="k">for</span> <span class="n">dimindex</span> <span class="ow">in</span> <span class="n">index_pairs</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
             <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">id1</span><span class="p">,</span> <span class="n">grps</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">id2</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grps</span><span class="p">):</span>
@@ -416,15 +419,40 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">Symbol</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">NumericSymbol</span><span class="p">):</span>
             <span class="n">dim</span> <span class="o">=</span> <span class="n">NumericSymbol</span><span class="o">.</span><span class="n">from_symbol</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
         <span class="n">n_dim</span> <span class="o">=</span> <span class="n">dim</span><span class="o">.</span><span class="n">numeric_dim</span>
-        
+
         <span class="n">max_dynkin_digit</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="n">dd</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="n">dd</span> <span class="o">&lt;</span> <span class="n">max_dynkin_digit</span><span class="p">:</span>
             <span class="n">dd</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span><span class="n">dd</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">dd</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">dim</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">c</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Irrep </span><span class="si">{dim}</span><span class="s2"> not found.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LieAlgebra.conjugate"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.conjugate">[docs]</a>    <span class="k">def</span> <span class="nf">conjugate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Finds the conjugate irrep. If it is the same</span>
+<span class="sd">        as the original irrep, you have a Real Irrep, otherwise</span>
+<span class="sd">        it&#39;s a Complex Irrep.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        ========</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from liesym import A,D</span>
+
+<span class="sd">            SU4 = A(3)</span>
+<span class="sd">            irrep_20 = Matrix([[0,1,1]])</span>
+<span class="sd">            irrep_20bar = Matrix([[1,1,0]])</span>
+<span class="sd">            assert irrep_20 == SU4.conjugate(irrep_20bar)</span>
+
+<span class="sd">            SO10 = D(5)</span>
+<span class="sd">            irrep_10 = Matrix([[1, 0, 0, 0, 0]])</span>
+<span class="sd">            assert irrep_10 == SO10.conjugate(irrep_10)</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">irrep</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">_is_s08</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
@@ -458,7 +486,7 @@
 
         <span class="k">return</span> <span class="n">NumericSymbol</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">irrep</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LieAlgebra.get_irrep_by_dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.get_irrep_by_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_irrep_by_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span><span class="n">NumericSymbol</span><span class="p">]]]:</span>
+<div class="viewcode-block" id="LieAlgebra.get_irrep_by_dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.get_irrep_by_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_irrep_by_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">NumericSymbol</span><span class="p">]]]:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by</span>
 <span class="sd">        ```</span>
 <span class="sd">        from itertools import product</span>
@@ -493,12 +521,12 @@
 <span class="sd">         (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
 <span class="sd">         (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
 <span class="sd">         (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
-<span class="sd">        &quot;&quot;&quot;</span> 
-        <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span>
+            <span class="n">dim</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">with_symbols</span><span class="p">:</span>
             <span class="n">results</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">results</span></div>
-
 
 <div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the dimension of the weight, root or irreducible representations.</span>
@@ -557,7 +585,7 @@
 <span class="sd">                print(&quot;Dim&quot;, a2.dim_name(i), &quot;Rep&quot;, i)</span>
 <span class="sd">            # Dim \bar{3} Rep Matrix([[0, 1]])</span>
 <span class="sd">            # Dim 6 Rep Matrix([[2, 0]])</span>
-<span class="sd">            </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
         <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -574,7 +602,6 @@
                     <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="n">decomp</span> <span class="o">=</span> <span class="n">results</span>
         <span class="k">return</span> <span class="n">decomp</span></div></div>
-
 </pre></div>
 
               </div>
