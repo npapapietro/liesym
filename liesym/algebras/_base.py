@@ -1,9 +1,7 @@
-from sympy.core import Basic
-from sympy import Matrix, Symbol, sympify
+from sympy import Matrix, Symbol, sympify, Basic
 from typing import List, Tuple, Union
 from copy import deepcopy
 from functools import cmp_to_key
-from itertools import product
 import re
 
 from ._methods import (
@@ -328,12 +326,11 @@ class LieAlgebra(Basic):
             irrep_10 = Matrix([[1, 0, 0, 0, 0]])
             assert irrep_10 == SO10.conjugate(irrep_10)
 
-
-
         """
         return self._backend_instance.conjugate(irrep)[0]
 
     def _is_s08(self, irrep):
+        # TODO: Implement this
         return ""
 
     def _dimindexsort(self, irrep1, irrep2):
