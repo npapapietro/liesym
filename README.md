@@ -22,15 +22,13 @@ Rust has good python binding support through [py03](https://github.com/PyO3/pyo3
 and allows easy communication through numpy using [rust-numpy](https://github.com/PyO3/rust-numpy)
 as well as numpy like api inside rust using [ndarray](https://github.com/rust-ndarray/ndarray).
 
-## Usage
-
-### Install
+## Install
 
 ```bash
 pip install liesym
 ```
 
-### Examples
+## Examples
 
 See also example [notebook](notebooks/Example.ipynb)
 
@@ -39,22 +37,20 @@ import liesym as ls
 from sympy import Matrix
 ```
 
-#### Cartan Matrix
+### Cartan Matrix
 
 
 ```python
 A3 = ls.A(3)
-A3.cartan_matrix
+print(A3.cartan_matrix)
 ```
 
 
-
-
-$\displaystyle \left[\begin{matrix}2 & -1 & 0\\-1 & 2 & -1\\0 & -1 & 2\end{matrix}\right]$
+    Matrix([[2, -1, 0], [-1, 2, -1], [0, -1, 2]])
 
 
 
-#### Positive Roots
+### Positive Roots
 
 
 ```python
@@ -73,7 +69,7 @@ A3.positive_roots
 
 
 
-#### Simple Roots
+### Simple Roots
 
 
 ```python
@@ -87,7 +83,7 @@ A3.simple_roots
 
 
 
-#### Fundamental Weights
+### Fundamental Weights
 
 
 ```python
@@ -103,7 +99,7 @@ A3.fundamental_weights # Orthogonal Basis
 
 
 
-#### Dimension of representation
+### Dimension of representation
   
 
 
@@ -122,7 +118,7 @@ for i in A3.fundamental_weights:
       4 | Matrix([[0, 0, 1]])
 
 
-#### Name of rep
+### Name of rep
 
 Commonly in literature (especially physics), names of the reps are the dimension rather than the matrix rep.
 
@@ -150,7 +146,7 @@ $\displaystyle \left[\begin{matrix}0 & 0 & 1\end{matrix}\right]$
 
 
 
-#### Tensor product decomps
+### Tensor product decomps
 
 The decomp of irreps from a product of irreps
 
