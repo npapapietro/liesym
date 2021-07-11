@@ -1,4 +1,4 @@
-from liesym import A, B, C, D
+from liesym import A, B, C, D, Basis
 from sympy import Matrix, Rational
 
 
@@ -13,6 +13,20 @@ def test_A():
         Matrix([[1, -1, 0]]),
         Matrix([[0, 1, -1]]),
     ]
+
+    a = A2.to_alpha(Matrix([[1, -1, 0]]), "ortho")
+    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+
+    x = Matrix([[1, -1, 0]])
+    x.basis = "ortho"
+    a = A2.to_omega(x)
+    assert a == Matrix([[2,-1]]) and a.basis == Basis.OMEGA
+
+    fw = A2.fundamental_weights[0]
+    assert fw.basis == Basis.ORTHO
+    assert A2.to_omega(fw) == Matrix([[1,0]])
+
+
 
     # baseclass generated
     A3 = A(3)
@@ -112,6 +126,18 @@ def test_B():
         Matrix([[0, 1]]),
     ]
 
+    a = B2.to_alpha(Matrix([[1, -1]]), "ortho")
+    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+
+    x = Matrix([[1, -1]])
+    x.basis = "ortho"
+    a = B2.to_omega(x)
+    assert a == Matrix([[2,-2]]) and a.basis == Basis.OMEGA
+
+    fw = B2.fundamental_weights[0]
+    assert fw.basis == Basis.ORTHO
+    assert B2.to_omega(fw) == Matrix([[1,0]])
+
     # baseclass generated
     B3 = B(3)
     assert B3.cartan_matrix == Matrix([[2, -1, 0], [-1, 2, -2], [0, -1, 2]])
@@ -209,6 +235,18 @@ def test_C():
         Matrix([[0, 2]]),
     ]
 
+    a = C2.to_alpha(Matrix([[1, -1]]), "ortho")
+    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+
+    x = Matrix([[1, -1]])
+    x.basis = "ortho"
+    a = C2.to_omega(x)
+    assert a == Matrix([[2,-1]]) and a.basis == Basis.OMEGA
+
+    fw = C2.fundamental_weights[0]
+    assert fw.basis == Basis.ORTHO
+    assert C2.to_omega(fw) == Matrix([[1,0]])
+
     # baseclass generated
     C3 = C(3)
     assert C3.cartan_matrix == Matrix([[2, -1, 0], [-1, 2, -1], [0, -2, 2]])
@@ -288,6 +326,18 @@ def test_D():
         Matrix([[1, -1]]),
         Matrix([[1, 1]]),
     ]
+
+    a = D2.to_alpha(Matrix([[1, -1]]), "ortho")
+    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+
+    x = Matrix([[1, -1]])
+    x.basis = "ortho"
+    a = D2.to_omega(x)
+    assert a == Matrix([[2,0]]) and a.basis == Basis.OMEGA
+
+    fw = D2.fundamental_weights[0]
+    assert fw.basis == Basis.ORTHO
+    assert D2.to_omega(fw) == Matrix([[1,0]])
 
     # baseclass generated
     D3 = D(3)
