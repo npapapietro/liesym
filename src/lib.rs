@@ -6,12 +6,11 @@ mod utils;
 use crate::debug::enable_debug;
 use crate::liealgebras::LieAlgebraBackend;
 
-use pyo3::prelude::{pyfunction, pymodule, PyModule, PyResult, Python};
+use pyo3::prelude::{pymodule, PyModule, PyResult, Python};
 
 #[pymodule]
 fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    #[allow(dead_code)]
-    #[pyfunction]
+    #[pyfn(m)]
     fn debug_mode<'py>(_py: Python<'py>, is_on: bool) {
         if is_on {
             enable_debug();

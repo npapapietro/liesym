@@ -4,7 +4,6 @@ use std::fmt::{Display, Formatter, Result};
 
 static mut DEBUGMODE: bool = false;
 
-#[allow(dead_code)]
 pub fn enable_debug() {
     unsafe { DEBUGMODE = true }
 }
