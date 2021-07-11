@@ -585,29 +585,38 @@ representation.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.conjugate" title="liesym.LieAlgebra.conjugate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conjugate</span></code></a>(irrep)</p></td>
 <td><p>Finds the conjugate irrep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dim" title="liesym.LieAlgebra.dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim</span></code></a>(irrep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dim" title="liesym.LieAlgebra.dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim</span></code></a>(irrep[, basis])</p></td>
 <td><p>Returns the dimension of the weight, root or irreducible representations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dim_name" title="liesym.LieAlgebra.dim_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim_name</span></code></a>(irrep)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dim_name" title="liesym.LieAlgebra.dim_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim_name</span></code></a>(irrep[, basis])</p></td>
 <td><p>Returns a sympy formatted symbol for the irrep.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.get_irrep_by_dim" title="liesym.LieAlgebra.get_irrep_by_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_irrep_by_dim</span></code></a>(dim[, max_dd, with_symbols])</p></td>
 <td><p>Gets all irreps by dimension and max dynkin digit. <cite>max_dd</cite> is . This algorithm brute forces searches by</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.irrep_lookup" title="liesym.LieAlgebra.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(dim)</p></td>
-<td><p>Returns the irrep for the symbol</p></td>
+<td><p>Returns the irrep matrix for the dimension.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.max_dynkin_digit" title="liesym.LieAlgebra.max_dynkin_digit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_dynkin_digit</span></code></a>(irrep)</p></td>
 <td><p>Returns the max Dynkin Digit for the representations</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.orbit" title="liesym.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.orbit" title="liesym.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers, basis])</p></td>
 <td><p>Returns the orbit of the weight or root by reflecting it a plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.root_system" title="liesym.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>()</p></td>
 <td><p>Returns the entire rootsystem of the algebra.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.tensor_product_decomposition" title="liesym.LieAlgebra.tensor_product_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_product_decomposition</span></code></a>(weights)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.tensor_product_decomposition" title="liesym.LieAlgebra.tensor_product_decomposition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor_product_decomposition</span></code></a>(weights[, basis])</p></td>
 <td><p>Returns the tensor product between irreducible representations as a the tensor sum of the irreducible representations of their highest weights.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.to_alpha" title="liesym.LieAlgebra.to_alpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_alpha</span></code></a>(x[, basis])</p></td>
+<td><p>Rotates to alpha basis</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.to_omega" title="liesym.LieAlgebra.to_omega"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_omega</span></code></a>(x[, basis])</p></td>
+<td><p>Rotates to omega basis</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.to_ortho" title="liesym.LieAlgebra.to_ortho"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_ortho</span></code></a>(x[, basis])</p></td>
+<td><p>Rotates to orthogonal basis</p></td>
 </tr>
 </tbody>
 </table>
@@ -665,7 +674,7 @@ it’s a Complex Irrep.</p>
 
 <dl class="method">
 <dt id="liesym.LieAlgebra.dim">
-<code class="sig-name descname">dim</code><span class="sig-paren">(</span><em class="sig-param">irrep: sympy.matrices.dense.MutableDenseMatrix</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.dim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dim</code><span class="sig-paren">(</span><em class="sig-param">irrep: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">basis='omega'</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.dim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dimension of the weight, root or irreducible representations.
 This follows Weyl’s dimension formula:</p>
 <div class="math notranslate nohighlight">
@@ -684,7 +693,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 
 <dl class="method">
 <dt id="liesym.LieAlgebra.dim_name">
-<code class="sig-name descname">dim_name</code><span class="sig-paren">(</span><em class="sig-param">irrep: sympy.matrices.dense.MutableDenseMatrix</em><span class="sig-paren">)</span> &#x2192; liesym.algebras._base.NumericSymbol<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.dim_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.dim_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dim_name</code><span class="sig-paren">(</span><em class="sig-param">irrep: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">basis='omega'</em><span class="sig-paren">)</span> &#x2192; liesym.algebras._base.NumericSymbol<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.dim_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.dim_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a sympy formatted symbol for the irrep.
 This is commonly used in physics literature. Returns
 a NumericSymbol object that is a simple extension of 
@@ -708,6 +717,7 @@ sympy.Symbol.</p>
 <dt id="liesym.LieAlgebra.fundamental_weights">
 <em class="property">property </em><code class="sig-name descname">fundamental_weights</code><a class="headerlink" href="#liesym.LieAlgebra.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
+<p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>List[Matrix]: List of Sympy Matrices</p>
 </dd>
@@ -754,8 +764,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="method">
 <dt id="liesym.LieAlgebra.irrep_lookup">
-<code class="sig-name descname">irrep_lookup</code><span class="sig-paren">(</span><em class="sig-param">dim: sympy.core.symbol.Symbol</em><span class="sig-paren">)</span> &#x2192; sympy.matrices.dense.MutableDenseMatrix<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.irrep_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.irrep_lookup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the irrep for the symbol</p>
+<code class="sig-name descname">irrep_lookup</code><span class="sig-paren">(</span><em class="sig-param">dim: Union[sympy.core.symbol.Symbol, str]</em><span class="sig-paren">)</span> &#x2192; sympy.matrices.dense.MutableDenseMatrix<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.irrep_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the irrep matrix for the dimension.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
+</dd>
+<dt>Raises:</dt><dd><p>KeyError: Dim not found</p>
+</dd>
+<dt>Returns:</dt><dd><p>Matrix: Returns irrep in Omega basis</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -801,10 +819,11 @@ of the algebra.</p>
 
 <dl class="method">
 <dt id="liesym.LieAlgebra.orbit">
-<code class="sig-name descname">orbit</code><span class="sig-paren">(</span><em class="sig-param">weight: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">stabilizers=None</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.orbit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.orbit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">orbit</code><span class="sig-paren">(</span><em class="sig-param">weight: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">stabilizers=None</em>, <em class="sig-param">basis='ortho'</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.orbit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.orbit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the orbit of the weight or root by reflecting it
 a plane. A stabilizer may be passed to calculate the orbit using
 the Orbit-Stabilizer theorem.</p>
+<p>Basis: Ortho</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>weight (Matrix): A Matrix of shape (1, rank)
 stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer
@@ -822,6 +841,7 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
+<p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>List[Matrix]: List of Sympy Matrices</p>
 </dd>
@@ -850,6 +870,7 @@ rotations about each simple root.</p>
 <code class="sig-name descname">root_system</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.root_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.root_system" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the entire rootsystem of the algebra. This
 includes the positive, negative and zeros of the algebra.</p>
+<p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>List[Matrix]: List of ordered roots.</p>
 </dd>
@@ -867,6 +888,7 @@ includes the positive, negative and zeros of the algebra.</p>
 <em class="property">property </em><code class="sig-name descname">simple_roots</code><a class="headerlink" href="#liesym.LieAlgebra.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
+<p>Basis: Orthogonal</p>
 <p>This method can be overridden to choose your own basis,
 be sure to do this before any other properties are called
 as they are lazily evaluated and the simple_roots define
@@ -885,14 +907,15 @@ the entire representation of the algebra.</p>
 
 <dl class="method">
 <dt id="liesym.LieAlgebra.tensor_product_decomposition">
-<code class="sig-name descname">tensor_product_decomposition</code><span class="sig-paren">(</span><em class="sig-param">weights: List[sympy.matrices.dense.MutableDenseMatrix]</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.tensor_product_decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.tensor_product_decomposition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tensor_product_decomposition</code><span class="sig-paren">(</span><em class="sig-param">weights: List[sympy.matrices.dense.MutableDenseMatrix], basis='omega'</em><span class="sig-paren">)</span> &#x2192; List[sympy.matrices.dense.MutableDenseMatrix]<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.tensor_product_decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.tensor_product_decomposition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the tensor product between irreducible representations
 as a the tensor sum of the irreducible representations of their
 highest weights. This algorithm is based on Klimky’s formula.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>weights (List[Matrix]): A list of fundamental weights to take the tensor product between</p>
+<dt>Args:</dt><dd><p>weights (List[Matrix]): A list of fundamental weights to take the tensor product between
+basis (str, Optional): Basis of incoming weights. If not set, will implicitly set. Defaults to ‘omega’.</p>
 </dd>
-<dt>Returns:</dt><dd><p>List[Matrix]: List of weights decomposed from the tensor product.</p>
+<dt>Returns:</dt><dd><p>List[Matrix]: List of weights decomposed from the tensor product. Basis: Omega</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
@@ -908,6 +931,51 @@ highest weights. This algorithm is based on Klimky’s formula.</p>
 <span class="c1"># Dim 6 Rep Matrix([[2, 0]])</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.LieAlgebra.to_alpha">
+<code class="sig-name descname">to_alpha</code><span class="sig-paren">(</span><em class="sig-param">x: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">basis=None</em><span class="sig-paren">)</span> &#x2192; sympy.matrices.dense.MutableDenseMatrix<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.to_alpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.to_alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates to alpha basis</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (Matrix): Matrix to be rotated
+basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> define it here. Defaults to None.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If no <cite>x.basis</cite> is set and None is passed to <cite>basis</cite> kwarg.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Matrix: Matrix in alpha basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.LieAlgebra.to_omega">
+<code class="sig-name descname">to_omega</code><span class="sig-paren">(</span><em class="sig-param">x: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">basis=None</em><span class="sig-paren">)</span> &#x2192; sympy.matrices.dense.MutableDenseMatrix<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.to_omega"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.to_omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates to omega basis</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (Matrix): Matrix to be rotated
+basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> define it here. Defaults to None.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If no <cite>x.basis</cite> is set and None is passed to <cite>basis</cite> kwarg.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Matrix: Matrix in omega basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="liesym.LieAlgebra.to_ortho">
+<code class="sig-name descname">to_ortho</code><span class="sig-paren">(</span><em class="sig-param">x: sympy.matrices.dense.MutableDenseMatrix</em>, <em class="sig-param">basis=None</em><span class="sig-paren">)</span> &#x2192; sympy.matrices.dense.MutableDenseMatrix<a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.to_ortho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#liesym.LieAlgebra.to_ortho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates to orthogonal basis</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (Matrix): Matrix to be rotated
+basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> define it here. Defaults to None.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If no <cite>x.basis</cite> is set and None is passed to <cite>basis</cite> kwarg.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Matrix: Matrix in orthogonal basis.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
