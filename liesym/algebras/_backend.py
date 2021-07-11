@@ -4,6 +4,12 @@ from sympy import Matrix, flatten, Rational
 from .. import (_debug_mode, _LieAlgebraBackend)
 
 
+def _annotate(M: Matrix, basis: str) -> Matrix:
+    """Adds basis attribute to sympy.Matrix"""
+    setattr(M, "basis", basis)
+    return M
+
+
 def _to_rational_tuple(obj):
     if obj is None:
         return
