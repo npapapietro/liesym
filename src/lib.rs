@@ -6,7 +6,7 @@ mod utils;
 use crate::debug::enable_debug;
 use crate::liealgebras::LieAlgebraBackend;
 
-use pyo3::prelude::{pymodule, PyModule, PyResult, Python};
+use pyo3::prelude::{pymodule, PyModule, PyResult, Python, pyfunction};
 
 #[pymodule]
 fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
