@@ -10,7 +10,7 @@ use pyo3::prelude::{pymodule, PyModule, PyResult, Python};
 
 #[pymodule]
 fn liesym(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    #[pyfn(m, "debug_mode")]
+    #[pyfn(m)]
     fn debug_mode<'py>(_py: Python<'py>, is_on: bool) {
         if is_on {
             enable_debug();
