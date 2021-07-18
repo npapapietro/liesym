@@ -507,7 +507,6 @@ impl LieAlgebraBackend {
         tower_with_mul: Vec<(Array2R, i64)>,
         weight: Array2R,
     ) -> Vec<(i64, Array2R)> {
-
         if debug_on() {
             println!("Starting weight_parities");
         }
