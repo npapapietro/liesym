@@ -6,15 +6,30 @@
 Welcome to liesym's documentation!
 ==================================
 
-.. toctree::
-   :maxdepth: 4
+Liesym is an extension module on SymPy that reimplements the
+liealgebra module inside sympy with the idea of using a
+compiled backend to do speedups on some of the slower aspects
+of SymPy's pure python implementation. This python module is
+mostly a reimplementation of a Mathematica module LieART.
+
+
+- SymPy: https://sympy.org
+- LieART: https://arxiv.org/pdf/1206.6379.pdf
 
 
 Module contents
 ---------------
 
-.. automodule:: liesym
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :exclude-members: default_assumptions 
+.. toctree::
+   :maxdepth: 4
+
+   algebra
+   group
+
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+

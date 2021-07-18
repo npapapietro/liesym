@@ -91,6 +91,12 @@ autodoc_mock_imports = ["liesym.liesym"]
 
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+autodoc_type_aliases = {
+    "Matrix": "sympy.Matrix",
+    "Symbol": "sympy.Symbol",
+    # "NumericSymbol": "NumericSymbol"
+}
+
 # latex_engine = 'pdflatex'
 
 # latex_elements = {

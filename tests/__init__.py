@@ -1,3 +1,2 @@
-from .test_classic import *
-from .test_backend import *
-from .test_exceptionals import *
+from .test_algebra import *
+from .test_group import *

@@ -465,6 +465,9 @@ impl LieAlgebraBackend {
     }
 
     fn weight_system_with_mul(&self, irrep: Array2R) -> Vec<(Array2R, i64)> {
+        if debug_on() {
+            println!("Starting weight_system_with_mul");
+        }
         let dom_weight_system: Vec<_> = self
             .single_dom_weights(&irrep)
             .iter()
@@ -504,6 +507,9 @@ impl LieAlgebraBackend {
         tower_with_mul: Vec<(Array2R, i64)>,
         weight: Array2R,
     ) -> Vec<(i64, Array2R)> {
+        if debug_on() {
+            println!("Starting weight_parities");
+        }
         let rho = Array2R::ones((1, self.rank));
 
         tower_with_mul
@@ -517,6 +523,10 @@ impl LieAlgebraBackend {
     }
 
     fn tensor_product_decomp(&self, irrep1: Array2R, irrep2: Array2R) -> Vec<Array2R> {
+        if debug_on() {
+            println!("Starting tensor_product_decomp");
+        }
+
         let tower = self.weight_system_with_mul(irrep1);
 
         let mut weight_parities = self
