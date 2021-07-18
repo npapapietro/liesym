@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 from sympy.core import Basic
 from sympy import Matrix, Symbol, sympify
 from typing import List, Tuple, Union
 from copy import deepcopy
 from functools import cmp_to_key
-from itertools import product
 import re
 
 from ._methods import (
@@ -59,7 +60,9 @@ class LieAlgebra(Basic):
             series (str): The series type
             rank (int): The rank of the algebra
         """
-        return super().__new__(cls, series, sympify(rank))
+        obj = super().__new__(cls, sympify(rank))
+        obj._series = series
+        return obj
 
     def __init__(self, *args, **kwargs):
         """Used to set lazy properties
@@ -79,22 +82,26 @@ class LieAlgebra(Basic):
     def series(self) -> str:
         """Algebra series type
         """
-        return self.args[0]
+        return self._series
 
     @property
     def rank(self) -> int:
         """Algebra rank
         """
-        return self.args[1]
+        return self.args[0]
 
     @property
     def dimension(self) -> int:
         """Algebra dimension
+
+        Abstract
         """
 
     @property
     def n_pos_roots(self) -> int:
         """Total number of positive roots in the algebra
+
+        Abstract
         """
     @property
     def n_roots(self) -> int:
@@ -105,7 +112,7 @@ class LieAlgebra(Basic):
     def simple_roots(self) -> List[Matrix]:
         """Returns a list of Sympy matrix (1,dimension)
         objects representing a chosen basis of the algebra.
-        
+
         Basis: Orthogonal
 
 
@@ -277,7 +284,7 @@ class LieAlgebra(Basic):
         sympy.Symbol.      
 
         Examples
-        =======
+        =========
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
@@ -325,7 +332,7 @@ class LieAlgebra(Basic):
             Matrix: Returns irrep in Omega basis
 
 
-        Example
+        Examples
         ========
         >>> from liesym import A
         >>> A3 = A(3)
@@ -361,6 +368,7 @@ class LieAlgebra(Basic):
         .. code-block:: python
 
             from liesym import A,D
+            from sympy import Matrix
 
             SU4 = A(3)
             irrep_20 = Matrix([[0,1,1]])
@@ -370,9 +378,6 @@ class LieAlgebra(Basic):
             SO10 = D(5)
             irrep_10 = Matrix([[1, 0, 0, 0, 0]])
             assert irrep_10 == SO10.conjugate(irrep_10)
-
-
-
         """
         return self.to_omega(self._backend_instance.conjugate(irrep)[0], "omega")
 
@@ -409,11 +414,7 @@ class LieAlgebra(Basic):
         return NumericSymbol(dim, irrep)
 
     def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> List[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
-        r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by
-        ```
-        from itertools import product
-        combos = product(range(max_dd+1), repeat=self.rank)
-        ```
+        r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by using `itertools.product`
         which can become expensive for large so searching max_dd > 3 will be 
         very expensive
 
@@ -427,7 +428,7 @@ class LieAlgebra(Basic):
 
 
         Examples
-        ========
+        =========
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
@@ -444,9 +445,9 @@ class LieAlgebra(Basic):
          (Matrix([[3, 0, 0]]), '\bar{20}^{\prime \prime}'),
          (Matrix([[0, 0, 3]]), '20^{\prime \prime}')]
         """
-        results: List[Matrix] = self._backend_instance.get_irrep_by_dim(
+        backend_results: List[Matrix] = self._backend_instance.get_irrep_by_dim(
             dim, max_dd)
-        results = [self.to_omega(x,"omega") for x in results]
+        results = [self.to_omega(x, "omega") for x in backend_results]
         if with_symbols:
             results = [(x, self.dim_name(x)) for x in results]
         return results
@@ -485,10 +486,11 @@ class LieAlgebra(Basic):
             List[Matrix]: List of ordered roots.
         """
         if self._root_system is None:
-            self._root_system = [_annotate_matrix(x) for x in self._backend_instance.root_system()]
+            self._root_system = [_annotate_matrix(
+                x) for x in self._backend_instance.root_system()]
         return self._root_system
 
-    def tensor_product_decomposition(self, weights: List[Matrix], basis="omega") -> List[Matrix]:
+    def tensor_product_decomposition(self, weights: List[Matrix], basis="omega", **_) -> List[Matrix]:
         """Returns the tensor product between irreducible representations
         as a the tensor sum of the irreducible representations of their
         highest weights. This algorithm is based on Klimky's formula.
@@ -503,20 +505,14 @@ class LieAlgebra(Basic):
 
 
         Examples
-        =======
-        .. code-block:: python
+        =========
+        >>> from liesym import A
+        >>> from sympy import Matrix
+        >>> a2 = A(2)
+        >>> results = a2.tensor_product_decomposition([Matrix([[1,0]]), Matrix([[1,0]])])
+        >>> print(results)
+        [Matrix([[0, 1]]), Matrix([[2, 0]])]
 
-            from liesym import A
-            from sympy import Matrix
-            a2 = A(2)
-            results = a2.tensor_product_decomposition([
-                Matrix([[1,0]]), 
-                Matrix([[1,0]])
-            ])
-            for i in results:
-                print("Dim", a2.dim_name(i), "Rep", i)
-            # Dim \bar{3} Rep Matrix([[0, 1]])
-            # Dim 6 Rep Matrix([[2, 0]])
 
         """
         weights = [self.to_omega(x, basis) for x in weights]
@@ -559,7 +555,8 @@ class LieAlgebra(Basic):
         elif x.basis is Basis.ALPHA:
             r = x * self.cartan_matrix * self.omega_matrix
         else:
-            raise ValueError("Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
+            raise ValueError(
+                "Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
 
         r.basis = Basis.ORTHO
         return r
@@ -576,7 +573,7 @@ class LieAlgebra(Basic):
 
         Returns:
             Matrix: Matrix in omega basis.
-        """        
+        """
         basis = _basis_lookup(basis)
         _annotate_matrix(x, basis)
 
@@ -587,7 +584,8 @@ class LieAlgebra(Basic):
         elif x.basis is Basis.ALPHA:
             r = x * self.cartan_matrix
         else:
-            raise ValueError("Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
+            raise ValueError(
+                "Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
 
         r.basis = Basis.OMEGA
         return r
@@ -604,7 +602,7 @@ class LieAlgebra(Basic):
 
         Returns:
             Matrix: Matrix in alpha basis.
-        """           
+        """
         basis = _basis_lookup(basis)
         _annotate_matrix(x, basis)
 
@@ -615,7 +613,8 @@ class LieAlgebra(Basic):
         elif x.basis is Basis.OMEGA:
             r = x * self.cartan_matrix.pinv()
         else:
-            raise ValueError("Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
+            raise ValueError(
+                "Basis arg cannot be None if attribute `basis` has not been set on Matrix.")
 
         r.basis = Basis.ALPHA
         return r
