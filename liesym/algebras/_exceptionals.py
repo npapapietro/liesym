@@ -120,7 +120,7 @@ class E(LieAlgebra):
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self._simple_roots = _e_series_default_roots(self.args[1])
+        self._simple_roots = _e_series_default_roots(self.args[0])
 
     @property
     def dimension(self) -> int:
