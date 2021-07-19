@@ -1,6 +1,6 @@
 [tools.poetry]
 name='liesym'
-version='0.4.1'
+version='0.5.0'
 description='Sympy Lie Algebra extensions powered by rust.'
 authors= "Nathan Papapietro <npapapietro95@gmail.com>"
 readme="README.md"
