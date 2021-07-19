@@ -9,5 +9,5 @@ from .groups import *
 
 __all__ = [
     "A", "B", "C", "D", "F4", "G2", "E", "LieAlgebra", "NumericSymbol",
-    "SU", "generalized_gell_mann", "SO", "Sp", "Group", "LieGroup"
+    "SU", "generalized_gell_mann", "SO", "Sp", "Group", "LieGroup", "Z"
 ]

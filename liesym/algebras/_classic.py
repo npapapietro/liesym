@@ -1,7 +1,7 @@
 from sympy.core.sympify import _sympify
 from sympy import Matrix, flatten
 
-from ._base import LieAlgebra
+from ._base import LieAlgebra, NumericSymbol
 
 
 def _euclidean_root(i, n):
@@ -48,17 +48,18 @@ class A(LieAlgebra):
         .. math::
             n(n + 1) / 2
         """
-        return self.rank * (self.rank + 1) / 2
+        return self.rank * (self.rank + 1) // 2
 
-    def dim_name(self, irrep: Matrix) -> str:
+    def dim_name(self, irrep: Matrix, basis="omega") -> NumericSymbol:
         r"""Returns a sympy formatted symbol for the irrep.
         This is commonly used in physics literature"""
+        irrep = self.to_omega(irrep, basis)
         if self.rank == 2:
             if irrep == Matrix([[2, 0]]):
                 return self._dim_name_fmt(6)
             elif irrep == Matrix([[0, 2]]):
                 return self._dim_name_fmt(6, True)
-        return super().dim_name(irrep)
+        return super().dim_name(irrep, basis)
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""

@@ -302,7 +302,7 @@ class LieAlgebra(Basic):
 
         if len(same_dim_irreps) > 1:
             # group by index
-            index_pairs = {}
+            index_pairs = {} # type: ignore
             for i in same_dim_irreps:
                 index = self._backend_instance.index_irrep(i, dim)
                 index_pairs[index] = index_pairs.get(index, []) + [i]

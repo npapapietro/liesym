@@ -90,7 +90,7 @@ class LieGroup(Group):
 
         """
         
-        return self.algebra.tensor_product_decomposition(args, **kwargs)
+        return self.algebra.tensor_product_decomposition(args, **kwargs) # type: ignore
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> List[Union[Symbol, Tuple[Matrix, Symbol]]]:
         """Uses tensor product decomposition to find the products between the 
