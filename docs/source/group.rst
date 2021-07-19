@@ -43,3 +43,11 @@ SU
    :undoc-members:
    :inherited-members: Basic
    :exclude-members: default_assumptions 
+
+Z
+----------------
+.. autoclass:: liesym.Z
+   :members:
+   :undoc-members:
+   :inherited-members: Basic
+   :exclude-members: default_assumptions 
