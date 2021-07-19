@@ -67,7 +67,18 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../algebra.html">
+  Algebra
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../group.html">
+  Groups
+ </a>
+</li>
+
     
 </ul>
       </div>
@@ -119,12 +130,13 @@
               <div>
                 
   <h1>Source code for liesym.algebras._base</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">Basic</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">Basic</span>
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Symbol</span><span class="p">,</span> <span class="n">sympify</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cmp_to_key</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">._methods</span> <span class="kn">import</span> <span class="p">(</span>
@@ -140,7 +152,7 @@
 <span class="kn">from</span> <span class="nn">._backend</span> <span class="kn">import</span> <span class="n">create_backend</span>
 
 
-<div class="viewcode-block" id="NumericSymbol"><a class="viewcode-back" href="../../../index.html#liesym.NumericSymbol">[docs]</a><span class="k">class</span> <span class="nc">NumericSymbol</span><span class="p">(</span><span class="n">Symbol</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">NumericSymbol</span><span class="p">(</span><span class="n">Symbol</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extension of Sympy symbol that allows</span>
 <span class="sd">    latex formatting but also tracks the underlying </span>
 <span class="sd">    integer value. Useful for dimension representations</span>
@@ -150,7 +162,7 @@
         <span class="n">obj</span><span class="o">.</span><span class="n">numeric_dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
 
-<div class="viewcode-block" id="NumericSymbol.from_symbol"><a class="viewcode-back" href="../../../index.html#liesym.NumericSymbol.from_symbol">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_symbol</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">symbol</span><span class="p">:</span> <span class="n">Symbol</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Converts from sympy.Symbol into NumericSymbol by</span>
 <span class="sd">        regex search for digits from latex display pattern and </span>
@@ -162,10 +174,10 @@
             <span class="n">num</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="n">s</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not extract numerical from sympy.Symbol&quot;</span><span class="p">)</span></div></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not extract numerical from sympy.Symbol&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="LieAlgebra"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra">[docs]</a><span class="k">class</span> <span class="nc">LieAlgebra</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
+<div class="viewcode-block" id="LieAlgebra"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra">[docs]</a><span class="k">class</span> <span class="nc">LieAlgebra</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The base class for all lie algebras. The methods and properties</span>
 <span class="sd">    in this class are basis independent and apply in a general sense. In</span>
 <span class="sd">    order to write down the roots as matricies and vectors, we choose a </span>
@@ -180,7 +192,9 @@
 <span class="sd">            series (str): The series type</span>
 <span class="sd">            rank (int): The rank of the algebra</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">sympify</span><span class="p">(</span><span class="n">rank</span><span class="p">))</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sympify</span><span class="p">(</span><span class="n">rank</span><span class="p">))</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_series</span> <span class="o">=</span> <span class="n">series</span>
+        <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used to set lazy properties</span>
@@ -200,22 +214,26 @@
     <span class="k">def</span> <span class="nf">series</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Algebra series type</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_series</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Algebra rank</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Algebra dimension</span>
+
+<span class="sd">        Abstract</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_pos_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Total number of positive roots in the algebra</span>
+
+<span class="sd">        Abstract</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -226,7 +244,7 @@
     <span class="k">def</span> <span class="nf">simple_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns a list of Sympy matrix (1,dimension)</span>
 <span class="sd">        objects representing a chosen basis of the algebra.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Basis: Orthogonal</span>
 
 
@@ -370,7 +388,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">create_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span>
 
-<div class="viewcode-block" id="LieAlgebra.orbit"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">stabilizers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="LieAlgebra.orbit"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">stabilizers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;ortho&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the orbit of the weight or root by reflecting it</span>
 <span class="sd">        a plane. A stabilizer may be passed to calculate the orbit using</span>
 <span class="sd">        the Orbit-Stabilizer theorem.</span>
@@ -391,14 +409,14 @@
         <span class="n">weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_ortho</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="s2">&quot;ortho&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_ortho</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;ortho&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">stabilizers</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.dim_name"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.dim_name">[docs]</a>    <span class="k">def</span> <span class="nf">dim_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NumericSymbol</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.dim_name"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.dim_name">[docs]</a>    <span class="k">def</span> <span class="nf">dim_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NumericSymbol</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a sympy formatted symbol for the irrep.</span>
 <span class="sd">        This is commonly used in physics literature. Returns</span>
 <span class="sd">        a NumericSymbol object that is a simple extension of </span>
 <span class="sd">        sympy.Symbol.      </span>
 
 <span class="sd">        Examples</span>
-<span class="sd">        =======</span>
+<span class="sd">        =========</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a3 = A(3)</span>
@@ -416,7 +434,7 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">same_dim_irreps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># group by index</span>
-            <span class="n">index_pairs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">index_pairs</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># type: ignore</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">same_dim_irreps</span><span class="p">:</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">index_irrep</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
                 <span class="n">index_pairs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">index_pairs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -433,7 +451,7 @@
         <span class="n">has_conjugate</span> <span class="o">=</span> <span class="n">conjugate</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">so8label</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim_name_fmt</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">has_conjugate</span><span class="p">,</span> <span class="n">num_primes</span><span class="p">,</span> <span class="n">so8label</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.irrep_lookup"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Symbol</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.irrep_lookup"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Symbol</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the irrep matrix for the dimension.</span>
 
 <span class="sd">        Args:</span>
@@ -446,7 +464,7 @@
 <span class="sd">            Matrix: Returns irrep in Omega basis</span>
 
 
-<span class="sd">        Example</span>
+<span class="sd">        Examples</span>
 <span class="sd">        ========</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; A3 = A(3)</span>
@@ -472,7 +490,7 @@
                     <span class="k">return</span> <span class="n">c</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Irrep </span><span class="si">{dim}</span><span class="s2"> not found.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.conjugate"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.conjugate">[docs]</a>    <span class="k">def</span> <span class="nf">conjugate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.conjugate"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.conjugate">[docs]</a>    <span class="k">def</span> <span class="nf">conjugate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Finds the conjugate irrep. If it is the same</span>
 <span class="sd">        as the original irrep, you have a Real Irrep, otherwise</span>
 <span class="sd">        it&#39;s a Complex Irrep.</span>
@@ -482,6 +500,7 @@
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            from liesym import A,D</span>
+<span class="sd">            from sympy import Matrix</span>
 
 <span class="sd">            SU4 = A(3)</span>
 <span class="sd">            irrep_20 = Matrix([[0,1,1]])</span>
@@ -491,9 +510,6 @@
 <span class="sd">            SO10 = D(5)</span>
 <span class="sd">            irrep_10 = Matrix([[1, 0, 0, 0, 0]])</span>
 <span class="sd">            assert irrep_10 == SO10.conjugate(irrep_10)</span>
-
-
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">irrep</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;omega&quot;</span><span class="p">)</span></div>
 
@@ -511,7 +527,7 @@
     <span class="k">def</span> <span class="nf">_congruency_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">0</span>
 
-<div class="viewcode-block" id="LieAlgebra.max_dynkin_digit"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.max_dynkin_digit"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the max Dynkin Digit for the representations&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
@@ -529,12 +545,8 @@
 
         <span class="k">return</span> <span class="n">NumericSymbol</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">irrep</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LieAlgebra.get_irrep_by_dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.get_irrep_by_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_irrep_by_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">NumericSymbol</span><span class="p">]]]:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by</span>
-<span class="sd">        ```</span>
-<span class="sd">        from itertools import product</span>
-<span class="sd">        combos = product(range(max_dd+1), repeat=self.rank)</span>
-<span class="sd">        ```</span>
+<div class="viewcode-block" id="LieAlgebra.get_irrep_by_dim"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.get_irrep_by_dim">[docs]</a>    <span class="k">def</span> <span class="nf">get_irrep_by_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">NumericSymbol</span><span class="p">]]]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by using `itertools.product`</span>
 <span class="sd">        which can become expensive for large so searching max_dd &gt; 3 will be </span>
 <span class="sd">        very expensive</span>
 
@@ -548,7 +560,7 @@
 
 
 <span class="sd">        Examples</span>
-<span class="sd">        ========</span>
+<span class="sd">        =========</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a3 = A(3)</span>
@@ -565,14 +577,14 @@
 <span class="sd">         (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
 <span class="sd">         (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span>
+        <span class="n">backend_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span>
             <span class="n">dim</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">)</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">backend_results</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">with_symbols</span><span class="p">:</span>
             <span class="n">results</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">results</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.dim"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.dim">[docs]</a>    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the dimension of the weight, root or irreducible representations.</span>
 <span class="sd">        This follows Weyl&#39;s dimension formula:</span>
 
@@ -596,7 +608,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.root_system"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.root_system">[docs]</a>    <span class="k">def</span> <span class="nf">root_system</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="LieAlgebra.root_system"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.root_system">[docs]</a>    <span class="k">def</span> <span class="nf">root_system</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the entire rootsystem of the algebra. This</span>
 <span class="sd">        includes the positive, negative and zeros of the algebra.</span>
 
@@ -606,10 +618,11 @@
 <span class="sd">            List[Matrix]: List of ordered roots.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_system</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_root_system</span> <span class="o">=</span> <span class="p">[</span><span class="n">_annotate_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">root_system</span><span class="p">()]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_root_system</span> <span class="o">=</span> <span class="p">[</span><span class="n">_annotate_matrix</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">root_system</span><span class="p">()]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_system</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.tensor_product_decomposition"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.tensor_product_decomposition">[docs]</a>    <span class="k">def</span> <span class="nf">tensor_product_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">],</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="LieAlgebra.tensor_product_decomposition"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.tensor_product_decomposition">[docs]</a>    <span class="k">def</span> <span class="nf">tensor_product_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">],</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the tensor product between irreducible representations</span>
 <span class="sd">        as a the tensor sum of the irreducible representations of their</span>
 <span class="sd">        highest weights. This algorithm is based on Klimky&#39;s formula.</span>
@@ -624,20 +637,14 @@
 
 
 <span class="sd">        Examples</span>
-<span class="sd">        =======</span>
-<span class="sd">        .. code-block:: python</span>
+<span class="sd">        =========</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import A</span>
+<span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
+<span class="sd">        &gt;&gt;&gt; a2 = A(2)</span>
+<span class="sd">        &gt;&gt;&gt; results = a2.tensor_product_decomposition([Matrix([[1,0]]), Matrix([[1,0]])])</span>
+<span class="sd">        &gt;&gt;&gt; print(results)</span>
+<span class="sd">        [Matrix([[0, 1]]), Matrix([[2, 0]])]</span>
 
-<span class="sd">            from liesym import A</span>
-<span class="sd">            from sympy import Matrix</span>
-<span class="sd">            a2 = A(2)</span>
-<span class="sd">            results = a2.tensor_product_decomposition([</span>
-<span class="sd">                Matrix([[1,0]]), </span>
-<span class="sd">                Matrix([[1,0]])</span>
-<span class="sd">            ])</span>
-<span class="sd">            for i in results:</span>
-<span class="sd">                print(&quot;Dim&quot;, a2.dim_name(i), &quot;Rep&quot;, i)</span>
-<span class="sd">            # Dim \bar{3} Rep Matrix([[0, 1]])</span>
-<span class="sd">            # Dim 6 Rep Matrix([[2, 0]])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">]</span>
@@ -657,7 +664,7 @@
             <span class="n">decomp</span> <span class="o">=</span> <span class="n">results</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;omega&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decomp</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.to_ortho"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.to_ortho">[docs]</a>    <span class="k">def</span> <span class="nf">to_ortho</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.to_ortho"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.to_ortho">[docs]</a>    <span class="k">def</span> <span class="nf">to_ortho</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Rotates to orthogonal basis</span>
 
 <span class="sd">        Args:</span>
@@ -680,12 +687,13 @@
         <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">basis</span> <span class="ow">is</span> <span class="n">Basis</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartan_matrix</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">omega_matrix</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
 
         <span class="n">r</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">Basis</span><span class="o">.</span><span class="n">ORTHO</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.to_omega"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.to_omega">[docs]</a>    <span class="k">def</span> <span class="nf">to_omega</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.to_omega"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.to_omega">[docs]</a>    <span class="k">def</span> <span class="nf">to_omega</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Rotates to omega basis</span>
 
 <span class="sd">        Args:</span>
@@ -697,7 +705,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Matrix: Matrix in omega basis.</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">_basis_lookup</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
         <span class="n">_annotate_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
 
@@ -708,12 +716,13 @@
         <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">basis</span> <span class="ow">is</span> <span class="n">Basis</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartan_matrix</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
 
         <span class="n">r</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">Basis</span><span class="o">.</span><span class="n">OMEGA</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="LieAlgebra.to_alpha"><a class="viewcode-back" href="../../../index.html#liesym.LieAlgebra.to_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">to_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+<div class="viewcode-block" id="LieAlgebra.to_alpha"><a class="viewcode-back" href="../../../algebra.html#liesym.LieAlgebra.to_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">to_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Rotates to alpha basis</span>
 
 <span class="sd">        Args:</span>
@@ -725,7 +734,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Matrix: Matrix in alpha basis.</span>
-<span class="sd">        &quot;&quot;&quot;</span>           
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">_basis_lookup</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
         <span class="n">_annotate_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
 
@@ -736,7 +745,8 @@
         <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">basis</span> <span class="ow">is</span> <span class="n">Basis</span><span class="o">.</span><span class="n">OMEGA</span><span class="p">:</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartan_matrix</span><span class="o">.</span><span class="n">pinv</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Basis arg cannot be None if attribute `basis` has not been set on Matrix.&quot;</span><span class="p">)</span>
 
         <span class="n">r</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">Basis</span><span class="o">.</span><span class="n">ALPHA</span>
         <span class="k">return</span> <span class="n">r</span></div></div>

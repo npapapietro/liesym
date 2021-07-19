@@ -67,7 +67,18 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../algebra.html">
+  Algebra
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../group.html">
+  Groups
+ </a>
+</li>
+
     
 </ul>
       </div>
@@ -124,7 +135,7 @@
 <span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
 
 
-<div class="viewcode-block" id="F4"><a class="viewcode-back" href="../../../index.html#liesym.F4">[docs]</a><span class="k">class</span> <span class="nc">F4</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="F4"><a class="viewcode-back" href="../../../algebra.html#liesym.F4">[docs]</a><span class="k">class</span> <span class="nc">F4</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type F4. The dynkin diagram for this algebra is</span>
 
 <span class="sd">        .. image:: ../../docs/source/images/type_F4.png</span>
@@ -153,13 +164,13 @@
     <span class="k">def</span> <span class="nf">n_pos_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">24</span>
 
-<div class="viewcode-block" id="F4.max_dynkin_digit"><a class="viewcode-back" href="../../../index.html#liesym.F4.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="F4.max_dynkin_digit"><a class="viewcode-back" href="../../../algebra.html#liesym.F4.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the max Dynkin Digit for the representation&quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">irrep</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
 
 
-<div class="viewcode-block" id="G2"><a class="viewcode-back" href="../../../index.html#liesym.G2">[docs]</a><span class="k">class</span> <span class="nc">G2</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="G2"><a class="viewcode-back" href="../../../algebra.html#liesym.G2">[docs]</a><span class="k">class</span> <span class="nc">G2</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type G2. The dynkin diagram for this algebra is</span>
 
 <span class="sd">        .. image:: ../../docs/source/images/type_G2.png</span>
@@ -185,7 +196,7 @@
     <span class="k">def</span> <span class="nf">n_pos_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">6</span>
 
-<div class="viewcode-block" id="G2.max_dynkin_digit"><a class="viewcode-back" href="../../../index.html#liesym.G2.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="G2.max_dynkin_digit"><a class="viewcode-back" href="../../../algebra.html#liesym.G2.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the max Dynkin Digit for the representation&quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">irrep</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span></div></div>
@@ -208,7 +219,7 @@
     <span class="k">return</span> <span class="p">[</span><span class="n">Matrix</span><span class="p">([</span><span class="n">roots</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
 
 
-<div class="viewcode-block" id="E"><a class="viewcode-back" href="../../../index.html#liesym.E">[docs]</a><span class="k">class</span> <span class="nc">E</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
+<div class="viewcode-block" id="E"><a class="viewcode-back" href="../../../algebra.html#liesym.E">[docs]</a><span class="k">class</span> <span class="nc">E</span><span class="p">(</span><span class="n">LieAlgebra</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The compact lie group of type E. There are only three defined for</span>
 <span class="sd">    type E.</span>
 
@@ -241,7 +252,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_simple_roots</span> <span class="o">=</span> <span class="n">_e_series_default_roots</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simple_roots</span> <span class="o">=</span> <span class="n">_e_series_default_roots</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -251,7 +262,7 @@
     <span class="k">def</span> <span class="nf">n_pos_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="mi">36</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">120</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span>
 
-<div class="viewcode-block" id="E.max_dynkin_digit"><a class="viewcode-back" href="../../../index.html#liesym.E.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="E.max_dynkin_digit"><a class="viewcode-back" href="../../../algebra.html#liesym.E.max_dynkin_digit">[docs]</a>    <span class="k">def</span> <span class="nf">max_dynkin_digit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the max Dynkin Digit for the representation&quot;&quot;&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
