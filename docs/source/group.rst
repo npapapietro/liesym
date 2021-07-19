@@ -7,9 +7,6 @@ Group Base
 
 .. autoclass:: liesym.Group
    :members:
-   :undoc-members:
-   :inherited-members: Basic
-   :exclude-members: default_assumptions 
 
 
 Lie Group

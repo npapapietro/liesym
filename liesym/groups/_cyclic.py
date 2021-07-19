@@ -26,7 +26,7 @@ class Z(Group):
         >>> Z(3).generators()
         [1, exp(2*I*pi/3), exp(-2*I*pi/3)]
         >>> Z(3).generators(indexed=True)
-        [1, exp(2*I*pi/3), exp(-2*I*pi/3)]
+        [(Z_0,1), (Z_1,exp(2*I*pi/3)), (Z_2, exp(-2*I*pi/3))]
         """
         d = self.dimension
         
