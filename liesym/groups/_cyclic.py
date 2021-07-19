@@ -73,7 +73,7 @@ class Z(Group):
 
         gens = {Symbol(f"Z_{idx}"): x  for idx, x in enumerate(self.generators())}
         
-        result = self.product(*[gens[Symbol(x)] for x in cleaned_args])
+        result = self.product(*[gens[x] for x in cleaned_args])
         
         for k,v in gens.items():
             if v == result[0]:
