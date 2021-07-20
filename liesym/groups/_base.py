@@ -83,11 +83,7 @@ class LieGroup(Group):
         >>> from sympy import Matrix
         >>> so10 = SO(10)
         >>> so10.product(Matrix([[1,0,0,0,0]]),Matrix([[1,0,0,0,0]]))
-        >>> print(results)
-        [Matrix([[0, 0, 0, 0, 0]]),
-         Matrix([[0, 1, 0, 0, 0]]),
-         Matrix([[2, 0, 0, 0, 0]])]
-
+        [Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]
         """
         
         return self.algebra.tensor_product_decomposition(args, **kwargs) # type: ignore
@@ -109,18 +105,11 @@ class LieGroup(Group):
         >>> so10.sym_product("10","45")        
         [120, 10, 320]
         >>> so10.sym_product("10","45", as_tuple=True)
-        [(Matrix([[0, 0, 1, 0, 0]]), 120),
-         (Matrix([[1, 0, 0, 0, 0]]), 10),
-         (Matrix([[1, 1, 0, 0, 0]]), 320)]
+        [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]
         >>> from liesym import SU
-        >>> su2 = SU(2)
-        >>> su.sym_product('3', '\\bar{3}')
+        >>> su3 = SU(3)
+        >>> su3.sym_product('3', r'\\bar{3}')
         [1, 8]
-        >>> su.sym_product('3', '\\bar{3}', '3', as_tuple=True)
-        [(Matrix([[1, 0]]), 3),
-        (Matrix([[0, 2]]), '\\bar{6}'),
-        (Matrix([[1, 0]]), 3),
-        (Matrix([[2, 1]]), 15)]
         """
         mats = [self.algebra.irrep_lookup(x) for x in args]
 

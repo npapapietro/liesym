@@ -57,7 +57,7 @@ jobs:
       #   run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
       - name: Run python tests
         run: |
-          python setup.py pytest
+          python setup.py pytest --doctest-modules
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -96,5 +96,5 @@ jobs:
       #   run: cargo test --no-default-features --target x86_64-unknown-linux-gnu
       - name: Run python tests
         run: |
-          python setup.py pytest
+          python setup.py pytest --doctest-modules
 
