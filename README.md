@@ -165,7 +165,29 @@ for i in results:
     Rep: Matrix([[2, 0, 0]]) Dim Name: \bar{10}
 
 
+### Lie Groups
 
+```python
+from liesym import SO, SU
+
+so10 = SO(10)
+so10.product(Matrix([[1,0,0,0,0]]),Matrix([[1,0,0,0,0]]))
+```
+    [Matrix([[0, 0, 0, 0, 0]]),
+     Matrix([[0, 1, 0, 0, 0]]),
+     Matrix([[2, 0, 0, 0, 0]])]
+
+```python
+so10.sym_product("10","45")
+```
+    [120, 10, 320]
+
+```python
+su3 = SU(3)
+su.sym_product('3', '\\bar{3}')
+```
+    [1, 8]
+    
 ## Repo Layout
 
 If you are new to how python and rust are tied together with py03, below
