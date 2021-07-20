@@ -420,8 +420,7 @@
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a3 = A(3)</span>
-<span class="sd">        &gt;&gt;&gt; str(a3.dim_name(Matrix([[1, 1, 0]])))</span>
-<span class="sd">        \bar{20}       </span>
+<span class="sd">        &gt;&gt;&gt; assert str(a3.dim_name(Matrix([[1, 1, 0]]))) == &#39;\\bar{20}&#39;           </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">irrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_omega</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
 
@@ -468,10 +467,10 @@
 <span class="sd">        ========</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; A3 = A(3)</span>
-<span class="sd">        &gt;&gt;&gt; A3.irrep_lookup(r&quot;\bar{4}&quot;)</span>
-<span class="sd">        Matrix([[0,0,1]])</span>
+<span class="sd">        &gt;&gt;&gt; A3.irrep_lookup(r&quot;\\bar{4}&quot;)</span>
+<span class="sd">        Matrix([[0, 0, 1]])</span>
 <span class="sd">        &gt;&gt;&gt; A3.irrep_lookup(&quot;4&quot;)</span>
-<span class="sd">        Matrix([[1,0,0]])</span>
+<span class="sd">        Matrix([[1, 0, 0]])</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">dim</span> <span class="o">=</span> <span class="n">Symbol</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
@@ -564,18 +563,16 @@
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a3 = A(3)</span>
-<span class="sd">        &gt;&gt;&gt; a3.get_irrep_by_dim(20)</span>
-<span class="sd">        [Matrix([[1, 1, 0]]),</span>
-<span class="sd">         Matrix([[0, 1, 1]]),</span>
-<span class="sd">         Matrix([[0, 2, 0]]),</span>
-<span class="sd">         Matrix([[3, 0, 0]]),</span>
-<span class="sd">         Matrix([[0, 0, 3]])]</span>
+<span class="sd">        &gt;&gt;&gt; expected = a3.get_irrep_by_dim(20)</span>
+<span class="sd">        &gt;&gt;&gt; result = [</span>
+<span class="sd">        ... Matrix([[1, 1, 0]]),</span>
+<span class="sd">        ... Matrix([[0, 1, 1]]),</span>
+<span class="sd">        ... Matrix([[0, 2, 0]]),</span>
+<span class="sd">        ... Matrix([[3, 0, 0]]),</span>
+<span class="sd">        ... Matrix([[0, 0, 3]])]</span>
+<span class="sd">        &gt;&gt;&gt; assert expected == result</span>
 <span class="sd">        &gt;&gt;&gt; a3.get_irrep_by_dim(20, with_symbols=True)</span>
-<span class="sd">        [(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="sd">         (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="sd">         (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="sd">         (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="sd">         (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="sd">        [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">backend_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Matrix</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_instance</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span>
             <span class="n">dim</span><span class="p">,</span> <span class="n">max_dd</span><span class="p">)</span>
@@ -599,8 +596,7 @@
 <span class="sd">        &gt;&gt;&gt; from liesym import A</span>
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; a2 = A(2)</span>
-<span class="sd">        &gt;&gt;&gt; a2.dim(Matrix([[1,0]])) # fundamental rep</span>
-<span class="sd">        3</span>
+<span class="sd">        &gt;&gt;&gt; assert a2.dim(Matrix([[1,0]])) == 3</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">basis</span> <span class="o">=</span> <span class="n">_basis_lookup</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
         <span class="n">_annotate_matrix</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>

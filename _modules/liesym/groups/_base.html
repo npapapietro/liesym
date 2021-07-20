@@ -215,11 +215,7 @@
 <span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
 <span class="sd">        &gt;&gt;&gt; so10 = SO(10)</span>
 <span class="sd">        &gt;&gt;&gt; so10.product(Matrix([[1,0,0,0,0]]),Matrix([[1,0,0,0,0]]))</span>
-<span class="sd">        &gt;&gt;&gt; print(results)</span>
-<span class="sd">        [Matrix([[0, 0, 0, 0, 0]]),</span>
-<span class="sd">         Matrix([[0, 1, 0, 0, 0]]),</span>
-<span class="sd">         Matrix([[2, 0, 0, 0, 0]])]</span>
-
+<span class="sd">        [Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="c1"># type: ignore</span></div>
@@ -241,18 +237,11 @@
 <span class="sd">        &gt;&gt;&gt; so10.sym_product(&quot;10&quot;,&quot;45&quot;)        </span>
 <span class="sd">        [120, 10, 320]</span>
 <span class="sd">        &gt;&gt;&gt; so10.sym_product(&quot;10&quot;,&quot;45&quot;, as_tuple=True)</span>
-<span class="sd">        [(Matrix([[0, 0, 1, 0, 0]]), 120),</span>
-<span class="sd">         (Matrix([[1, 0, 0, 0, 0]]), 10),</span>
-<span class="sd">         (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="sd">        [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import SU</span>
-<span class="sd">        &gt;&gt;&gt; su2 = SU(2)</span>
-<span class="sd">        &gt;&gt;&gt; su.sym_product(&#39;3&#39;, &#39;\\bar{3}&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; su3 = SU(3)</span>
+<span class="sd">        &gt;&gt;&gt; su3.sym_product(&#39;3&#39;, r&#39;\\bar{3}&#39;)</span>
 <span class="sd">        [1, 8]</span>
-<span class="sd">        &gt;&gt;&gt; su.sym_product(&#39;3&#39;, &#39;\\bar{3}&#39;, &#39;3&#39;, as_tuple=True)</span>
-<span class="sd">        [(Matrix([[1, 0]]), 3),</span>
-<span class="sd">        (Matrix([[0, 2]]), &#39;\\bar{6}&#39;),</span>
-<span class="sd">        (Matrix([[1, 0]]), 3),</span>
-<span class="sd">        (Matrix([[2, 1]]), 15)]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
 

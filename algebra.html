@@ -344,8 +344,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -361,8 +360,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -403,18 +401,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -434,10 +430,10 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -973,8 +969,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1137,18 +1132,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1213,10 +1206,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2592,8 +2585,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2609,8 +2601,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -2764,18 +2755,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2840,10 +2829,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -4219,8 +4208,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -4236,8 +4224,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -4391,18 +4378,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -4467,10 +4452,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -5846,8 +5831,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -5863,8 +5847,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -6018,18 +6001,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -6094,10 +6075,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -7487,8 +7468,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -7504,8 +7484,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -7659,18 +7638,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -7735,10 +7712,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -9112,8 +9089,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -9129,8 +9105,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -9284,18 +9259,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -9360,10 +9333,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -10737,8 +10710,7 @@ the positive roots: <cite>[1] * rank</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="c1"># fundamental rep</span>
-<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">a2</span><span class="o">.</span><span class="n">dim</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span> <span class="o">==</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -10754,8 +10726,7 @@ sympy.Symbol.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span>
-<span class="go">\bar{20}       </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">a3</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])))</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">bar</span><span class="si">{20}</span><span class="s1">&#39;</span>           
 </pre></div>
 </div>
 </dd></dl>
@@ -10909,18 +10880,16 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">[Matrix([[1, 1, 0]]),</span>
-<span class="go"> Matrix([[0, 1, 1]]),</span>
-<span class="go"> Matrix([[0, 2, 0]]),</span>
-<span class="go"> Matrix([[3, 0, 0]]),</span>
-<span class="go"> Matrix([[0, 0, 3]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expected</span> <span class="o">=</span> <span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+<span class="gp">... </span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">result</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a3</span><span class="o">.</span><span class="n">get_irrep_by_dim</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">with_symbols</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="go">[(Matrix([[1, 1, 0]]), &#39;\bar{20}&#39;),</span>
-<span class="go"> (Matrix([[0, 1, 1]]), &#39;20&#39;),</span>
-<span class="go"> (Matrix([[0, 2, 0]]), &#39;20^{\prime}&#39;),</span>
-<span class="go"> (Matrix([[3, 0, 0]]), &#39;\bar{20}^{\prime \prime}&#39;),</span>
-<span class="go"> (Matrix([[0, 0, 3]]), &#39;20^{\prime \prime}&#39;)]</span>
+<span class="go">[(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -10985,10 +10954,10 @@ returned when the list of patterns is empty.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">A</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[0,0,1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bar</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Matrix([[0, 0, 1]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
-<span class="go">Matrix([[1,0,0]])</span>
+<span class="go">Matrix([[1, 0, 0]])</span>
 </pre></div>
 </div>
 </dd></dl>
