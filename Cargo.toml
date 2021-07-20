@@ -1,6 +1,6 @@
 [package]
 name = "liesym"
-version = "0.5.1"
+version = "0.5.2"
 authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
 edition = "2018"
 license-file = "LICENSE"
