@@ -288,8 +288,7 @@ class LieAlgebra(Basic):
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
-        >>> str(a3.dim_name(Matrix([[1, 1, 0]])))
-        \bar{20}       
+        >>> assert str(a3.dim_name(Matrix([[1, 1, 0]]))) == '\\bar{20}'           
         """
         irrep = self.to_omega(irrep, basis)
 
@@ -336,10 +335,10 @@ class LieAlgebra(Basic):
         ========
         >>> from liesym import A
         >>> A3 = A(3)
-        >>> A3.irrep_lookup(r"\bar{4}")
-        Matrix([[0,0,1]])
+        >>> A3.irrep_lookup(r"\\bar{4}")
+        Matrix([[0, 0, 1]])
         >>> A3.irrep_lookup("4")
-        Matrix([[1,0,0]])
+        Matrix([[1, 0, 0]])
         """
         if isinstance(dim, str):
             dim = Symbol(dim)
@@ -432,18 +431,16 @@ class LieAlgebra(Basic):
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
-        >>> a3.get_irrep_by_dim(20)
-        [Matrix([[1, 1, 0]]),
-         Matrix([[0, 1, 1]]),
-         Matrix([[0, 2, 0]]),
-         Matrix([[3, 0, 0]]),
-         Matrix([[0, 0, 3]])]
+        >>> expected = a3.get_irrep_by_dim(20)
+        >>> result = [
+        ... Matrix([[1, 1, 0]]),
+        ... Matrix([[0, 1, 1]]),
+        ... Matrix([[0, 2, 0]]),
+        ... Matrix([[3, 0, 0]]),
+        ... Matrix([[0, 0, 3]])]
+        >>> assert expected == result
         >>> a3.get_irrep_by_dim(20, with_symbols=True)
-        [(Matrix([[1, 1, 0]]), '\bar{20}'),
-         (Matrix([[0, 1, 1]]), '20'),
-         (Matrix([[0, 2, 0]]), '20^{\prime}'),
-         (Matrix([[3, 0, 0]]), '\bar{20}^{\prime \prime}'),
-         (Matrix([[0, 0, 3]]), '20^{\prime \prime}')]
+        [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]
         """
         backend_results: List[Matrix] = self._backend_instance.get_irrep_by_dim(
             dim, max_dd)
@@ -467,8 +464,7 @@ class LieAlgebra(Basic):
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a2 = A(2)
-        >>> a2.dim(Matrix([[1,0]])) # fundamental rep
-        3
+        >>> assert a2.dim(Matrix([[1,0]])) == 3
         """
         basis = _basis_lookup(basis)
         _annotate_matrix(irrep, basis)

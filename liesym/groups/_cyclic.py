@@ -9,7 +9,7 @@ from ._base import Group
 class Z(Group):
     """Cyclic Group
     """
-    
+
     def __new__(cls, dim: int):
         return super().__new__(cls, "Z", dim)
 
@@ -23,18 +23,18 @@ class Z(Group):
         Examples
         =========
         >>> from liesym import Z
+        >>> from sympy import I, pi
         >>> Z(3).generators()
         [1, exp(2*I*pi/3), exp(-2*I*pi/3)]
         >>> Z(3).generators(indexed=True)
-        [(Z_0,1), (Z_1,exp(2*I*pi/3)), (Z_2, exp(-2*I*pi/3))]
+        [(Z_0, 1), (Z_1, exp(2*I*pi/3)), (Z_2, exp(-2*I*pi/3))]
         """
         d = self.dimension
-        
+
         gens = [exp(2 * pi * I * x / d) for x in range(d)]
         if indexed:
-            return [(Symbol(f"Z_{idx}"), x)  for idx, x in gens]
+            return [(Symbol(f"Z_{idx}"), x) for idx, x in enumerate(gens)]
         return gens
-
 
     def product(self, *args, **kwargs) -> list:
         """Product of the Cyclic representations
@@ -50,7 +50,7 @@ class Z(Group):
         >>> z5.product(g[0], g[1], g[2], g[3], g[4])
         [1]
         """
-        return [reduce(lambda a,b: a*b,args)]
+        return [reduce(lambda a, b: a*b, args)]
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
         """Will take the product symbolically of Cyclic representations
@@ -69,15 +69,16 @@ class Z(Group):
         [(Z_2, exp(4*I*pi/5))]
         """
 
-        cleaned_args = [Symbol(x) if isinstance(x,str) else x for x in args]
+        cleaned_args = [Symbol(x) if isinstance(x, str) else x for x in args]
 
-        gens = {Symbol(f"Z_{idx}"): x  for idx, x in enumerate(self.generators())}
-        
+        gens = {Symbol(f"Z_{idx}"): x for idx,
+                x in enumerate(self.generators())}
+
         result = self.product(*[gens[x] for x in cleaned_args])
-        
-        for k,v in gens.items():
+
+        for k, v in gens.items():
             if v == result[0]:
                 if as_tuple:
-                    return [(k,v)]
+                    return [(k, v)]
                 return [k]
         raise ValueError("Malformed cyclic product")
