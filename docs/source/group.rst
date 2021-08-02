@@ -7,7 +7,7 @@ Group Base
 
 .. autoclass:: liesym.Group
    :members:
-
+   :exclude-members: default_assumptions 
 
 Lie Group
 ----------------
@@ -48,3 +48,9 @@ Z
    :undoc-members:
    :inherited-members: Basic
    :exclude-members: default_assumptions 
+
+Functions
+-----------------
+
+.. automodule:: liesym.groups
+   :members: generalized_gell_mann, commutator

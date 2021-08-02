@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Any
 from sympy.core import Basic
 from sympy import Matrix, Symbol, sympify
 
@@ -54,6 +54,19 @@ class Group(Basic):
         """
         pass
 
+    def conjugate(self, rep, symbolic=False):
+        """Returns the conjugate representation. If the incoming rep is symbolic/named then it will return as such.
+
+        Abstract
+        """
+
+    def irrep_lookup(self, irrep):
+        """Returns the mathematical representation to the common name. Example would be returning `3` in SU(3) as `Matrix([[1,0]])`
+        
+        Abstract
+        """
+
+
 class LieGroup(Group):
     """Group that has a Lie Algebra associated with it.
     """
@@ -62,7 +75,6 @@ class LieGroup(Group):
         """Used to set lazy properties
         """
         self._algebra = None
-
 
     @property
     def algebra(self) -> LieAlgebra:
@@ -85,11 +97,12 @@ class LieGroup(Group):
         >>> so10.product(Matrix([[1,0,0,0,0]]),Matrix([[1,0,0,0,0]]))
         [Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]
         """
-        
-        return self.algebra.tensor_product_decomposition(args, **kwargs) # type: ignore
+
+        # type: ignore
+        return self.algebra.tensor_product_decomposition(args, **kwargs)
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> List[Union[Symbol, Tuple[Matrix, Symbol]]]:
-        """Uses tensor product decomposition to find the products between the 
+        r"""Uses tensor product decomposition to find the products between the 
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`.
 
         Args:
@@ -108,7 +121,7 @@ class LieGroup(Group):
         [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]
         >>> from liesym import SU
         >>> su3 = SU(3)
-        >>> su3.sym_product('3', r'\\bar{3}')
+        >>> su3.sym_product('3', r'\bar{3}')
         [1, 8]
         """
         mats = [self.algebra.irrep_lookup(x) for x in args]
@@ -121,3 +134,27 @@ class LieGroup(Group):
             else:
                 results.append(symbol)
         return results
+
+    def conjugate(self, rep, symbolic=False):
+        r"""Uses the underlying algebra to find the conjugate representation.
+
+        Examples
+        =========
+        >>> from liesym import SU
+        >>> from sympy import Matrix
+        >>> su3 = SU(3)
+        >>> su3.conjugate(Matrix([[1,0]]))
+        Matrix([[0, 1]])
+        >>> su3.conjugate(3, symbolic=True) # sympy prints without quotes
+        \bar{3}
+        """
+        if symbolic:
+            rep = str(rep)
+            math_rep = self.algebra.irrep_lookup(rep)
+            conj_rep = self.algebra.conjugate(math_rep)
+            return self.algebra.dim_name(conj_rep)
+        return self.algebra.conjugate(rep)
+
+    def irrep_lookup(self, irrep: str) -> Matrix:
+        """Uses the underlying algebra to do a lookup on the common name to find the matrix representation."""
+        return self.algebra.irrep_lookup(irrep)
