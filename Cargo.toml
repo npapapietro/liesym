@@ -17,7 +17,7 @@ crate-type = ["cdylib"]
 [dependencies]
 ndarray = { version = "0.15.3", features = ["approx", "rayon"]}
 num-traits = "0.2.14"
-numpy = {git = "https://github.com/PyO3/rust-numpy"}
+numpy = "0.14.1"
 num = "0.4.0"
 itertools = "0.10.1"
 # pyo3 = {version = "0.14.1", features = ["extension-module"], default-features=false}
@@ -25,3 +25,4 @@ itertools = "0.10.1"
 [dependencies.pyo3]
 version = "0.14.1"
 features = ["extension-module"]
+

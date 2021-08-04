@@ -12,13 +12,13 @@ def test_su():
     assert su2.generators() == [
         Matrix([
             [0, 1],
-            [1, 0]]),
+            [1, 0]]) / 2,
         Matrix([
             [0, -I],
-            [I,  0]]),
+            [I,  0]]) / 2,
         Matrix([
             [1,  0],
-            [0, -1]])]
+            [0, -1]]) / 2]
 
     assert su2.algebra == A(1)
 
@@ -26,7 +26,8 @@ def test_su():
     #     for j in range(3):
     #         for k in range(3):
     #             assert su2.structure_constants(i,j,k) == 2 * LeviCivita(i, j, k)
-    SU(3).structure_constants()
+    # SU(3).structure_constants()
+
 
 def test_so():
     so3 = SO(3)

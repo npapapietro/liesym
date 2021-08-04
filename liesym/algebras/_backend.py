@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.lib.arraysetops import isin
 from sympy import Matrix, flatten, Rational
 
 from .. import (_debug_mode, _LieAlgebraBackend)
@@ -33,26 +34,41 @@ def _rust_new(func):
     return inner
 
 
-def _rust_wrapper(func):
+def _is_scalar(x) -> bool:
+    return isinstance(x, (int, str, float, bool)) or x is None
+
+
+def _is_tuple_int(x) -> bool:
+    if not isinstance(x, tuple):
+        raise Exception("Wrapper error, tuple expected")
+    return isinstance(x[0], int) and isinstance(x[1], int)
+
+
+def _rust_wrapper(*args, **kwargs):
     """Wraps the rust methods to and from. Formats the calls
     to rust by turning either a 2d matrix to 3d matrix of (x,y) => (x,y,[numerator,denominator])
     for preserving rational numbers. Rust returns objects as a tuple of (numerator-matrix, denominator-matrix)
     """
+    if len(args) == 1 and callable(args[0]):
+        func = args[0]
+    if kwargs != {}:
+        def wrapper(func):
+            return inner(func, **kwargs)
+        return wrapper
+
     def inner(*args, **kwargs):
         cls = args[0]
         rank = cls.rank
 
         nargs = [_to_rational_tuple(x) for x in args[1:]]
+
         result = func(cls, *nargs, **kwargs)
 
-        if isinstance(result, (int, str, float, bool)) or result is None:
+        if _is_scalar(result):
             return result
 
-        if not isinstance(result, tuple):
-            return
-
         # Tuple of ints
-        if isinstance(result[0], int) and isinstance(result[1], int):
+        if _is_tuple_int(result):
             return Rational(*result)
 
         # tuple of ndarrays

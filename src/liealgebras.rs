@@ -1,9 +1,9 @@
-use crate::utils::array_to_pyreturn;
 use itertools::Itertools;
-use ndarray::parallel::prelude::IntoParallelIterator;
-use ndarray::parallel::prelude::ParallelIterator;
-use ndarray::Array;
-use num::rational::Ratio;
+use ndarray::{
+    parallel::prelude::{IntoParallelIterator, ParallelIterator},
+    Array, Zip,
+};
+use num::{rational::Ratio, Complex};
 use numpy::PyArray2;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
@@ -16,8 +16,8 @@ use crate::matrix_methods::{
     all_pos, all_pos_filter, reflect_weights, reflection_matrix, union_new_weights,
 };
 use crate::utils::{
-    adjacent_find, pos_where, set_diff, to_rational_list, to_rational_matrix, to_rational_vector,
-    vecarray_to_pyreturn, Array2R, Rational, Tap,
+    adjacent_find, arrayr_to_pyreturn, pos_where, set_diff, to_rational_list, to_rational_matrix,
+    to_rational_vector, vecarray_to_pyreturn, Array2C, Array2R, Array3C, Rational, Tap,
 };
 
 #[pyclass]
@@ -139,7 +139,7 @@ impl LieAlgebraBackend {
         irrep: PyReadonlyArray3<i64>,
     ) -> (&'py PyArray2<i64>, &'py PyArray2<i64>) {
         let result = to_rational_vector(irrep);
-        let (numer, denom) = array_to_pyreturn(self.conjugate(result));
+        let (numer, denom) = arrayr_to_pyreturn(self.conjugate(result));
         (numer.into_pyarray(py), denom.into_pyarray(py))
     }
 }
@@ -594,6 +594,34 @@ impl LieAlgebraBackend {
             None => irrep,
         }
     }
+}
+
+pub fn d_coeffecients<'a>(generators: &'a Vec<Array2C>) -> Array3C {
+    let n = generators.len();
+    let mut d = Array3C::zeros((n, n, n));
+    Zip::indexed(&mut d).par_for_each(|(i, j, k), elm| {
+        *elm = ((&generators[i] * &generators[j] + &generators[j] * &generators[i])
+            * &generators[k])
+            .into_diag()
+            .sum()
+            * Complex::from(Ratio::from(2));
+    });
+
+   d
+}
+
+pub fn struct_consts<'a>(generators: &'a Vec<Array2C>) -> Array3C {
+    let n = generators.len();
+    let mut f = Array3C::zeros((n, n, n));
+    Zip::indexed(&mut f).par_for_each(|(i, j, k), elm| {
+        *elm = Complex::i() * Ratio::from(2)
+            * ((&generators[i] * &generators[j] - &generators[j] * &generators[i])
+                * &generators[k])
+                .into_diag()
+                .sum();
+    });
+
+   f
 }
 
 #[cfg(test)]

@@ -5,6 +5,7 @@ from sympy import Matrix, zeros, I, sqrt, Basic, sympify, trace
 from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
 
 from ._base import LieGroup
+from ._backend import _structure_constants
 from ..algebras import A
 
 
@@ -104,7 +105,7 @@ class SU(LieGroup):
         return self._generators
 
     def structure_constants(self, *idxs: int) -> Union[Basic, Matrix]:
-        """Returns the structure constants of the group. Indexes start at 0 and constants maybe
+        r"""Returns the structure constants of the group. Indexes start at 0 and constants maybe
         in different orderings than existing literature, but will still be in the Gell-Mann basis.
         Structure constants $f_{abc}$ is defined as
 
@@ -137,6 +138,8 @@ class SU(LieGroup):
         """Calculates the structure constants"""
         gens = self.generators()
         n = len(gens)
+
+        # _structure_constants(gens)
 
         f = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
         d = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
