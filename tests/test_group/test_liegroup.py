@@ -1,4 +1,4 @@
-from sympy import Matrix, I
+from sympy import Matrix, I, LeviCivita
 
 from liesym import SU, SO, Sp, A, B, C, D
 
@@ -12,15 +12,20 @@ def test_su():
     assert su2.generators() == [
         Matrix([
             [0, 1],
-            [1, 0]]),
+            [1, 0]]) / 2,
         Matrix([
             [0, -I],
-            [I,  0]]),
+            [I,  0]]) / 2,
         Matrix([
             [1,  0],
-            [0, -1]])]
+            [0, -1]]) / 2]
 
     assert su2.algebra == A(1)
+
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                assert su2.structure_constants(i,j,k) == LeviCivita(i, j, k)
 
 
 def test_so():

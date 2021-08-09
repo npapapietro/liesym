@@ -14,6 +14,7 @@ setup_requires = [
 install_requires = [
     'numpy>=1.16',
     'sympy>=1.5',
+    'symengine>=0.7.2'
 ]
 
 setup(

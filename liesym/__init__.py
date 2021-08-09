@@ -1,3 +1,8 @@
+import os
+
+# C++ backend for sympy. Symbolic speed ups
+os.environ["USE_SYMENGINE"] = "1"
+
 # Compiled extension imports
 from .liesym import (
     debug_mode as _debug_mode,

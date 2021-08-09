@@ -41,6 +41,7 @@ class Sp(LieGroup):
         return super().__new__(cls, "Sp", dim)
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._algebra = C(self.dimension / 2)
 
     def generators(self) -> List['Matrix']:

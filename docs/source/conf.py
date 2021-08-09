@@ -94,6 +94,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 autodoc_type_aliases = {
     "Matrix": "sympy.Matrix",
     "Symbol": "sympy.Symbol",
+    "Basic": "sympy.Basic"
     # "NumericSymbol": "NumericSymbol"
 }
 

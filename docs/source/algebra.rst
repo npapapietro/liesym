@@ -1,6 +1,5 @@
 Algebra
 ========
-
    
 Lie Algebra Base
 ----------------
