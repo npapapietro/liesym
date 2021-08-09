@@ -7,7 +7,6 @@ os.environ["USE_SYMENGINE"] = "1"
 from .liesym import (
     debug_mode as _debug_mode,
     LieAlgebraBackend as _LieAlgebraBackend,
-    structure_constants as _structure_constants_backend
 )
 
 from .algebras import *
