@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from typing import Generator, Union
-from sympy import Matrix, zeros, I, sqrt, Basic, sympify, trace
-from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
+from typing import Generator
+from sympy import I, Basic
+from sympy.core.backend import zeros, sqrt
 
 from ._base import LieGroup
-from ._backend import _structure_constants
 from ..algebras import A
 
 
@@ -48,35 +47,6 @@ def generalized_gell_mann(dimension: int) -> Generator:
         sum_term = sum([E(j, j) for j in range(l+1)], zeros(dimension))
         yield coeff * (sum_term - (l+1) * E(l+1, l+1))
 
-
-
-
-def commutator(A: Basic, B: Basic, anti=False) -> Basic:
-    r"""Performs commutation brackets on A,B.
-
-    If anti is False
-
-    .. math::
-        [ A, B ] = A * B - B * A
-
-    Otherwise 
-
-    .. math::
-        \{A, B\} = A * B + B * A
-
-    Args:
-        A (Basic): Any mathematical object
-        B (Basic): Any mathematical object
-        anti (bool, optional): Anticommutation. Defaults to False.
-
-    Returns:
-        Basic: The (anti)commutation bracket result
-    """
-    if anti:
-        return A * B + B * A
-    return A * B - B * A
-
-
 class SU(LieGroup):
     """The Special Unitary Group
     """
@@ -87,9 +57,10 @@ class SU(LieGroup):
         return super().__new__(cls, "SU", dim)
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._algebra = A(self.dimension - 1)
         self._generators = None
-        self._structure_constants = (None, None)
+        
 
     def generators(self):
         r"""Generators for SU(N).  Based off the generalized Gell-Mann matrices $\lambda_a$
@@ -103,63 +74,3 @@ class SU(LieGroup):
             # typical normalization
             self._generators = [x / 2 for x in generalized_gell_mann(self.dimension)]
         return self._generators
-
-    def structure_constants(self, *idxs: int) -> Union[Basic, Matrix]:
-        r"""Returns the structure constants of the group. Indexes start at 0 and constants maybe
-        in different orderings than existing literature, but will still be in the Gell-Mann basis.
-        Structure constants $f_{abc}$ is defined as
-
-        .. math::
-            [T_a, T_b] = \sum_c f_{abc} T_c
-
-        where the group generators are $T$.
-
-        Args:
-            idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.
-
-        Returns:
-            Union[Basic, Matrix]: If indicies are passed in, will return corresponding
-            structure constant. Otherwise returns the 3dArry for entire group.
-        """
-
-        if self._structure_constants == (None, None):
-            self._structure_constants = self._calculate_structure_constants()
-
-        if len(idxs) > 0:
-            if len(idxs) != 3:
-                raise ValueError(
-                    "3 indices need to be passed in if calling `structure_constants` with indices")
-            else:
-                [i, j, k] = idxs
-                return self._structure_constants[0][i, j, k]
-        return self._structure_constants[0]
-
-    def _calculate_structure_constants(self):
-        """Calculates the structure constants"""
-        gens = self.generators()
-        n = len(gens)
-
-        # _structure_constants(gens)
-
-        f = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
-        d = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
-
-        for i in range(n):
-            for j in range(n):
-                for k in range(n):
-                    f[i, j, k] = -2 * I * trace(commutator(gens[i],gens[j]) * gens[k])
-                    d[i, j, k] = 2 * trace(commutator(gens[i],gens[j], anti=True) * gens[k])
-        return (f, d)
-
-    def d_coeffecients(self, *idxs: int):
-        if self._structure_constants == (None, None):
-            self._structure_constants = self._calculate_structure_constants()
-
-        if len(idxs) > 0:
-            if len(idxs) != 3:
-                raise ValueError(
-                    "3 indices need to be passed in if calling `structure_constants` with indices")
-            else:
-                [i, j, k] = idxs
-                return self._structure_constants[1][i, j, k]
-        return self._structure_constants[1]

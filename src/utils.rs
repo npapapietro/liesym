@@ -9,7 +9,6 @@ use std::{cmp, collections::HashSet, hash::Hash, iter::FromIterator, slice::Iter
 /// Typedef for rational integer matrix
 pub type Array2R = Array2<Ratio<i64>>;
 pub type Array2C = Array2<Complex<Ratio<i64>>>;
-pub type Array3C = Array3<Complex<Ratio<i64>>>;
 
 /// Returns a vector of rational Array2. The first axis divides it into vectors.
 ///
@@ -57,6 +56,7 @@ where
 ///
 /// * `reals` - A 4d matrix with that is X stacked MxN matrices of tupled rationals (X, M, N, 2)
 /// * `imags` - A 4d matrix with that is X stacked MxN matrices of tupled rationals (X, M, N, 2)
+#[allow(dead_code)]
 pub fn to_complex_list(reals: PyReadonlyArray4<i64>, imags: PyReadonlyArray4<i64>) -> Vec<Array2C> {
     reals
         .as_array()
@@ -74,8 +74,6 @@ pub fn to_complex_list(reals: PyReadonlyArray4<i64>, imags: PyReadonlyArray4<i64
 pub fn to_rational_vector(ary: PyReadonlyArray3<i64>) -> Array2R {
     to_rational_list(ary).first().unwrap().clone()
 }
-
-
 
 /// Returns a matrix of rational Array2.
 ///
@@ -313,7 +311,7 @@ pub mod test {
         let ary1 = array![[1, 2], [1, 0i64]];
         let ary2 = array![[1, 1], [2, 1i64]];
 
-        let result = array_to_pyreturn(input);
+        let result = arrayr_to_pyreturn(input);
 
         assert_eq!(result, (ary1, ary2));
     }

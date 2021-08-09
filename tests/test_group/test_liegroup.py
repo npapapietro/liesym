@@ -22,11 +22,10 @@ def test_su():
 
     assert su2.algebra == A(1)
 
-    # for i in range(3):
-    #     for j in range(3):
-    #         for k in range(3):
-    #             assert su2.structure_constants(i,j,k) == 2 * LeviCivita(i, j, k)
-    # SU(3).structure_constants()
+    for i in range(3):
+        for j in range(3):
+            for k in range(3):
+                assert su2.structure_constants(i,j,k) == LeviCivita(i, j, k)
 
 
 def test_so():

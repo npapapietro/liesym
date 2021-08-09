@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 
-from ._base import Group, LieGroup
-from ._su import generalized_gell_mann, SU, commutator
+from ._base import Group, LieGroup, commutator
+from ._su import generalized_gell_mann, SU
 from ._so import SO
 from ._sp import Sp
 from ._cyclic import Z

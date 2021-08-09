@@ -1,9 +1,9 @@
 use itertools::Itertools;
 use ndarray::{
     parallel::prelude::{IntoParallelIterator, ParallelIterator},
-    Array, Zip,
+    Array,
 };
-use num::{rational::Ratio, Complex};
+use num::rational::Ratio;
 use numpy::PyArray2;
 use numpy::{IntoPyArray, PyArray3, PyReadonlyArray1, PyReadonlyArray3};
 use pyo3::prelude::{pyclass, pymethods, Python};
@@ -17,7 +17,7 @@ use crate::matrix_methods::{
 };
 use crate::utils::{
     adjacent_find, arrayr_to_pyreturn, pos_where, set_diff, to_rational_list, to_rational_matrix,
-    to_rational_vector, vecarray_to_pyreturn, Array2C, Array2R, Array3C, Rational, Tap,
+    to_rational_vector, vecarray_to_pyreturn, Array2R, Rational, Tap,
 };
 
 #[pyclass]
@@ -596,33 +596,33 @@ impl LieAlgebraBackend {
     }
 }
 
-pub fn d_coeffecients<'a>(generators: &'a Vec<Array2C>) -> Array3C {
-    let n = generators.len();
-    let mut d = Array3C::zeros((n, n, n));
-    Zip::indexed(&mut d).par_for_each(|(i, j, k), elm| {
-        *elm = ((&generators[i] * &generators[j] + &generators[j] * &generators[i])
-            * &generators[k])
-            .into_diag()
-            .sum()
-            * Complex::from(Ratio::from(2));
-    });
+// pub fn d_coeffecients<'a>(generators: &'a Vec<Array2C>) -> Array3C {
+//     let n = generators.len();
+//     let mut d = Array3C::zeros((n, n, n));
+//     Zip::indexed(&mut d).par_for_each(|(i, j, k), elm| {
+//         *elm = ((&generators[i] * &generators[j] + &generators[j] * &generators[i])
+//             * &generators[k])
+//             .into_diag()
+//             .sum()
+//             * Complex::from(Ratio::from(2));
+//     });
 
-   d
-}
+//    d
+// }
 
-pub fn struct_consts<'a>(generators: &'a Vec<Array2C>) -> Array3C {
-    let n = generators.len();
-    let mut f = Array3C::zeros((n, n, n));
-    Zip::indexed(&mut f).par_for_each(|(i, j, k), elm| {
-        *elm = Complex::i() * Ratio::from(2)
-            * ((&generators[i] * &generators[j] - &generators[j] * &generators[i])
-                * &generators[k])
-                .into_diag()
-                .sum();
-    });
+// pub fn struct_consts<'a>(generators: &'a Vec<Array2C>) -> Array3C {
+//     let n = generators.len();
+//     let mut f = Array3C::zeros((n, n, n));
+//     Zip::indexed(&mut f).par_for_each(|(i, j, k), elm| {
+//         *elm = Complex::i() * Ratio::from(2)
+//             * ((&generators[i] * &generators[j] - &generators[j] * &generators[i])
+//                 * &generators[k])
+//                 .into_diag()
+//                 .sum();
+//     });
 
-   f
-}
+//    f
+// }
 
 #[cfg(test)]
 mod test {

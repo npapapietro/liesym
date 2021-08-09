@@ -84,9 +84,6 @@ pub fn union_new_weights<'a>(
     res.iter().cloned().collect()
 }
 
-
-
-
 #[cfg(test)]
 mod test {
     use super::*;
