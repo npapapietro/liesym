@@ -22,7 +22,7 @@ copyright = '2021, Nathan Papapietro'
 author = 'Nathan Papapietro'
 
 # The full version, including alpha/beta/rc tags
-release = '0.5.4'
+release = '0.5.5'
 
 
 # -- General configuration ---------------------------------------------------

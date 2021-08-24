@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tools.poetry]
 name = "liesym"
-version = "0.5.4"
+version = "0.5.5"
 description = "Sympy Lie Algebra extensions powered by rust."
 authors = "Nathan Papapietro <npapapietro95@gmail.com>"
 readme = "README.md"

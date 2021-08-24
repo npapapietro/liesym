@@ -37,6 +37,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
+          python -m pip install twine wheel
       - name: publish
         env:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
