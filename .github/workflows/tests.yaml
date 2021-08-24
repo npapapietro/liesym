@@ -46,10 +46,19 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.7, 3.8, 3.9]
-        platform: [
-          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
-          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-        ]
+        platform:
+          [
+            {
+              os: "macOS-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-apple-darwin",
+            },
+            {
+              os: "windows-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-pc-windows-msvc",
+            },
+          ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -112,4 +121,60 @@ jobs:
       - name: Run python tests
         run: |
           python setup.py pytest
+
+  test-publish-mac-os:
+    needs: [build-mac-win, test-linux]
+    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+        platform:
+          [
+            {
+              os: "macOS-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-apple-darwin",
+            },
+            {
+              os: "windows-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-pc-windows-msvc",
+            },
+          ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.platform.python-architecture }}
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.platform.rust-target }}
+          profile: minimal
+          default: true
+      - name: Install cargo test and setup.py dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip instal twine wheel
+      - name: test publish
+        run: |
+          python setup.py bdist_wheel
+    env:
+      RUST_BACKTRACE: 1
+      RUSTFLAGS: "-D warnings"
+
+  test-publish-linux:
+    name: Publish linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish
+        run: |
+          python -m pip install twine wheel
+          docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
 
