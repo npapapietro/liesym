@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Union
+from typing import Tuple, Union
 from sympy import Symbol, Basic, I, Basic, trace, sympify
 from sympy.core.backend import Matrix
 from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
@@ -110,12 +110,12 @@ class LieGroup(Group):
         """
         return self._algebra
 
-    def product(self, *args, **kwargs) -> List['Matrix']:
+    def product(self, *args, **kwargs) -> list['Matrix']:
         """Uses tensor product decomposition to find the products between the 
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`
 
         Returns:
-            List[Matrix]: Tensor sum of the product.
+            list[Matrix]: Tensor sum of the product.
 
         Examples
         =========
@@ -129,7 +129,7 @@ class LieGroup(Group):
         # type: ignore
         return self.algebra.tensor_product_decomposition(args, **kwargs)
 
-    def sym_product(self, *args, as_tuple=False, **kwargs) -> List[Union[Symbol, Tuple[Matrix, Symbol]]]:
+    def sym_product(self, *args, as_tuple=False, **kwargs) -> list[Union[Symbol, Tuple[Matrix, Symbol]]]:
         r"""Uses tensor product decomposition to find the products between the 
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`.
 
@@ -137,7 +137,7 @@ class LieGroup(Group):
             as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.
 
         Returns:
-            List[Union[Symbol, Tuple[Matrix, Symbol]]]: List of symbols or list of (Matrix, Symbol)
+            list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)
 
         Examples
         ========

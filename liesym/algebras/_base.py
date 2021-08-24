@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from sympy.core import Basic
 from sympy import Matrix, Symbol, sympify
-from typing import List, Tuple, Union
+from typing import Tuple, Union
 from copy import deepcopy
 from functools import cmp_to_key
 import re
@@ -109,7 +109,7 @@ class LieAlgebra(Basic):
         return 2 * self.n_pos_roots + self.rank
 
     @property
-    def simple_roots(self) -> List[Matrix]:
+    def simple_roots(self) -> list[Matrix]:
         """Returns a list of Sympy matrix (1,dimension)
         objects representing a chosen basis of the algebra.
 
@@ -138,7 +138,7 @@ class LieAlgebra(Basic):
         return [_annotate_matrix(x) for x in self._simple_roots]
 
     @simple_roots.setter
-    def simple_roots(self, val: List[Matrix]):
+    def simple_roots(self, val: list[Matrix]):
         """Overrides the default representation of the algebras simple_roots.
         Please ensure that roots are in Orthogonal Basis
         """
@@ -207,12 +207,12 @@ class LieAlgebra(Basic):
         return self._quadratic_form
 
     @property
-    def reflection_matricies(self) -> List[Matrix]:
+    def reflection_matricies(self) -> list[Matrix]:
         """Returns a list of reflection matrices built from
         rotations about each simple root.
 
         Returns:
-            List[Matrix]: List of Sympy Matrices
+            list[Matrix]: list of Sympy Matrices
         """
         if self._reflection_matricies is None:
             self._reflection_matricies = _reflection_matricies(
@@ -220,13 +220,13 @@ class LieAlgebra(Basic):
         return self._reflection_matricies
 
     @property
-    def fundamental_weights(self) -> List[Matrix]:
+    def fundamental_weights(self) -> list[Matrix]:
         """Returns the fundamental weights of the algebra. 
 
         Basis: Orthogonal
 
         Returns:
-            List[Matrix]: List of Sympy Matrices
+            list[Matrix]: list of Sympy Matrices
         """
         if self._fundamental_weights is None:
             self._fundamental_weights = [
@@ -236,7 +236,7 @@ class LieAlgebra(Basic):
         return self._fundamental_weights
 
     @property
-    def positive_roots(self) -> List[Matrix]:
+    def positive_roots(self) -> list[Matrix]:
         """Returns the postive roots of the algebra. They are sorted 
         first by their distance from the highest root and then by 
         tuple ordering (convention).
@@ -244,7 +244,7 @@ class LieAlgebra(Basic):
         Basis: Orthogonal
 
         Returns:
-            List[Matrix]: List of Sympy Matrices
+            list[Matrix]: list of Sympy Matrices
         """
         if self._positive_roots is None:
             self._positive_roots = self.root_system()[:self.n_pos_roots]
@@ -256,7 +256,7 @@ class LieAlgebra(Basic):
             self._backend = create_backend(self)
         return self._backend
 
-    def orbit(self, weight: Matrix, stabilizers=None, basis="ortho") -> List[Matrix]:
+    def orbit(self, weight: Matrix, stabilizers=None, basis="ortho") -> list[Matrix]:
         """Returns the orbit of the weight or root by reflecting it
         a plane. A stabilizer may be passed to calculate the orbit using
         the Orbit-Stabilizer theorem.
@@ -294,7 +294,7 @@ class LieAlgebra(Basic):
 
         dim = self.dim(irrep)
         max_dd = self.max_dynkin_digit(irrep)
-        same_dim_irreps: List[Matrix] = self.get_irrep_by_dim(dim, max_dd)
+        same_dim_irreps: list[Matrix] = self.get_irrep_by_dim(dim, max_dd)
         num_primes = 0
         conjugate = 0
         so8label = ""
@@ -412,7 +412,7 @@ class LieAlgebra(Basic):
 
         return NumericSymbol(dim, irrep)
 
-    def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> List[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
+    def get_irrep_by_dim(self, dim: int, max_dd: int = 3, with_symbols=False) -> list[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
         r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by using `itertools.product`
         which can become expensive for large so searching max_dd > 3 will be 
         very expensive
@@ -423,7 +423,7 @@ class LieAlgebra(Basic):
             with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defaults to False.
 
         Returns:
-            List[Union[Matrix, Tuple[Matrix,NumericSymbol]]]: If `with_symbols=True` will return a list of tuples.
+            list[Union[Matrix, Tuple[Matrix,NumericSymbol]]]: If `with_symbols=True` will return a list of tuples.
 
 
         Examples
@@ -442,7 +442,7 @@ class LieAlgebra(Basic):
         >>> a3.get_irrep_by_dim(20, with_symbols=True)
         [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]
         """
-        backend_results: List[Matrix] = self._backend_instance.get_irrep_by_dim(
+        backend_results: list[Matrix] = self._backend_instance.get_irrep_by_dim(
             dim, max_dd)
         results = [self.to_omega(x, "omega") for x in backend_results]
         if with_symbols:
@@ -472,32 +472,32 @@ class LieAlgebra(Basic):
 
         return self._backend_instance.dim(irrep)
 
-    def root_system(self) -> List[Matrix]:
+    def root_system(self) -> list[Matrix]:
         """Returns the entire rootsystem of the algebra. This
         includes the positive, negative and zeros of the algebra.
 
         Basis: Orthogonal
 
         Returns:
-            List[Matrix]: List of ordered roots.
+            list[Matrix]: list of ordered roots.
         """
         if self._root_system is None:
             self._root_system = [_annotate_matrix(
                 x) for x in self._backend_instance.root_system()]
         return self._root_system
 
-    def tensor_product_decomposition(self, weights: List[Matrix], basis="omega", **_) -> List[Matrix]:
+    def tensor_product_decomposition(self, weights: list[Matrix], basis="omega", **_) -> list[Matrix]:
         """Returns the tensor product between irreducible representations
         as a the tensor sum of the irreducible representations of their
         highest weights. This algorithm is based on Klimky's formula.
 
 
         Args:
-            weights (List[Matrix]): A list of fundamental weights to take the tensor product between
+            weights (list[Matrix]): A list of fundamental weights to take the tensor product between
             basis (str, Optional): Basis of incoming weights. If not set, will implicitly set. Defaults to 'omega'.
 
         Returns:
-            List[Matrix]: List of weights decomposed from the tensor product. Basis: Omega
+            list[Matrix]: list of weights decomposed from the tensor product. Basis: Omega
 
 
         Examples

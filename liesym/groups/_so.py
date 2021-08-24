@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Tuple, Union
+from typing import Tuple, Union
 from sympy import Matrix, zeros, I, KroneckerDelta
 
 from ._base import LieGroup
@@ -27,7 +27,7 @@ class SO(LieGroup):
             self._algebra = B((n-1) / 2)
 
 
-    def generators(self, indexed=False) -> List[Union[Matrix, Tuple[Matrix, tuple]]]:
+    def generators(self, indexed=False) -> list[Union[Matrix, Tuple[Matrix, tuple]]]:
         """Generators for SO(N).
 
         Args:
@@ -35,7 +35,7 @@ class SO(LieGroup):
             of the matrix and its (m,n) index.
 
         Returns:
-            List[Union[Matrix, Tuple[Matrix, tuple]]]: List of (mathematical) generators
+            list[Union[Matrix, Tuple[Matrix, tuple]]]: list of (mathematical) generators
 
         Sources:
             - http://www.astro.sunysb.edu/steinkirch/books/group.pdf

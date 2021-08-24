@@ -23,8 +23,23 @@ jobs:
       - name: Check rust formatting (rustfmt)
         run: cargo fmt --all -- --check
 
+  sphinx-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Deps
+        run: python -m pip install sphinx-math-dollar groundwork-sphinx-theme numpydoc pydata_sphinx_theme sympy numpy
+      - name: Build Warnings As Errors
+        run: |
+          cd docs
+          make html SPHINXOPTS="-W"
+
   build-mac-win:
-    needs: [fmt]
+    needs: [fmt, sphinx-test]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
@@ -63,7 +78,7 @@ jobs:
       RUSTFLAGS: "-D warnings"
 
   test-linux:
-    needs: [fmt]
+    needs: [fmt, sphinx-test]
     name: Test linux
     runs-on: ubuntu-latest
     strategy:
