@@ -169,6 +169,7 @@ jobs:
       RUSTFLAGS: "-D warnings"
 
   test-publish-linux:
+    needs: [build-mac-win, test-linux]
     name: Publish linux
     runs-on: ubuntu-latest
     steps:
