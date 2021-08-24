@@ -23,8 +23,23 @@ jobs:
       - name: Check rust formatting (rustfmt)
         run: cargo fmt --all -- --check
 
+  sphinx-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install Deps
+        run: python setup.py setupdocs
+      - name: Build Warnings As Errors
+        run: |
+          cd docs
+          make html SPHINXOPTS="-W"
+
   build-mac-win:
-    needs: [fmt]
+    needs: [fmt, sphinx-test]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
@@ -52,7 +67,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install wheel numpy sympy pytest setuptools wheel setuptools-rust twine symengine
+          python setup.py setuptests
       # - name: Test
       #   run: cargo test --no-default-features --target ${{ matrix.platform.rust-target }}
       - name: Run python tests
@@ -63,7 +78,7 @@ jobs:
       RUSTFLAGS: "-D warnings"
 
   test-linux:
-    needs: [fmt]
+    needs: [fmt, sphinx-test]
     name: Test linux
     runs-on: ubuntu-latest
     strategy:
@@ -91,7 +106,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          pip install wheel numpy sympy pytest setuptools wheel setuptools-rust symengine
+          python setup.py setuptests
       # - name: Test
       #   run: cargo test --no-default-features --target x86_64-unknown-linux-gnu
       - name: Run python tests

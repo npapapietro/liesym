@@ -3,18 +3,21 @@ on:
   release:
     types: 
       - created
-  pull_request:
-    branches: [main]
-
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: ammaraskar/sphinx-action@master
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
       with:
-        pre-build-command: python -m pip install sphinx-math-dollar groundwork-sphinx-theme numpydoc pydata_sphinx_theme sympy numpy
-        docs-folder: "docs/"
+        python-version: 3.8
+    - name: Install Deps
+      run: python setup.py setupdocs
+    - name: Build Warnings As Errors
+      run: |
+        cd docs
+        make html SPHINXOPTS="-W"
     - name: check build
       run : |
         mkdir gh-pages && \

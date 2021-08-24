@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import List
 from sympy import Matrix, zeros
 
 from ._base import LieGroup
@@ -44,12 +43,12 @@ class Sp(LieGroup):
         super().__init__(*args, **kwargs)
         self._algebra = C(self.dimension / 2)
 
-    def generators(self) -> List['Matrix']:
+    def generators(self) -> list['Matrix']:
         """Generators for Sp(2N). There are a lot of possible choices, so 
         we choose one based on existing literature.
 
         Returns:
-            List[Matrix]: List of (mathematical) generators in Iachello's basis.
+            list[Matrix]: list of (mathematical) generators in Iachello's basis.
 
         Sources:
             - Iachello, F (2006). Lie algebras and applications. ISBN 978-3-540-36236-4.

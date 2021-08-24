@@ -1,4 +1,5 @@
-from typing import List
+from __future__ import annotations
+
 from sympy import zeros, Matrix, eye, sqrt
 from enum import Enum
 
@@ -48,7 +49,7 @@ def _annotate_matrix(M, basis=Basis.ORTHO):
     return M
 
 
-def _cartan_matrix(simple_roots: List[Matrix]) -> Matrix:
+def _cartan_matrix(simple_roots: list[Matrix]) -> Matrix:
     rank = len(simple_roots)
     cartan_matrix = zeros(rank, rank)
     for i, sr_i in enumerate(simple_roots):
@@ -57,11 +58,11 @@ def _cartan_matrix(simple_roots: List[Matrix]) -> Matrix:
     return cartan_matrix
 
 
-def _cocartan_matrix(simple_roots: List[Matrix]) -> Matrix:
+def _cocartan_matrix(simple_roots: list[Matrix]) -> Matrix:
     return Matrix([2 * x / x.dot(x) for x in simple_roots])
 
 
-def _quadratic_form(cartan_matrix: Matrix, simple_roots: List[Matrix]) -> Matrix:
+def _quadratic_form(cartan_matrix: Matrix, simple_roots: list[Matrix]) -> Matrix:
     rank = len(simple_roots)
     quadratic_form = zeros(rank, rank)
 
@@ -74,7 +75,7 @@ def _quadratic_form(cartan_matrix: Matrix, simple_roots: List[Matrix]) -> Matrix
     return cartan_matrix.pinv() * quadratic_form
 
 
-def _reflection_matricies(simple_roots: List[Matrix]) -> List[Matrix]:
+def _reflection_matricies(simple_roots: list[Matrix]) -> list[Matrix]:
     def reflection_matrix(v): return (
         eye(len(v)) - 2 * v.T * v / v.dot(v)).as_immutable()
     return [reflection_matrix(x) for x in simple_roots]
