@@ -6,7 +6,8 @@ import sys
 
 setup_requires = [
     'setuptools-rust>=0.11.6',
-    'twine>=3.4.2'
+    'twine>=3.4.2',
+    "pytest-runner"
 ]
 try:
     from setuptools_rust import RustExtension, Binding
@@ -62,10 +63,7 @@ class InstallTest(InstallCommand):
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
-
-
-
-            
+         
 
 setup(
     name='liesym',
@@ -81,6 +79,7 @@ setup(
     setup_requires=setup_requires,
     python_requires=">=3.7",
     packages=find_packages(),
+    test_requires=test_requires,
     zip_safe=False,
     include_package_data=True,
     author="Nathan Papapietro <npapapietro95@gmail.com>",
