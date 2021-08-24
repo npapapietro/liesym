@@ -160,7 +160,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip
-          python -m pip instal twine wheel
+          python -m pip install twine wheel
       - name: test publish
         run: |
           python setup.py bdist_wheel
