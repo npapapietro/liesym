@@ -37,7 +37,7 @@ jobs:
       - name: Install cargo test and setup.py dependencies
         run: |
           python -m pip install -U pip 
-          python -m pip install twine wheel
+          python -m pip install twine wheel setuptools-rust
       - name: publish
         env:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           TWINE_USERNAME: __token__
         run: |
-          python -m pip install twine wheel
+          python -m pip install twine wheel setuptools-rust
           docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
           python -m twine upload dist/*
 
