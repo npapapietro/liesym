@@ -6,12 +6,13 @@ import sys
 
 setup_requires = [
     'setuptools-rust>=0.11.6',
-    'twine=>3.4.2'
+    'twine>=3.4.2'
 ]
 try:
     from setuptools_rust import RustExtension, Binding
 except ModuleNotFoundError:
     subprocess.check_call([sys.executable, "-m", "pip", "install"] + setup_requires)
+    from setuptools_rust import RustExtension, Binding
 
 install_requires = [
     'numpy>=1.16',
