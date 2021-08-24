@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Groups &#8212; liesym 0.5.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Groups &#8212; liesym 0.5.3 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -21,17 +22,18 @@
       
 
     
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
     
   <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Algebra" href="algebra.html" />
@@ -157,7 +159,7 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#functions">
+  <a class="reference internal nav-link" href="#module-liesym.groups">
    Functions
   </a>
  </li>
@@ -186,24 +188,867 @@
 <h1>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="group-base">
 <h2>Group Base<a class="headerlink" href="#group-base" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.Group">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base class for all (lie) groups. The methods and properties
+in this class are basis independent and apply in a general sense. In
+order to write down the roots as matricies and vectors, we choose a 
+representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.Group.dimension" title="liesym.Group.dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dimension</span></code></a></dt><dd><p>Group dimension</p>
+</dd>
+<dt><a class="reference internal" href="#liesym.Group.group" title="liesym.Group.group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">group</span></code></a></dt><dd><p>Group type</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Group.conjugate" title="liesym.Group.conjugate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conjugate</span></code></a>(rep[, symbolic])</p></td>
+<td><p>Returns the conjugate representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.Group.generators" title="liesym.Group.generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators</span></code></a>()</p></td>
+<td><p>Generalized matrix generators of the group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Group.irrep_lookup" title="liesym.Group.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(irrep)</p></td>
+<td><p>Returns the mathematical representation to the common name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.Group.product" title="liesym.Group.product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">product</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Calculates the product between several group representations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Group.sym_product" title="liesym.Group.sym_product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sym_product</span></code></a>(*args[, as_tuple])</p></td>
+<td><p>Calculates the product between several group representations passed by the symbolic name.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Group.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group.conjugate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the conjugate representation. If the incoming rep is symbolic/named then it will return as such.</p>
+<p>Abstract</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Group.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.Group.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Group.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group.generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generalized matrix generators of the group.</p>
+<p>Abstract</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Group.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.Group.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Group.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group.irrep_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mathematical representation to the common name. Example would be returning <cite>3</cite> in SU(3) as <cite>Matrix([[1,0]])</cite></p>
+<p>Abstract</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Group.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group.product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the product between several group representations.
+If backing algebra is a Lie Algebra, defaults to <cite>LieAlgebra.tensor_product_decomposition</cite>.</p>
+<p>Abstract</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Group.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#Group.sym_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Group.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the product between several group representations passed by the symbolic name.
+If backing algebra is a Lie Algebra, defaults to <cite>LieAlgebra.tensor_product_decomposition</cite></p>
+<p>Abstract</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="lie-group">
 <h2>Lie Group<a class="headerlink" href="#lie-group" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.LieGroup">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">LieGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group that has a Lie Algebra associated with it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.LieGroup.algebra" title="liesym.LieGroup.algebra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">algebra</span></code></a></dt><dd><p>Backing Lie Algebra</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieGroup.conjugate" title="liesym.LieGroup.conjugate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conjugate</span></code></a>(rep[, symbolic])</p></td>
+<td><p>Uses the underlying algebra to find the conjugate representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieGroup.irrep_lookup" title="liesym.LieGroup.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(irrep)</p></td>
+<td><p>Uses the underlying algebra to do a lookup on the common name to find the matrix representation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieGroup.product" title="liesym.LieGroup.product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">product</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Uses tensor product decomposition to find the products between the  representations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieGroup.structure_constants" title="liesym.LieGroup.structure_constants"><code class="xref py py-obj docutils literal notranslate"><span class="pre">structure_constants</span></code></a>(*idxs)</p></td>
+<td><p>Returns the structure constants of the group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieGroup.sym_product" title="liesym.LieGroup.sym_product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sym_product</span></code></a>(*args[, as_tuple])</p></td>
+<td><p>Uses tensor product decomposition to find the products between the  representations.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<colgroup>
+<col style="width: 64%" />
+<col style="width: 36%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>d_coeffecients</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.LieGroup.algebra">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">algebra</span></span><em class="property"><span class="pre">:</span> <span class="pre">liesym.algebras._base.LieAlgebra</span></em><a class="headerlink" href="#liesym.LieGroup.algebra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backing Lie Algebra</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.conjugate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to find the conjugate representation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">Matrix([[0, 1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># sympy prints without quotes</span>
+<span class="go">\bar{3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.d_coeffecients">
+<span class="sig-name descname"><span class="pre">d_coeffecients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.d_coeffecients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.d_coeffecients" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.LieGroup.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.LieGroup.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#liesym.LieGroup.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generalized matrix generators of the group.</p>
+<p>Abstract</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.LieGroup.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.LieGroup.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sympy.Matrix</span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.irrep_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to do a lookup on the common name to find the matrix representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Matrix]: Tensor sum of the product.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]),</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">[Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.structure_constants">
+<span class="sig-name descname"><span class="pre">structure_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Basic</span><span class="p"><span class="pre">,</span> </span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.structure_constants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.structure_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the structure constants of the group. Indexes start at 0 and constants maybe
+in different orderings than existing literature, but will still be in the Gell-Mann basis.
+Structure constants <span class="math notranslate nohighlight">\(f_{abc}\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[[T_a, T_b] = \sum_c f_{abc} T_c\]</div>
+<p>where the group generators are <span class="math notranslate nohighlight">\(T\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Union[Basic, Matrix]: If indicies are passed in, will return corresponding
+structure constant. Otherwise returns the 3dArry for entire group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieGroup.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">Symbol</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#LieGroup.sym_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieGroup.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">)</span>        
+<span class="go">[120, 10, 320]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bar</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[1, 8]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="so">
 <h2>SO<a class="headerlink" href="#so" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.SO">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">SO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_so.html#SO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.SO" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Special Orthogonal Group</p>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.SO.generators" title="liesym.SO.generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators</span></code></a>([indexed])</p></td>
+<td><p>Generators for SO(N).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SO.algebra">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">algebra</span></span><em class="property"><span class="pre">:</span> <span class="pre">liesym.algebras._base.LieAlgebra</span></em><a class="headerlink" href="#liesym.SO.algebra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backing Lie Algebra</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.SO.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to find the conjugate representation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">Matrix([[0, 1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># sympy prints without quotes</span>
+<span class="go">\bar{3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.d_coeffecients">
+<span class="sig-name descname"><span class="pre">d_coeffecients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.SO.d_coeffecients" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SO.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.SO.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/liesym/groups/_so.html#SO.generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.SO.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generators for SO(N).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>indexed (bool, Optional): For N &gt; 3, there exists a naming scheme for generators. If True returns a tuple
+of the matrix and its (m,n) index.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Union[Matrix, Tuple[Matrix, tuple]]]: list of (mathematical) generators</p>
+</dd>
+<dt>Sources:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="http://www.astro.sunysb.edu/steinkirch/books/group.pdf">http://www.astro.sunysb.edu/steinkirch/books/group.pdf</a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SO.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.SO.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sympy.Matrix</span></span></span><a class="headerlink" href="#liesym.SO.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to do a lookup on the common name to find the matrix representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SO.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Matrix]: Tensor sum of the product.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]),</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">[Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.structure_constants">
+<span class="sig-name descname"><span class="pre">structure_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Basic</span><span class="p"><span class="pre">,</span> </span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SO.structure_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the structure constants of the group. Indexes start at 0 and constants maybe
+in different orderings than existing literature, but will still be in the Gell-Mann basis.
+Structure constants <span class="math notranslate nohighlight">\(f_{abc}\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[[T_a, T_b] = \sum_c f_{abc} T_c\]</div>
+<p>where the group generators are <span class="math notranslate nohighlight">\(T\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Union[Basic, Matrix]: If indicies are passed in, will return corresponding
+structure constant. Otherwise returns the 3dArry for entire group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SO.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">Symbol</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SO.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">)</span>        
+<span class="go">[120, 10, 320]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bar</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[1, 8]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="sp">
 <h2>Sp<a class="headerlink" href="#sp" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.Sp">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">Sp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_sp.html#Sp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Symplectic Group</p>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Sp.generators" title="liesym.Sp.generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators</span></code></a>()</p></td>
+<td><p>Generators for Sp(2N).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Sp.algebra">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">algebra</span></span><em class="property"><span class="pre">:</span> <span class="pre">liesym.algebras._base.LieAlgebra</span></em><a class="headerlink" href="#liesym.Sp.algebra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backing Lie Algebra</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.Sp.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to find the conjugate representation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">Matrix([[0, 1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># sympy prints without quotes</span>
+<span class="go">\bar{3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.d_coeffecients">
+<span class="sig-name descname"><span class="pre">d_coeffecients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.Sp.d_coeffecients" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Sp.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.Sp.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/liesym/groups/_sp.html#Sp.generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Sp.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generators for Sp(2N). There are a lot of possible choices, so 
+we choose one based on existing literature.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Matrix]: list of (mathematical) generators in Iachello’s basis.</p>
+</dd>
+<dt>Sources:</dt><dd><ul class="simple">
+<li><p>Iachello, F (2006). Lie algebras and applications. ISBN 978-3-540-36236-4.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Sp.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.Sp.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sympy.Matrix</span></span></span><a class="headerlink" href="#liesym.Sp.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to do a lookup on the common name to find the matrix representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.Sp.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Matrix]: Tensor sum of the product.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]),</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">[Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.structure_constants">
+<span class="sig-name descname"><span class="pre">structure_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Basic</span><span class="p"><span class="pre">,</span> </span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.Sp.structure_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the structure constants of the group. Indexes start at 0 and constants maybe
+in different orderings than existing literature, but will still be in the Gell-Mann basis.
+Structure constants <span class="math notranslate nohighlight">\(f_{abc}\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[[T_a, T_b] = \sum_c f_{abc} T_c\]</div>
+<p>where the group generators are <span class="math notranslate nohighlight">\(T\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Union[Basic, Matrix]: If indicies are passed in, will return corresponding
+structure constant. Otherwise returns the 3dArry for entire group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Sp.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">Symbol</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.Sp.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">)</span>        
+<span class="go">[120, 10, 320]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bar</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[1, 8]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="su">
 <h2>SU<a class="headerlink" href="#su" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.SU">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">SU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_su.html#SU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.SU" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Special Unitary Group</p>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.SU.generators" title="liesym.SU.generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators</span></code></a>()</p></td>
+<td><p>Generators for SU(N).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SU.algebra">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">algebra</span></span><em class="property"><span class="pre">:</span> <span class="pre">liesym.algebras._base.LieAlgebra</span></em><a class="headerlink" href="#liesym.SU.algebra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backing Lie Algebra</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.SU.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to find the conjugate representation.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">Matrix([[0, 1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># sympy prints without quotes</span>
+<span class="go">\bar{3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.d_coeffecients">
+<span class="sig-name descname"><span class="pre">d_coeffecients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#liesym.SU.d_coeffecients" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SU.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.SU.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_su.html#SU.generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.SU.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generators for SU(N).  Based off the generalized Gell-Mann matrices <span class="math notranslate nohighlight">\(\lambda_a\)</span>
+the generators, <span class="math notranslate nohighlight">\(T_a\)</span> are</p>
+<div class="math notranslate nohighlight">
+\[T_a = \frac{\lambda_a}{2}            \]</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.SU.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.SU.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sympy.Matrix</span></span></span><a class="headerlink" href="#liesym.SU.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the underlying algebra to do a lookup on the common name to find the matrix representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SU.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[Matrix]: Tensor sum of the product.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]),</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]))</span>
+<span class="go">[Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.structure_constants">
+<span class="sig-name descname"><span class="pre">structure_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">idxs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Basic</span><span class="p"><span class="pre">,</span> </span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SU.structure_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the structure constants of the group. Indexes start at 0 and constants maybe
+in different orderings than existing literature, but will still be in the Gell-Mann basis.
+Structure constants <span class="math notranslate nohighlight">\(f_{abc}\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[[T_a, T_b] = \sum_c f_{abc} T_c\]</div>
+<p>where the group generators are <span class="math notranslate nohighlight">\(T\)</span>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Union[Basic, Matrix]: If indicies are passed in, will return corresponding
+structure constant. Otherwise returns the 3dArry for entire group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.SU.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">,</span> </span><span class="pre">Symbol</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#liesym.SU.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses tensor product decomposition to find the products between the 
+representations. Supported kwargs can be found on <cite>LieAlgebra.tensor_product_decomposition</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span> <span class="o">=</span> <span class="n">SO</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">)</span>        
+<span class="go">[120, 10, 320]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">so10</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="s2">&quot;45&quot;</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">SU</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span> <span class="o">=</span> <span class="n">SU</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">su3</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\bar</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[1, 8]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="z">
 <h2>Z<a class="headerlink" href="#z" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="liesym.Z">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">liesym.</span></span><span class="sig-name descname"><span class="pre">Z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cyclic Group</p>
+<p class="rubric">Methods</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Z.conjugate" title="liesym.Z.conjugate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conjugate</span></code></a>(rep[, symbolic])</p></td>
+<td><p>Finds the conjugate representation of the cyclic representation</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.Z.generators" title="liesym.Z.generators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generators</span></code></a>([indexed])</p></td>
+<td><p>The basis for the generators in the cyclic group are  in the exponential imaginary basis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Z.irrep_lookup" title="liesym.Z.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(irrep)</p></td>
+<td><p>Returns the symbol of irrep</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.Z.product" title="liesym.Z.product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">product</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Product of the Cyclic representations</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.Z.sym_product" title="liesym.Z.sym_product"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sym_product</span></code></a>(*args[, as_tuple])</p></td>
+<td><p>Will take the product symbolically of Cyclic representations of the form <cite>lambda x: f`Z_{x}</cite></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Z.conjugate">
+<span class="sig-name descname"><span class="pre">conjugate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z.conjugate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the conjugate representation of the cyclic representation</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">sympify</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">generators</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">z3</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="s2">&quot;Z_1&quot;</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">sympify</span><span class="p">(</span><span class="s2">&quot;Z_2&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Z.dimension">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">dimension</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#liesym.Z.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group dimension</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Z.generators">
+<span class="sig-name descname"><span class="pre">generators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z.generators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z.generators" title="Permalink to this definition">¶</a></dt>
+<dd><p>The basis for the generators in the cyclic group are 
+in the exponential imaginary basis.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>indexed (bool, Optional): Returns tuple of named generators. Defaults to False.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">I</span><span class="p">,</span> <span class="n">pi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">generators</span><span class="p">()</span>
+<span class="go">[1, exp(2*I*pi/3), exp(-2*I*pi/3)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">generators</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Z_0, 1), (Z_1, exp(2*I*pi/3)), (Z_2, exp(-2*I*pi/3))]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.Z.group">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#liesym.Z.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Z.irrep_lookup">
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z.irrep_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the symbol of irrep</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">sympify</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="s2">&quot;Z_1&quot;</span><span class="p">)</span>
+<span class="go">exp(2*I*pi/3)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Z.product">
+<span class="sig-name descname"><span class="pre">product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z.product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Product of the Cyclic representations</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: To keep types standard, returns a list of length 1</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z5</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">z5</span><span class="o">.</span><span class="n">generators</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z5</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+<span class="go">[1]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.Z.sym_product">
+<span class="sig-name descname"><span class="pre">sym_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_tuple</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/liesym/groups/_cyclic.html#Z.sym_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.Z.sym_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will take the product symbolically of Cyclic representations
+of the form <cite>lambda x: f`Z_{x}</cite></p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list: To keep types standard, returns a list of length 1</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">liesym</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z5</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z5</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;Z_1&quot;</span><span class="p">,</span> <span class="s2">&quot;Z_2&quot;</span><span class="p">)</span>
+<span class="go">[Z_3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z5</span><span class="o">.</span><span class="n">sym_product</span><span class="p">(</span><span class="s2">&quot;Z_3&quot;</span><span class="p">,</span> <span class="s2">&quot;Z_4&quot;</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(Z_2, exp(4*I*pi/5))]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-liesym.groups">
+<span id="functions"></span><h2>Functions<a class="headerlink" href="#module-liesym.groups" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="liesym.groups.commutator">
+<span class="sig-prename descclassname"><span class="pre">liesym.groups.</span></span><span class="sig-name descname"><span class="pre">commutator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">sympy.Basic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">sympy.Basic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sympy.Basic</span></span></span><a class="reference internal" href="_modules/liesym/groups/_base.html#commutator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.groups.commutator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs commutation brackets on A,B.</p>
+<p>If anti is False</p>
+<div class="math notranslate nohighlight">
+\[[ A, B ] = A * B - B * A\]</div>
+<p>Otherwise</p>
+<div class="math notranslate nohighlight">
+\[\{A, B\} = A * B + B * A\]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>A (Basic): Any mathematical object
+B (Basic): Any mathematical object
+anti (bool, optional): Anticommutation. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: The (anti)commutation bracket result</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="liesym.groups.generalized_gell_mann">
+<span class="sig-prename descclassname"><span class="pre">liesym.groups.</span></span><span class="sig-name descname"><span class="pre">generalized_gell_mann</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span></span></span><a class="reference internal" href="_modules/liesym/groups/_su.html#generalized_gell_mann"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.groups.generalized_gell_mann" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator of generalized Gell-Mann Matrices. Note order may
+be different than usual because we generate symmetric, then antisymmetric, 
+then diagonal.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dimension (int): Dimension of group</p>
+</dd>
+<dt>Yields:</dt><dd><p>Generator[Matrix]: Python Generator of (mathematical) generators</p>
+</dd>
+<dt>Sources:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://mathworld.wolfram.com/GeneralizedGell-MannMatrix.html">https://mathworld.wolfram.com/GeneralizedGell-MannMatrix.html</a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -236,7 +1081,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
 </p>
     </div>
     

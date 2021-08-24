@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>liesym.groups._base &#8212; liesym 0.5.3 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../../index.html">
+<p class="title">liesym</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../algebra.html">
+  Algebra
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../group.html">
+  Groups
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for liesym.groups._base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Symbol</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">sympify</span>
+<span class="kn">from</span> <span class="nn">sympy.core.backend</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="kn">from</span> <span class="nn">sympy.tensor.array.dense_ndim_array</span> <span class="kn">import</span> <span class="n">MutableDenseNDimArray</span>
+
+
+<span class="kn">from</span> <span class="nn">..algebras</span> <span class="kn">import</span> <span class="n">LieAlgebra</span>
+
+
+<div class="viewcode-block" id="commutator"><a class="viewcode-back" href="../../../group.html#liesym.commutator">[docs]</a><span class="k">def</span> <span class="nf">commutator</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">anti</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Basic</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Performs commutation brackets on A,B.</span>
+
+<span class="sd">    If anti is False</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        [ A, B ] = A * B - B * A</span>
+
+<span class="sd">    Otherwise </span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \{A, B\} = A * B + B * A</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        A (Basic): Any mathematical object</span>
+<span class="sd">        B (Basic): Any mathematical object</span>
+<span class="sd">        anti (bool, optional): Anticommutation. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Basic: The (anti)commutation bracket result</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">anti</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">A</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">-</span> <span class="n">B</span> <span class="o">*</span> <span class="n">A</span></div>
+
+<div class="viewcode-block" id="Group"><a class="viewcode-back" href="../../../group.html#liesym.Group">[docs]</a><span class="k">class</span> <span class="nc">Group</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The base class for all (lie) groups. The methods and properties</span>
+<span class="sd">    in this class are basis independent and apply in a general sense. In</span>
+<span class="sd">    order to write down the roots as matricies and vectors, we choose a </span>
+<span class="sd">    representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sympify</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_group</span> <span class="o">=</span> <span class="n">group</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Group type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Group dimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Group.generators"><a class="viewcode-back" href="../../../group.html#liesym.Group.generators">[docs]</a>    <span class="k">def</span> <span class="nf">generators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Generalized matrix generators of the group.</span>
+
+<span class="sd">        Abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Group.product"><a class="viewcode-back" href="../../../group.html#liesym.Group.product">[docs]</a>    <span class="k">def</span> <span class="nf">product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the product between several group representations.</span>
+<span class="sd">        If backing algebra is a Lie Algebra, defaults to `LieAlgebra.tensor_product_decomposition`.</span>
+
+<span class="sd">        Abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Group.sym_product"><a class="viewcode-back" href="../../../group.html#liesym.Group.sym_product">[docs]</a>    <span class="k">def</span> <span class="nf">sym_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the product between several group representations passed by the symbolic name.</span>
+<span class="sd">        If backing algebra is a Lie Algebra, defaults to `LieAlgebra.tensor_product_decomposition`</span>
+
+<span class="sd">        Abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Group.conjugate"><a class="viewcode-back" href="../../../group.html#liesym.Group.conjugate">[docs]</a>    <span class="k">def</span> <span class="nf">conjugate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the conjugate representation. If the incoming rep is symbolic/named then it will return as such.</span>
+
+<span class="sd">        Abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="Group.irrep_lookup"><a class="viewcode-back" href="../../../group.html#liesym.Group.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the mathematical representation to the common name. Example would be returning `3` in SU(3) as `Matrix([[1,0]])`</span>
+<span class="sd">        </span>
+<span class="sd">        Abstract</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="LieGroup"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup">[docs]</a><span class="k">class</span> <span class="nc">LieGroup</span><span class="p">(</span><span class="n">Group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Group that has a Lie Algebra associated with it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Used to set lazy properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_algebra</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">algebra</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LieAlgebra</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Backing Lie Algebra</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_algebra</span>
+
+<div class="viewcode-block" id="LieGroup.product"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.product">[docs]</a>    <span class="k">def</span> <span class="nf">product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="s1">&#39;Matrix&#39;</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Uses tensor product decomposition to find the products between the </span>
+<span class="sd">        representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Matrix]: Tensor sum of the product.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        =========</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import SO</span>
+<span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
+<span class="sd">        &gt;&gt;&gt; so10 = SO(10)</span>
+<span class="sd">        &gt;&gt;&gt; so10.product(Matrix([[1,0,0,0,0]]),Matrix([[1,0,0,0,0]]))</span>
+<span class="sd">        [Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LieGroup.sym_product"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.sym_product">[docs]</a>    <span class="k">def</span> <span class="nf">sym_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">as_tuple</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">Symbol</span><span class="p">]]]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Uses tensor product decomposition to find the products between the </span>
+<span class="sd">        representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        ========</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import SO</span>
+<span class="sd">        &gt;&gt;&gt; so10 = SO(10)</span>
+<span class="sd">        &gt;&gt;&gt; so10.sym_product(&quot;10&quot;,&quot;45&quot;)        </span>
+<span class="sd">        [120, 10, 320]</span>
+<span class="sd">        &gt;&gt;&gt; so10.sym_product(&quot;10&quot;,&quot;45&quot;, as_tuple=True)</span>
+<span class="sd">        [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import SU</span>
+<span class="sd">        &gt;&gt;&gt; su3 = SU(3)</span>
+<span class="sd">        &gt;&gt;&gt; su3.sym_product(&#39;3&#39;, r&#39;\bar{3}&#39;)</span>
+<span class="sd">        [1, 8]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">tensor_product_decomposition</span><span class="p">(</span><span class="n">mats</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">as_tuple</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">rep</span><span class="p">,</span> <span class="n">symbol</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="LieGroup.conjugate"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.conjugate">[docs]</a>    <span class="k">def</span> <span class="nf">conjugate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">symbolic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Uses the underlying algebra to find the conjugate representation.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        =========</span>
+<span class="sd">        &gt;&gt;&gt; from liesym import SU</span>
+<span class="sd">        &gt;&gt;&gt; from sympy import Matrix</span>
+<span class="sd">        &gt;&gt;&gt; su3 = SU(3)</span>
+<span class="sd">        &gt;&gt;&gt; su3.conjugate(Matrix([[1,0]]))</span>
+<span class="sd">        Matrix([[0, 1]])</span>
+<span class="sd">        &gt;&gt;&gt; su3.conjugate(3, symbolic=True) # sympy prints without quotes</span>
+<span class="sd">        \bar{3}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">symbolic</span><span class="p">:</span>
+            <span class="n">rep</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+            <span class="n">math_rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+            <span class="n">conj_rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">math_rep</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">dim_name</span><span class="p">(</span><span class="n">conj_rep</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LieGroup.irrep_lookup"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Uses the underlying algebra to do a lookup on the common name to find the matrix representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LieGroup.structure_constants"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.structure_constants">[docs]</a>    <span class="k">def</span> <span class="nf">structure_constants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">idxs</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Basic</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the structure constants of the group. Indexes start at 0 and constants maybe</span>
+<span class="sd">        in different orderings than existing literature, but will still be in the Gell-Mann basis.</span>
+<span class="sd">        Structure constants $f_{abc}$ is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            [T_a, T_b] = \sum_c f_{abc} T_c</span>
+
+<span class="sd">        where the group generators are $T$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Union[Basic, Matrix]: If indicies are passed in, will return corresponding</span>
+<span class="sd">            structure constant. Otherwise returns the 3dArry for entire group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">==</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_structure_constants</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;3 indices need to be passed in if calling `structure_constants` with indices&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">idxs</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_calculate_structure_constants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the structure constants&quot;&quot;&quot;</span>
+        <span class="n">gens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generators</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gens</span><span class="p">)</span>
+
+        <span class="c1"># _structure_constants(gens)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">MutableDenseNDimArray</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympify</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">MutableDenseNDimArray</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympify</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">I</span> <span class="o">*</span> <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span><span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span><span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">anti</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LieGroup.d_coeffecients"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.d_coeffecients">[docs]</a>    <span class="k">def</span> <span class="nf">d_coeffecients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">idxs</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">==</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_structure_constants</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;3 indices need to be passed in if calling `structure_constants` with indices&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">idxs</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div></div>
+</pre></div>
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, Nathan Papapietro.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
