@@ -30,6 +30,7 @@ doc_install_requires = install_requires + [
     "groundwork-sphinx-theme>=1.1.1",
     "numpydoc>=1.1.0",
     "pydata_sphinx_theme>=0.5.2",
+    "sphinx-math-dollar>=1.2"
 ]
 
 test_requires = install_requires + [
