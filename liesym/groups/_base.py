@@ -34,6 +34,7 @@ def commutator(A: Basic, B: Basic, anti=False) -> Basic:
         return A * B + B * A
     return A * B - B * A
 
+
 class Group(Basic):
     """The base class for all (lie) groups. The methods and properties
     in this class are basis independent and apply in a general sense. In
@@ -89,7 +90,7 @@ class Group(Basic):
 
     def irrep_lookup(self, irrep):
         """Returns the mathematical representation to the common name. Example would be returning `3` in SU(3) as `Matrix([[1,0]])`
-        
+
         Abstract
         """
 
@@ -230,8 +231,11 @@ class LieGroup(Group):
         for i in range(n):
             for j in range(n):
                 for k in range(n):
-                    f[i, j, k] = -2 * I * trace(commutator(gens[i],gens[j]) * gens[k])
-                    d[i, j, k] = 2 * trace(commutator(gens[i],gens[j], anti=True) * gens[k])
+                    f[i, j, k] = -2 * I * \
+                        trace(commutator(gens[i], gens[j]) * gens[k])
+                    d[i, j, k] = 2 * \
+                        trace(commutator(
+                            gens[i], gens[j], anti=True) * gens[k])
         return (f, d)
 
     def d_coeffecients(self, *idxs: int):

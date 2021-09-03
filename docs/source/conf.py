@@ -31,14 +31,14 @@ release = '0.5.5'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 
-    'sphinx_math_dollar', 
-    'sphinx.ext.mathjax', 
+    'sphinx.ext.autodoc',
+    'sphinx_math_dollar',
+    'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
     'sphinx.ext.viewcode',
     'numpydoc',
     'sphinx.ext.inheritance_diagram'
-    
+
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -65,8 +65,8 @@ pygments_style = 'sphinx'
 # html_static_path = ['_static']
 
 autodoc_inherit_docstrings = True
-numpydoc_show_inherited_class_members=False
-numpydoc_class_members_toctree=False
+numpydoc_show_inherited_class_members = False
+numpydoc_class_members_toctree = False
 
 # MathJax file, which is free to use.  See https://www.mathjax.org/#gettingstarted
 # As explained in the link using latest.js will get the latest version even
@@ -76,8 +76,8 @@ mathjax_path = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?c
 
 mathjax_config = {
     'tex2jax': {
-        'inlineMath': [ ["\\(","\\)"] ],
-        'displayMath': [["\\[","\\]"] ],
+        'inlineMath': [["\\(", "\\)"]],
+        'displayMath': [["\\[", "\\]"]],
     },
 }
 

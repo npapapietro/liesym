@@ -29,7 +29,7 @@ def generalized_gell_mann(dimension: int) -> Generator:
             mat[i, j] = 1
             return mat
         return _
-    E = eij(dimension) 
+    E = eij(dimension)
 
     # Symmetric
     for k in range(dimension):
@@ -47,6 +47,7 @@ def generalized_gell_mann(dimension: int) -> Generator:
         sum_term = sum([E(j, j) for j in range(l+1)], zeros(dimension))
         yield coeff * (sum_term - (l+1) * E(l+1, l+1))
 
+
 class SU(LieGroup):
     """The Special Unitary Group
     """
@@ -60,7 +61,6 @@ class SU(LieGroup):
         super().__init__(*args, **kwargs)
         self._algebra = A(self.dimension - 1)
         self._generators = None
-        
 
     def generators(self):
         r"""Generators for SU(N).  Based off the generalized Gell-Mann matrices $\lambda_a$
@@ -72,5 +72,6 @@ class SU(LieGroup):
         """
         if self._generators is None:
             # typical normalization
-            self._generators = [x / 2 for x in generalized_gell_mann(self.dimension)]
+            self._generators = [
+                x / 2 for x in generalized_gell_mann(self.dimension)]
         return self._generators

@@ -7,7 +7,6 @@ on:
       - created
 env:
   CARGO_TERM_COLOR: always
-
 jobs:
   publish-mac-win:
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}

@@ -131,7 +131,6 @@ def test_E6():
     assert fw.basis == Basis.ORTHO
     assert E6.to_omega(fw) == Matrix([[1, 0, 0, 0, 0, 0]])
 
-
     # baseclass generated
     assert E6.cartan_matrix == Matrix([
         [2, -1, 0, 0, 0, 0],

@@ -101,15 +101,15 @@ class Z(Group):
             cleaned_rep = Symbol(rep) if isinstance(rep, str) else rep
             math_rep = self._lookups[cleaned_rep]
             conj_rep = conjugate(math_rep)
-            return [k for k,v in self._lookups.items() if v == conj_rep][0]
+            return [k for k, v in self._lookups.items() if v == conj_rep][0]
 
-        if len([k for k,v in self._lookups.items() if v == rep]) == 0:
+        if len([k for k, v in self._lookups.items() if v == rep]) == 0:
             raise KeyError("Rep not in cyclic group.")
         return conjugate(rep)
 
     def irrep_lookup(self, irrep):
         """Returns the symbol of irrep
-        
+
         Examples
         =========
         >>> from liesym import Z

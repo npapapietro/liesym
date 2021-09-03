@@ -128,9 +128,9 @@ def create_backend(algebra):
         algebra.rank,
         algebra.n_pos_roots,
         algebra.simple_roots,
-        algebra.cartan_matrix,
+        # algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),
         algebra.omega_matrix,
         algebra.omega_matrix.pinv(),
-        algebra.cocartan_matrix,
+        # algebra.cocartan_matrix,
     )
