@@ -3,12 +3,13 @@ from functools import reduce
 
 from ._base import Group
 
+
 class U1(Group):
     """U1 Group. Technically continuous, but represented
     in this module as discrete"""
 
     def __new__(cls):
-        return super().__new__(cls,"U", 1)
+        return super().__new__(cls, "U", 1)
 
     def __init__(self, *args, **kwargs):
         self._theta = Symbol(r"\theta", real=True)
@@ -27,7 +28,7 @@ class U1(Group):
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
         """Sums up all the charges, symbolically"""
-        
+
         result = self.product(*[self._from_charge(x) for x in args], **kwargs)
 
         if as_tuple:
@@ -47,7 +48,7 @@ class U1(Group):
         >>> print(u1.irrep_lookup("1/6"))
         exp(I*\theta/6)
         """
-        if symbolic:            
+        if symbolic:
             cleaned_rep = sympify(rep) if isinstance(rep, str) else rep
             math_rep = self._from_charge(cleaned_rep)
             return expand_log(log(conjugate(math_rep)), force=True) / (I * self._theta)
@@ -55,6 +56,6 @@ class U1(Group):
         return conjugate(rep)
 
     def irrep_lookup(self, irrep):
-        
+
         cleaned_rep = sympify(irrep) if isinstance(irrep, str) else irrep
         return self._from_charge(cleaned_rep)

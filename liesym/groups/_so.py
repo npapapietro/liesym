@@ -7,7 +7,6 @@ from ._base import LieGroup
 from ..algebras import B, D
 
 
-
 class SO(LieGroup):
     """The Special Orthogonal Group
     """
@@ -26,7 +25,6 @@ class SO(LieGroup):
         else:
             self._algebra = B((n-1) / 2)
 
-
     def generators(self, indexed=False) -> list[Union[Matrix, Tuple[Matrix, tuple]]]:
         """Generators for SO(N).
 
@@ -42,12 +40,13 @@ class SO(LieGroup):
         """
         results = []
         for m in range(self.dimension):
-            for n in range(m):                      
-                mat = zeros(self.dimension)          
+            for n in range(m):
+                mat = zeros(self.dimension)
                 for i in range(self.dimension):
                     for j in range(self.dimension):
-                        mat[i,j] = - I * (KroneckerDelta(m,i) * KroneckerDelta(n,j) - KroneckerDelta(m,j) * KroneckerDelta(n,i))
-                results.append((mat, (m,n)) if indexed else mat)
+                        mat[i, j] = - I * (KroneckerDelta(m, i) * KroneckerDelta(
+                            n, j) - KroneckerDelta(m, j) * KroneckerDelta(n, i))
+                results.append((mat, (m, n)) if indexed else mat)
         if indexed:
             return sorted(results, key=lambda y: y[1])
         return results

@@ -15,18 +15,16 @@ def test_A():
     ]
 
     a = A2.to_alpha(Matrix([[1, -1, 0]]), "ortho")
-    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+    assert a == Matrix([[1, 0]]) and a.basis == Basis.ALPHA
 
     x = Matrix([[1, -1, 0]])
     x.basis = "ortho"
     a = A2.to_omega(x)
-    assert a == Matrix([[2,-1]]) and a.basis == Basis.OMEGA
+    assert a == Matrix([[2, -1]]) and a.basis == Basis.OMEGA
 
     fw = A2.fundamental_weights[0]
     assert fw.basis == Basis.ORTHO
-    assert A2.to_omega(fw) == Matrix([[1,0]])
-
-
+    assert A2.to_omega(fw) == Matrix([[1, 0]])
 
     # baseclass generated
     A3 = A(3)
@@ -104,7 +102,8 @@ def test_A():
 
     assert A3.get_irrep_by_dim(15) == [adj]
 
-    assert A3.conjugate(Matrix([[1,1,0]])) == Matrix([[0,1,1]])
+    assert A3.conjugate(Matrix([[1, 1, 0]])) == Matrix([[0, 1, 1]])
+
 
 def test_A1():
     A2 = A(1)
@@ -127,16 +126,16 @@ def test_B():
     ]
 
     a = B2.to_alpha(Matrix([[1, -1]]), "ortho")
-    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+    assert a == Matrix([[1, 0]]) and a.basis == Basis.ALPHA
 
     x = Matrix([[1, -1]])
     x.basis = "ortho"
     a = B2.to_omega(x)
-    assert a == Matrix([[2,-2]]) and a.basis == Basis.OMEGA
+    assert a == Matrix([[2, -2]]) and a.basis == Basis.OMEGA
 
     fw = B2.fundamental_weights[0]
     assert fw.basis == Basis.ORTHO
-    assert B2.to_omega(fw) == Matrix([[1,0]])
+    assert B2.to_omega(fw) == Matrix([[1, 0]])
 
     # baseclass generated
     B3 = B(3)
@@ -236,16 +235,16 @@ def test_C():
     ]
 
     a = C2.to_alpha(Matrix([[1, -1]]), "ortho")
-    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+    assert a == Matrix([[1, 0]]) and a.basis == Basis.ALPHA
 
     x = Matrix([[1, -1]])
     x.basis = "ortho"
     a = C2.to_omega(x)
-    assert a == Matrix([[2,-1]]) and a.basis == Basis.OMEGA
+    assert a == Matrix([[2, -1]]) and a.basis == Basis.OMEGA
 
     fw = C2.fundamental_weights[0]
     assert fw.basis == Basis.ORTHO
-    assert C2.to_omega(fw) == Matrix([[1,0]])
+    assert C2.to_omega(fw) == Matrix([[1, 0]])
 
     # baseclass generated
     C3 = C(3)
@@ -328,16 +327,16 @@ def test_D():
     ]
 
     a = D2.to_alpha(Matrix([[1, -1]]), "ortho")
-    assert a == Matrix([[1,0]]) and a.basis == Basis.ALPHA
+    assert a == Matrix([[1, 0]]) and a.basis == Basis.ALPHA
 
     x = Matrix([[1, -1]])
     x.basis = "ortho"
     a = D2.to_omega(x)
-    assert a == Matrix([[2,0]]) and a.basis == Basis.OMEGA
+    assert a == Matrix([[2, 0]]) and a.basis == Basis.OMEGA
 
     fw = D2.fundamental_weights[0]
     assert fw.basis == Basis.ORTHO
-    assert D2.to_omega(fw) == Matrix([[1,0]])
+    assert D2.to_omega(fw) == Matrix([[1, 0]])
 
     # baseclass generated
     D3 = D(3)
@@ -404,5 +403,4 @@ def test_D():
                                        Matrix([[0, 0, 3]])]
 
     D5 = D(5)
-    assert D5.conjugate(Matrix([[1, 0, 0, 0, 0]])) ==  Matrix([[1, 0, 0, 0, 0]])
-                                      
+    assert D5.conjugate(Matrix([[1, 0, 0, 0, 0]])) == Matrix([[1, 0, 0, 0, 0]])

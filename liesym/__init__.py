@@ -1,16 +1,15 @@
+from .liesym import (
+    LieAlgebraBackend as _LieAlgebraBackend,
+)
+from .groups import *
+from .algebras import *
 import os
 
 # C++ backend for sympy. Symbolic speed ups
 os.environ["USE_SYMENGINE"] = "1"
 
 # Compiled extension imports
-from .liesym import (
-    debug_mode as _debug_mode,
-    LieAlgebraBackend as _LieAlgebraBackend,
-)
 
-from .algebras import *
-from .groups import *
 
 __all__ = [
     "A", "B", "C", "D", "F4", "G2", "E", "LieAlgebra", "NumericSymbol",

@@ -1,6 +1,5 @@
 mod debug;
 mod liealgebras;
-mod matrix_methods;
 mod utils;
 
 use crate::debug::enable_debug;

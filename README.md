@@ -195,13 +195,16 @@ is a simple top level layout of this repository. When the rust code is
 build into a lib binary, it is put into into `./liesym` so it can be
 imported in `./liesym/__init__.py`
 
+Formatt
+
 ```
 .
 ├── Cargo.toml          # rust config file
 ├── README.md           # you are here
 ├── liesym              # python module
 ├── notebooks           # jupyter notebooks
-├── src                 # rust source code
+├── rootsystem          # native rust lie algebra root system 
+├── src                 # rust binding source code
 ├── tests               # python tests
 └── ...                 # other stuff
 ```

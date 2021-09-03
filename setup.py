@@ -12,7 +12,8 @@ setup_requires = [
 try:
     from setuptools_rust import RustExtension, Binding
 except ModuleNotFoundError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install"] + setup_requires)
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install"] + setup_requires)
     from setuptools_rust import RustExtension, Binding
 
 install_requires = [
@@ -43,27 +44,45 @@ class InstallDocs(InstallCommand):
     """ Customized setuptools install command which uses pip. """
 
     def run(self, *args, **kwargs):
-        subprocess.check_call([sys.executable, "-m", "pip", "install"] + doc_install_requires)
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install"] + doc_install_requires)
 
 
 class InstallDev(InstallCommand):
     """ Customized setuptools install command which uses pip. """
 
     def run(self, *args, **kwargs):
-        subprocess.check_call([sys.executable, "-m", "pip", "install"] + dev_install_requires)
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install"] + dev_install_requires)
 
 
 class InstallTest(InstallCommand):
     """ Customized setuptools install command which uses pip. """
 
     def run(self, *args, **kwargs):
-        subprocess.check_call([sys.executable, "-m", "pip", "install"] + test_requires)
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install"] + test_requires)
+
+
+class Clean(InstallCommand):
+    """Cleans local directory"""
+    targets = [
+        "target/",
+        "liesym.egg-info/",
+        "build/",
+        ".eggs/"
+    ]
+
+    def run(self, *args, **kwargs):
+        import shutil as sh
+        for t in self.targets:
+            sh.rmtree(t)
 
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
-         
+
 
 setup(
     name='liesym',
@@ -98,5 +117,6 @@ setup(
         "setupdev": InstallDev,
         "setupdocs": InstallDocs,
         "setuptests": InstallTest,
+        "clean": Clean
     }
 )

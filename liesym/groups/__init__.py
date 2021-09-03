@@ -9,5 +9,5 @@ from ._cyclic import Z
 from ._u1 import U1
 
 __all__ = [
-    "generalized_gell_mann", "SU", "SO", "Sp", "Group", "LieGroup" ,"Z", "U1", "commutator"
+    "generalized_gell_mann", "SU", "SO", "Sp", "Group", "LieGroup", "Z", "U1", "commutator"
 ]

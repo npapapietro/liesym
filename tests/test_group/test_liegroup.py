@@ -25,7 +25,7 @@ def test_su():
     for i in range(3):
         for j in range(3):
             for k in range(3):
-                assert su2.structure_constants(i,j,k) == LeviCivita(i, j, k)
+                assert su2.structure_constants(i, j, k) == LeviCivita(i, j, k)
 
 
 def test_so():

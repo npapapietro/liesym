@@ -2,7 +2,7 @@ import numpy as np
 from numpy.lib.arraysetops import isin
 from sympy import Matrix, flatten, Rational
 
-from .. import (_debug_mode, _LieAlgebraBackend)
+from .. import (_LieAlgebraBackend)
 
 
 def _annotate(M: Matrix, basis: str) -> Matrix:
@@ -128,9 +128,9 @@ def create_backend(algebra):
         algebra.rank,
         algebra.n_pos_roots,
         algebra.simple_roots,
-        algebra.cartan_matrix,
+        # algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),
         algebra.omega_matrix,
         algebra.omega_matrix.pinv(),
-        algebra.cocartan_matrix,
+        # algebra.cocartan_matrix,
     )
