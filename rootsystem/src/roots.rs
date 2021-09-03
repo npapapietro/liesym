@@ -54,7 +54,6 @@ impl RootSystem {
     }
 
     fn omega_to_alpha<'a>(&self, x: &'a Array2R) -> Array2R {
-        println!("{:?}, {:?}", x.clone().shape(), self.cartan_matrix_inverse.shape());
         x.dot(&self.cartan_matrix_inverse)
     }
 

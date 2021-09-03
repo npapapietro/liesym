@@ -1,7 +1,7 @@
-use num::rational::Ratio;
 use itertools::Itertools;
-use std::{cmp, collections::HashSet, hash::Hash, iter::FromIterator, slice::Iter};
 use ndarray::{Array, Array2};
+use num::rational::Ratio;
+use std::{cmp, collections::HashSet, hash::Hash, iter::FromIterator, slice::Iter};
 
 use crate::Array2R;
 
@@ -40,7 +40,7 @@ pub fn all_pos_filter<'a>(x: &'a Array2R, filter: Vec<usize>) -> bool {
     true
 }
 
-/// Gets the idx were item is == 0 if gt0 is false, 
+/// Gets the idx were item is == 0 if gt0 is false,
 /// otherwise >= 0
 pub fn pos_where(ary: Array2R, gt0: bool) -> Vec<usize> {
     ary.iter()
@@ -72,7 +72,6 @@ pub fn reflect_weights<'a>(x: &'a Vec<Array2R>, reflmats: &'a Vec<Array2R>) -> V
     vecs.extend(x.clone());
     vecs.iter().unique().cloned().collect()
 }
-
 
 pub trait Tap {
     fn tap(self, f: impl FnMut(&mut Self)) -> Self;
@@ -108,7 +107,6 @@ pub fn adjacent_find(it: Vec<(i64, Array2R)>) -> Vec<usize> {
     }
     v
 }
-
 
 ///  Returns a set of unique arrays that are all positive after subtraction by `x`
 fn select_pos_diff<'a>(x: &'a Array2R, arrays: &'a Vec<Array2R>) -> HashSet<Array2R> {
@@ -150,7 +148,6 @@ impl Rational for Vec<usize> {
     }
 }
 
-
 /// Returns the unique set of positive arrays being subtracted by `arrays`
 pub fn union_new_weights<'a>(
     x: &'a HashSet<Array2R>,
@@ -162,7 +159,6 @@ pub fn union_new_weights<'a>(
     }
     res.iter().cloned().collect()
 }
-
 
 #[cfg(test)]
 pub mod test {
@@ -255,5 +251,4 @@ pub mod test {
 
         assert_eq!(result.difference(&expected).count(), 0);
     }
-
 }

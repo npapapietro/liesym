@@ -1,7 +1,6 @@
 from .groups import *
 from .algebras import *
 from .liesym import (
-    debug_mode as _debug_mode,
     LieAlgebraBackend as _LieAlgebraBackend,
 )
 import os
