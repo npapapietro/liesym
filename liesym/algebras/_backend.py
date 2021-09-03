@@ -2,7 +2,7 @@ import numpy as np
 from numpy.lib.arraysetops import isin
 from sympy import Matrix, flatten, Rational
 
-from .. import (_debug_mode, _LieAlgebraBackend)
+from .. import (_LieAlgebraBackend)
 
 
 def _annotate(M: Matrix, basis: str) -> Matrix:
