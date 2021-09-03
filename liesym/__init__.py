@@ -1,8 +1,8 @@
-from .groups import *
-from .algebras import *
 from .liesym import (
     LieAlgebraBackend as _LieAlgebraBackend,
 )
+from .groups import *
+from .algebras import *
 import os
 
 # C++ backend for sympy. Symbolic speed ups
