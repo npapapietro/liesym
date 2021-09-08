@@ -268,12 +268,13 @@ class LieGroup(Group):
         return self._structure_constants[1]
 
     def dynkin_index(self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs) -> Basic:
-        """Returns the dykin index for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing
-        symbolic dim names to be passed.
+        """Returns the dykin index for the arbitrary irreducible representation. This method 
+        extends the underlying algebra method by allowing symbolic dim names to be passed.
 
         Args:
-            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default to adjoint rep. Defaults to None.
-            **kwargs: Pass through to LieAlgebra.dynkin_index
+            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default 
+            to adjoint rep. Defaults to None.
+            kwargs: Pass through to LieAlgebra.dynkin_index
 
         Returns:
             Basic: The irrep's dynkin index.
@@ -295,7 +296,7 @@ class LieGroup(Group):
 
         Args:
             irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default to adjoint rep. Defaults to None.
-            **kwargs: Pass through to LieAlgebra.quadratic_casimir
+            kwargs: Pass through to LieAlgebra.quadratic_casimir
 
         Returns:
             Basic: The irrep's quadratic casimir.
