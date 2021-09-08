@@ -11,6 +11,7 @@ use crate::common::{
 };
 use crate::Array2R;
 
+#[derive(Debug)]
 pub struct RootSystem {
     rank: usize,
     n_roots: usize,
@@ -157,7 +158,10 @@ impl RootSystem {
             .clone()
             .into_par_iter()
             .flat_map(|x| self.orbit_no_stabilizers(x))
-            .map(|x| self.ortho_to_omega(&x))
+            .map(|x| {
+                let x = self.ortho_to_omega(&x);
+                x
+            })
             .collect::<Vec<Array2R>>()
             .iter()
             .unique()
@@ -435,11 +439,6 @@ impl RootSystem {
         tensor_decomp
     }
 
-    // pub fn index_irrep<'a>(&self, irrep: &'a Array2R, dim: i64) -> Ratio<i64> {
-    //     let delta = Array2R::ones((1, self.rank));
-    //     self.scalar_product(irrep.clone(), irrep + delta * 2) * dim / (self.n_roots as i64)
-    // }
-
     pub fn irrep_by_dim(&self, dim: i64, max_dyn_digit: i64) -> Vec<Array2R> {
         (0..self.rank)
             .map(|_| 0..(max_dyn_digit + 1))
@@ -493,12 +492,21 @@ pub mod test {
     use crate::common::test::to_ratio;
 
     enum GroupTestType {
+        A1,
         A,
         B,
     }
 
     fn helper_liealgebra(group_type: GroupTestType) -> RootSystem {
         match group_type {
+            GroupTestType::A1 => RootSystem::new(
+                1,
+                1,
+                vec![to_ratio(array![[1, -1]])],
+                array![[Ratio::new(1, 2)]],
+                array![[Ratio::new(1, 2), Ratio::new(-1, 2)]],
+                array![[Ratio::from(1)], [Ratio::from(-1)]],
+            ),
             GroupTestType::A => RootSystem::new(
                 3,
                 6,
@@ -752,26 +760,38 @@ pub mod test {
 
     #[test]
     fn test_rootsystem_backend() {
-        let algebra = helper_liealgebra(GroupTestType::A);
-        let results = algebra.root_system();
-        let expected = vec![
-            to_ratio(array![[1, 0, 1]]),
-            to_ratio(array![[-1, 1, 1]]),
-            to_ratio(array![[1, 1, -1]]),
-            to_ratio(array![[-1, 2, -1]]),
-            to_ratio(array![[0, -1, 2]]),
-            to_ratio(array![[2, -1, 0]]),
-            to_ratio(array![[0, 0, 0]]),
-            to_ratio(array![[0, 0, 0]]),
-            to_ratio(array![[0, 0, 0]]),
-            to_ratio(array![[-2, 1, 0]]),
-            to_ratio(array![[0, 1, -2]]),
-            to_ratio(array![[1, -2, 1]]),
-            to_ratio(array![[-1, -1, 1]]),
-            to_ratio(array![[1, -1, -1]]),
-            to_ratio(array![[-1, 0, -1]]),
-        ];
-        assert_eq!(results, expected)
+        {
+            let algebra = helper_liealgebra(GroupTestType::A);
+            let results = algebra.root_system();
+            let expected = vec![
+                to_ratio(array![[1, 0, 1]]),
+                to_ratio(array![[-1, 1, 1]]),
+                to_ratio(array![[1, 1, -1]]),
+                to_ratio(array![[-1, 2, -1]]),
+                to_ratio(array![[0, -1, 2]]),
+                to_ratio(array![[2, -1, 0]]),
+                to_ratio(array![[0, 0, 0]]),
+                to_ratio(array![[0, 0, 0]]),
+                to_ratio(array![[0, 0, 0]]),
+                to_ratio(array![[-2, 1, 0]]),
+                to_ratio(array![[0, 1, -2]]),
+                to_ratio(array![[1, -2, 1]]),
+                to_ratio(array![[-1, -1, 1]]),
+                to_ratio(array![[1, -1, -1]]),
+                to_ratio(array![[-1, 0, -1]]),
+            ];
+            assert_eq!(results, expected)
+        }
+        {
+            let algebra = helper_liealgebra(GroupTestType::A1);
+            let results = algebra.root_system();
+            let expected = vec![
+                to_ratio(array![[2]]),
+                to_ratio(array![[0]]),
+                to_ratio(array![[-2]]),
+            ];
+            assert_eq!(results, expected)
+        }
     }
 
     #[test]
@@ -1066,6 +1086,18 @@ pub mod test {
     }
 
     #[test]
+    fn test_dim() {
+        let algebra = helper_liealgebra(GroupTestType::A1);
+
+        let irreps = algebra.dim(to_ratio(array![[2]]));
+        let expected = 3;
+        assert_eq!(
+            irreps, expected,
+            "Group A1\nTwo term test_dim is not correct"
+        );
+    }
+
+    #[test]
     fn test_get_irrep_by_dim() {
         {
             let algebra = helper_liealgebra(GroupTestType::A);
@@ -1091,6 +1123,17 @@ pub mod test {
             assert_eq!(
                 irreps, expected,
                 "Group B\nTwo term get_irrep_by_dim is not correct"
+            );
+        }
+
+        {
+            let algebra = helper_liealgebra(GroupTestType::A1);
+
+            let irreps = algebra.irrep_by_dim(3, 2);
+            let expected = vec![to_ratio(array![[2]])];
+            assert_eq!(
+                irreps, expected,
+                "Group A1\nTwo term get_irrep_by_dim is not correct"
             );
         }
     }

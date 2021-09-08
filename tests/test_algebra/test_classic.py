@@ -3,6 +3,7 @@ from sympy import Matrix, Rational
 
 
 def test_A():
+
     A2 = A(2)
 
     # test subclass items
@@ -57,7 +58,7 @@ def test_A():
         Matrix([[Rational(1, 4), Rational(1, 4), Rational(1, 4), Rational(-3, 4)]])]
 
     # backend
-    assert A3.root_system() == [
+    assert A3.root_system() == [A3.to_ortho(x, "omega") for x in [
         Matrix([[1, 0, 1]]),
         Matrix([[-1, 1, 1]]),
         Matrix([[1, 1, -1]]),
@@ -73,16 +74,16 @@ def test_A():
         Matrix([[-1, -1, 1]]),
         Matrix([[1, -1, -1]]),
         Matrix([[-1, 0, -1]])
-    ]
+    ]]
 
-    assert A3.positive_roots == [
+    assert A3.positive_roots == [A3.to_ortho(x, "omega") for x in [
         Matrix([[1, 0, 1]]),
         Matrix([[-1, 1, 1]]),
         Matrix([[1, 1, -1]]),
         Matrix([[-1, 2, -1]]),
         Matrix([[0, -1, 2]]),
         Matrix([[2, -1, 0]]),
-    ]
+    ]]
 
     fund = Matrix([[1, 0, 0]])
     antifund = Matrix([[0, 0, 1]])
@@ -106,11 +107,13 @@ def test_A():
 
 
 def test_A1():
-    A2 = A(1)
+    A1 = A(1)
 
     # test subclass items
-    assert A2.dimension == 2
-    assert A2.root_system() == [Matrix([[2]]), Matrix([[0]]), Matrix([[-2]])]
+    assert A1.dimension == 2
+    assert A1.irrep_lookup('3') == Matrix([[2]])
+    assert A1.root_system() == [A1.to_ortho(x, "omega") for x in [
+        Matrix([[2]]), Matrix([[0]]), Matrix([[-2]])]]
 
 
 def test_B():
@@ -165,7 +168,7 @@ def test_B():
     ]
 
     # backend
-    assert B3.root_system() == [
+    assert B3.root_system() == [B3.to_ortho(x, "omega") for x in [
         Matrix([[0, 1, 0]]),
         Matrix([[1, -1, 2]]),
         Matrix([[-1, 0, 2]]),
@@ -187,9 +190,9 @@ def test_B():
         Matrix([[1, 0, -2]]),
         Matrix([[-1, 1, -2]]),
         Matrix([[0, -1, 0]]),
-    ]
+    ]]
 
-    assert B3.positive_roots == [
+    assert B3.positive_roots == [B3.to_ortho(x, "omega") for x in [
         Matrix([[0, 1, 0]]),
         Matrix([[1, -1, 2]]),
         Matrix([[-1, 0, 2]]),
@@ -199,7 +202,7 @@ def test_B():
         Matrix([[-1, 2, -2]]),
         Matrix([[0, -1, 2]]),
         Matrix([[2, -1, 0]]),
-    ]
+    ]]
 
     decomp = B3.tensor_product_decomposition(
         [Matrix([[1, 0, 0]]), Matrix([[1, 0, 0]]), Matrix([[1, 0, 0]])])
@@ -272,7 +275,7 @@ def test_C():
         Matrix([[1, 1, 1]])
     ]
     # backend
-    assert C3.root_system() == [
+    assert [C3.to_omega(x) for x in C3.root_system()] == [
         Matrix([[2, 0, 0]]),
         Matrix([[0, 1, 0]]),
         Matrix([[-2, 2, 0]]),
@@ -296,7 +299,7 @@ def test_C():
         Matrix([[-2, 0, 0]]),
     ]
 
-    assert C3.positive_roots == [
+    assert [C3.to_omega(x) for x in C3.positive_roots] == [
         Matrix([[2, 0, 0]]),
         Matrix([[0, 1, 0]]),
         Matrix([[-2, 2, 0]]),
@@ -366,7 +369,7 @@ def test_D():
     ]
 
     # backend
-    assert D3.root_system() == [
+    assert [D3.to_omega(x) for x in D3.root_system()] == [
         Matrix([[0, 1, 1]]),
         Matrix([[1, -1, 1]]),
         Matrix([[1, 1, -1]]),
@@ -384,7 +387,7 @@ def test_D():
         Matrix([[0, -1, -1]]),
     ]
 
-    assert D3.positive_roots == [
+    assert [D3.to_omega(x) for x in D3.positive_roots] == [
         Matrix([[0, 1, 1]]),
         Matrix([[1, -1, 1]]),
         Matrix([[1, 1, -1]]),

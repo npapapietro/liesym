@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sympy.core import Basic
-from sympy import Matrix, Symbol, sympify
+from sympy import Matrix, Symbol, sympify, ones
 from typing import Tuple, Union
 from copy import deepcopy
 from functools import cmp_to_key
@@ -77,6 +77,7 @@ class LieAlgebra(Basic):
         self._fundamental_weights = None
         self._backend = None
         self._root_system = None
+        self._adjoint_casimir = None
 
     @property
     def series(self) -> str:
@@ -318,7 +319,7 @@ class LieAlgebra(Basic):
         has_conjugate = conjugate == 1 if so8label == "" else False
         return self._dim_name_fmt(dim, has_conjugate, num_primes, so8label)
 
-    def irrep_lookup(self, dim: Union[Symbol, str]) -> Matrix:
+    def irrep_lookup(self, dim: Union[Symbol, str], max_dynkin_digit=5) -> Matrix:
         """Returns the irrep matrix for the dimension.
 
         Args:
@@ -348,7 +349,6 @@ class LieAlgebra(Basic):
 
         n_dim = dim.numeric_dim
 
-        max_dynkin_digit = 3
         dd = 0
         while dd < max_dynkin_digit:
             dd += 1
@@ -443,7 +443,7 @@ class LieAlgebra(Basic):
         [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]
         """
         backend_results: list[Matrix] = self._backend_instance.get_irrep_by_dim(
-            dim, max_dd)
+            dim, max_dd) or []
         results = [self.to_omega(x, "omega") for x in backend_results]
         if with_symbols:
             results = [(x, self.dim_name(x)) for x in results]
@@ -470,7 +470,7 @@ class LieAlgebra(Basic):
         _annotate_matrix(irrep, basis)
         irrep = self.to_omega(irrep)
 
-        return self._backend_instance.dim(irrep)
+        return sympify(self._backend_instance.dim(irrep))
 
     def root_system(self) -> list[Matrix]:
         """Returns the entire rootsystem of the algebra. This
@@ -482,8 +482,8 @@ class LieAlgebra(Basic):
             list[Matrix]: list of ordered roots.
         """
         if self._root_system is None:
-            self._root_system = [_annotate_matrix(
-                x) for x in self._backend_instance.root_system()]
+            self._root_system = [self.to_ortho(
+                x, basis="omega") for x in self._backend_instance.root_system()]
         return self._root_system
 
     def tensor_product_decomposition(self, weights: list[Matrix], basis="omega", **_) -> list[Matrix]:
@@ -614,3 +614,59 @@ class LieAlgebra(Basic):
 
         r.basis = Basis.ALPHA
         return r
+
+    def _scalar_product(self, irrep1, irrep2, basis="ortho"):
+        """Scalar product between two irreps."""
+        irrep1 = self.to_ortho(irrep1, basis=basis)
+        irrep2 = self.to_ortho(irrep2, basis=basis)
+
+        return irrep1.dot(irrep2)
+
+    def quadratic_casimir(self, irrep: Matrix = None, basis="omega", **kwargs) -> Basic:
+        r"""Returns the quadratic casimir for an arbitrary irreducible
+        representation, $R$.
+
+        .. math::
+
+            \frac{1}{2}<R | R + \rho> 
+
+        Args:
+            irrep (Matrix): Irreducible representation 
+            basis (str, optional): Basis of irrep. Defaults to "omega".
+
+        Returns:
+            Basic: Rational number
+        """
+        if irrep is None:
+            # return sympify(1)
+            irrep = self.adjoint_rep
+            basis = irrep.basis
+        irrep = self.to_omega(irrep, basis=basis)
+        rho = 2 * ones(1, self.rank)
+        return self._scalar_product(irrep, irrep + rho, basis="omega") / 2
+
+    def dynkin_index(self, irrep: Matrix = None, basis="omega") -> Basic:
+        r"""Calculates the dynkin index of an arbitrary irrep. This
+        is also called in literature second-order index, $I_2(R)$. If no irrep 
+        is passed, basis and rep default to the algebra's adjoint rep.
+        For arbitrary irrep, $R$, the dynkin index, $I_2(R)$ can be calculated 
+        as:
+
+        .. math::
+            I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)
+
+        where the $dim$ is the dimension formula, $adj$ is the adjoint irrep
+        and $c$ is the quadratic casimir (`Liealgebra.casimir`).
+        """
+        irrep = irrep or self.adjoint_rep
+        basis = basis if irrep else self.adjoint_rep.basis
+        d_r = self.dim(irrep, basis=basis)
+        d_a = self.dim(self.adjoint_rep)
+        c_r = self.quadratic_casimir(irrep, basis=basis)
+        return d_r * c_r / d_a
+
+    @property
+    def adjoint_rep(self) -> Matrix:
+        """Returns the adjoint irrep. This is the highest weight of the 
+        root system."""
+        return self.positive_roots[0]

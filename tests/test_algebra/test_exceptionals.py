@@ -54,7 +54,7 @@ def test_F4():
         [[1, 1, 0, -2]]), Matrix([[S.Half, S.Half, S.Half, -3*S.Half]]), Matrix([[0, 0, 0, -1]])]
 
     # backend
-    assert F4_.root_system() == [
+    assert [F4_.to_omega(x) for x in F4_.root_system()] == [
         Matrix([[1, 0, 0, 0]]),
         Matrix([[-1, 1, 0, 0]]),
         Matrix([[0, -1, 2, 0]]),
@@ -160,7 +160,7 @@ def test_E6():
          [1, 2, 3, 2, 1, 2], ])
 
     # backend
-    assert E6.root_system() == [
+    assert [E6.to_omega(x) for x in E6.root_system()] == [
         Matrix([[0, 0, 0, 0, 0, 1]]),
         Matrix([[0, 0, 1, 0, 0, -1]]),
         Matrix([[0, 1, -1, 1, 0, 0]]),
@@ -241,7 +241,7 @@ def test_E6():
         Matrix([[0, 0, 0, 0, 0, -1]]),
     ]
 
-    assert E6.positive_roots == [
+    assert [E6.to_omega(x) for x in E6.positive_roots] == [
         Matrix([[0, 0, 0, 0, 0, 1]]),
         Matrix([[0, 0, 1, 0, 0, -1]]),
         Matrix([[0, 1, -1, 1, 0, 0]]),
