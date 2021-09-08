@@ -56,6 +56,10 @@ class U1(Group):
         return conjugate(rep)
 
     def irrep_lookup(self, irrep):
-
         cleaned_rep = sympify(irrep) if isinstance(irrep, str) else irrep
         return self._from_charge(cleaned_rep)
+
+    @staticmethod
+    def dynkin_index(charge):
+        """Returns the dynkin index for the abelian gauge"""
+        return charge**2

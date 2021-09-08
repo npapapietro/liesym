@@ -12,6 +12,10 @@ def _annotate(M: Matrix, basis: str) -> Matrix:
 
 
 def _to_rational_tuple(obj):
+    """Converts to a sympy matrix into into two
+    ndarray(dtype=int), one for numerators and one
+    for denoms
+    """
     if obj is None:
         return
     elif isinstance(obj, list) or isinstance(obj, tuple):
@@ -26,35 +30,26 @@ def _to_rational_tuple(obj):
     return np.array([(i.p, i.q) for i in x], dtype=np.int64).reshape(*obj.shape, 2)
 
 
-def _rust_new(func):
-    def inner(*args, **kwargs):
-        cls = args[0]
-        nargs = [_to_rational_tuple(x) for x in args[1:]]
-        return func(cls, *nargs, **kwargs)
-    return inner
-
-
 def _is_scalar(x) -> bool:
+    """Is a basic type"""
     return isinstance(x, (int, str, float, bool)) or x is None
 
 
 def _is_tuple_int(x) -> bool:
+    """Tuple of ints"""
     if not isinstance(x, tuple):
         raise Exception("Wrapper error, tuple expected")
     return isinstance(x[0], int) and isinstance(x[1], int)
 
 
-def _rust_wrapper(*args, **kwargs):
+def _rust_wrapper(func=None, default=None):
     """Wraps the rust methods to and from. Formats the calls
     to rust by turning either a 2d matrix to 3d matrix of (x,y) => (x,y,[numerator,denominator])
     for preserving rational numbers. Rust returns objects as a tuple of (numerator-matrix, denominator-matrix)
     """
-    if len(args) == 1 and callable(args[0]):
-        func = args[0]
-    if kwargs != {}:
-        def wrapper(func):
-            return inner(func, **kwargs)
-        return wrapper
+
+    if func is None and default is not None:
+        return lambda f: _rust_wrapper(func=f, default=default)
 
     def inner(*args, **kwargs):
         cls = args[0]
@@ -64,10 +59,10 @@ def _rust_wrapper(*args, **kwargs):
 
         result = func(cls, *nargs, **kwargs)
 
+        if result is None:
+            return default
         if _is_scalar(result):
             return result
-
-        # Tuple of ints
         if _is_tuple_int(result):
             return Rational(*result)
 
@@ -86,10 +81,19 @@ def _rust_wrapper(*args, **kwargs):
     return inner
 
 
+def _rust_new(func):
+    """Transforms into rust acceptable types"""
+    def inner(*args, **kwargs):
+        cls = args[0]
+        nargs = [_to_rational_tuple(x) for x in args[1:]]
+        return func(cls, *nargs, **kwargs)
+    return inner
+
+
 class _LieAlgebraBackendWrapped:
     @_rust_new
     def __init__(self, *args, **kwargs):
-        # obscuring this option
+        # obscuring this option, used in testing
         backend = kwargs.get("backend", _LieAlgebraBackend)
         self.rank = args[0]
         self.backend = backend(*args)
@@ -110,7 +114,7 @@ class _LieAlgebraBackendWrapped:
     def dim(self, irrep):
         return self.backend.dim(irrep)
 
-    @_rust_wrapper
+    @_rust_wrapper(default=[])
     def get_irrep_by_dim(self, dim, max_dd):
         return self.backend.irrep_by_dim(dim, max_dd)
 

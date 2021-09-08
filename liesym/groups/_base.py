@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from typing import Tuple, Union
-from sympy import Symbol, Basic, I, Basic, trace, sympify
-from sympy.core.backend import Matrix
+from sympy import Symbol, Basic, I, Basic, trace, sympify, Matrix
+from sympy.core.backend import Matrix as _CMatrix
 from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
 
 
@@ -194,7 +194,7 @@ class LieGroup(Group):
         Structure constants $f_{abc}$ is defined as
 
         .. math::
-            [T_a, T_b] = \sum_c f_{abc} T_c
+            [T_a, T_b] = i f_{abc} T_c
 
         where the group generators are $T$.
 
@@ -220,10 +220,10 @@ class LieGroup(Group):
 
     def _calculate_structure_constants(self):
         """Calculates the structure constants"""
-        gens = self.generators()
-        n = len(gens)
 
-        # _structure_constants(gens)
+        # For improved performance use explicit Symengine backend
+        gens = [_CMatrix(x) for x in self.generators()]
+        n = len(gens)
 
         f = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
         d = MutableDenseNDimArray.zeros(n, n, n) * sympify("0")
@@ -238,7 +238,23 @@ class LieGroup(Group):
                             gens[i], gens[j], anti=True) * gens[k])
         return (f, d)
 
-    def d_coeffecients(self, *idxs: int):
+    def d_coeffecients(self, *idxs: int) -> Union[Basic, Matrix]:
+        r"""Returns the d constants of the group. Indexes start at 0 and constants maybe
+        in different orderings than existing literature, but will still be in the Gell-Mann basis.
+        d constants $d_{abc}$ is defined as
+
+        .. math::
+            {T_a, T_b} = \frac{1}{N}\delta_{ab} + d_{abc} T_c
+
+        where the group generators are $T$.
+
+        Args:
+            idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.
+
+        Returns:
+            Union[Basic, Matrix]: If indicies are passed in, will return corresponding
+            d constant. Otherwise returns the 3dArry for entire group.
+        """
         if self._structure_constants == (None, None):
             self._structure_constants = self._calculate_structure_constants()
 
@@ -250,3 +266,47 @@ class LieGroup(Group):
                 [i, j, k] = idxs
                 return self._structure_constants[1][i, j, k]
         return self._structure_constants[1]
+
+    def dynkin_index(self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs) -> Basic:
+        """Returns the dykin index for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing
+        symbolic dim names to be passed.
+
+        Args:
+            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default to adjoint rep. Defaults to None.
+            **kwargs: Pass through to LieAlgebra.dynkin_index
+
+        Returns:
+            Basic: The irrep's dynkin index.
+        """
+        if irrep is None:
+            return self.algebra.dynkin_index()
+        elif isinstance(irrep, Matrix):
+            return self.algebra.dynkin_index(irrep, **kwargs)
+        elif isinstance(irrep, (Basic, str, int)):
+            irrep = self.algebra.irrep_lookup(str(irrep))
+            return self.algebra.dynkin_index(irrep)
+        else:
+            raise TypeError(
+                "Only sympy basic types and sympy.Matrix are allowed.")
+
+    def quadratic_casimir(self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs) -> Basic:
+        """Returns the quadratic casimir for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing
+        symbolic dim names to be passed.
+
+        Args:
+            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default to adjoint rep. Defaults to None.
+            **kwargs: Pass through to LieAlgebra.quadratic_casimir
+
+        Returns:
+            Basic: The irrep's quadratic casimir.
+        """
+        if irrep is None:
+            return self.algebra.quadratic_casimir()
+        elif isinstance(irrep, Matrix):
+            return self.algebra.quadratic_casimir(irrep, **kwargs)
+        elif isinstance(irrep, (Basic, str, int)):
+            irrep = self.algebra.irrep_lookup(str(irrep))
+            return self.algebra.quadratic_casimir(irrep)
+        else:
+            raise TypeError(
+                "Only sympy basic types and sympy.Matrix are allowed.")

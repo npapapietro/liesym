@@ -8,6 +8,7 @@ import os
 # C++ backend for sympy. Symbolic speed ups
 os.environ["USE_SYMENGINE"] = "1"
 
+IS_SYMENGINE = (os.environ.get("USE_SYMENGINE") == "1")
 # Compiled extension imports
 
 

@@ -2,16 +2,6 @@ use ndarray::{Array, Dimension};
 use num::rational::Ratio;
 use std::fmt::{Display, Formatter, Result};
 
-static mut DEBUGMODE: bool = false;
-
-pub fn enable_debug() {
-    unsafe { DEBUGMODE = true }
-}
-
-pub fn debug_on() -> bool {
-    unsafe { DEBUGMODE }
-}
-
 #[derive(Debug)]
 pub struct Frac(Ratio<i64>);
 
@@ -51,16 +41,5 @@ impl Frac {
                 .collect::<Vec<String>>()
                 .join(",")
             + ")"
-    }
-}
-
-#[allow(dead_code)]
-pub struct Logger {}
-impl Logger {
-    #[allow(dead_code)]
-    pub fn debug(msg: String) {
-        if debug_on() {
-            println!("{}", msg);
-        }
     }
 }

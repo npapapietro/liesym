@@ -74,10 +74,14 @@ impl LieAlgebraBackend {
         py: Python<'py>,
         dim: i64,
         max_dynkin_digit: i64,
-    ) -> (&'py PyArray3<i64>, &'py PyArray3<i64>) {
+    ) -> Option<(&'py PyArray3<i64>, &'py PyArray3<i64>)> {
         let results = self.roots.irrep_by_dim(dim, max_dynkin_digit);
-        let (numer, denom) = vecarray_to_pyreturn(results);
-        (numer.into_pyarray(py), denom.into_pyarray(py))
+        if results.len() == 0 {
+            return None;
+        } else {
+            let (n, d) = vecarray_to_pyreturn(results);
+            return Some((n.into_pyarray(py), d.into_pyarray(py)));
+        };
     }
     fn index_irrep<'py>(
         &self,
