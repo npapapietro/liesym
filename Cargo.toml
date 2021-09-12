@@ -1,6 +1,6 @@
 [package]
 name = "liesym"
-version = "0.5.5"
+version = "0.6.0"
 authors = [ "Nathan Papapietro <npapapietro95@gmail.com>",]
 edition = "2018"
 license-file = "LICENSE"
@@ -18,7 +18,12 @@ num-traits = "0.2.14"
 numpy = "0.14.1"
 num = "0.4.0"
 itertools = "0.10.1"
-rootsystem = {path="./rootsystem"}
+
+[workspaces]
+members = [ "rootsystem",]
+
+[dependencies.rootsystem]
+path = "./rootsystem"
 
 [dependencies.ndarray]
 version = "0.15.3"
@@ -27,9 +32,3 @@ features = [ "approx", "rayon",]
 [dependencies.pyo3]
 version = "0.14.1"
 features = [ "extension-module",]
-
-
-[workspaces]
-members = [
-    "rootsystem"
-]
