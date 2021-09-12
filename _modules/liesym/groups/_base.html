@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>liesym.groups._base &#8212; liesym 0.5.5 documentation</title>
+    <title>liesym.groups._base &#8212; liesym 0.6.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -131,8 +131,8 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Symbol</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">sympify</span>
-<span class="kn">from</span> <span class="nn">sympy.core.backend</span> <span class="kn">import</span> <span class="n">Matrix</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Symbol</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">Basic</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">sympify</span><span class="p">,</span> <span class="n">Matrix</span>
+<span class="kn">from</span> <span class="nn">sympy.core.backend</span> <span class="kn">import</span> <span class="n">Matrix</span> <span class="k">as</span> <span class="n">_CMatrix</span>
 <span class="kn">from</span> <span class="nn">sympy.tensor.array.dense_ndim_array</span> <span class="kn">import</span> <span class="n">MutableDenseNDimArray</span>
 
 
@@ -163,6 +163,7 @@
     <span class="k">if</span> <span class="n">anti</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">A</span>
     <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">-</span> <span class="n">B</span> <span class="o">*</span> <span class="n">A</span></div>
+
 
 <div class="viewcode-block" id="Group"><a class="viewcode-back" href="../../../group.html#liesym.Group">[docs]</a><span class="k">class</span> <span class="nc">Group</span><span class="p">(</span><span class="n">Basic</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The base class for all (lie) groups. The methods and properties</span>
@@ -219,7 +220,7 @@
 
 <div class="viewcode-block" id="Group.irrep_lookup"><a class="viewcode-back" href="../../../group.html#liesym.Group.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the mathematical representation to the common name. Example would be returning `3` in SU(3) as `Matrix([[1,0]])`</span>
-<span class="sd">        </span>
+
 <span class="sd">        Abstract</span>
 <span class="sd">        &quot;&quot;&quot;</span></div></div>
 
@@ -323,7 +324,7 @@
 <span class="sd">        Structure constants $f_{abc}$ is defined as</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            [T_a, T_b] = \sum_c f_{abc} T_c</span>
+<span class="sd">            [T_a, T_b] = i f_{abc} T_c</span>
 
 <span class="sd">        where the group generators are $T$.</span>
 
@@ -349,10 +350,10 @@
 
     <span class="k">def</span> <span class="nf">_calculate_structure_constants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculates the structure constants&quot;&quot;&quot;</span>
-        <span class="n">gens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generators</span><span class="p">()</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gens</span><span class="p">)</span>
 
-        <span class="c1"># _structure_constants(gens)</span>
+        <span class="c1"># For improved performance use explicit Symengine backend</span>
+        <span class="n">gens</span> <span class="o">=</span> <span class="p">[</span><span class="n">_CMatrix</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generators</span><span class="p">()]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gens</span><span class="p">)</span>
 
         <span class="n">f</span> <span class="o">=</span> <span class="n">MutableDenseNDimArray</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympify</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">MutableDenseNDimArray</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympify</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
@@ -360,11 +361,30 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">I</span> <span class="o">*</span> <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span><span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-                    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span><span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">anti</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">I</span> <span class="o">*</span> \
+                        <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span><span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> \
+                        <span class="n">trace</span><span class="p">(</span><span class="n">commutator</span><span class="p">(</span>
+                            <span class="n">gens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gens</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">anti</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="n">gens</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LieGroup.d_coeffecients"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.d_coeffecients">[docs]</a>    <span class="k">def</span> <span class="nf">d_coeffecients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">idxs</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="LieGroup.d_coeffecients"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.d_coeffecients">[docs]</a>    <span class="k">def</span> <span class="nf">d_coeffecients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">idxs</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Basic</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">]:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the d constants of the group. Indexes start at 0 and constants maybe</span>
+<span class="sd">        in different orderings than existing literature, but will still be in the Gell-Mann basis.</span>
+<span class="sd">        d constants $d_{abc}$ is defined as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            {T_a, T_b} = \frac{1}{N}\delta_{ab} + d_{abc} T_c</span>
+
+<span class="sd">        where the group generators are $T$.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            idxs (int): Optional postional arguments of 3 indices to return structure constant. If omitted, will return array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Union[Basic, Matrix]: If indicies are passed in, will return corresponding</span>
+<span class="sd">            d constant. Otherwise returns the 3dArry for entire group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">==</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_structure_constants</span><span class="p">()</span>
 
@@ -375,7 +395,52 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">idxs</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure_constants</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LieGroup.dynkin_index"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.dynkin_index">[docs]</a>    <span class="k">def</span> <span class="nf">dynkin_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Basic</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Basic</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the dykin index for the arbitrary irreducible representation. This method </span>
+<span class="sd">        extends the underlying algebra method by allowing symbolic dim names to be passed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default </span>
+<span class="sd">            to adjoint rep. Defaults to None.</span>
+<span class="sd">            kwargs: Pass through to LieAlgebra.dynkin_index</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Basic: The irrep&#39;s dynkin index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">irrep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">dynkin_index</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">dynkin_index</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="p">(</span><span class="n">Basic</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="n">irrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">irrep</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">dynkin_index</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Only sympy basic types and sympy.Matrix are allowed.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LieGroup.quadratic_casimir"><a class="viewcode-back" href="../../../group.html#liesym.LieGroup.quadratic_casimir">[docs]</a>    <span class="k">def</span> <span class="nf">quadratic_casimir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Basic</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Basic</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the quadratic casimir for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing</span>
+<span class="sd">        symbolic dim names to be passed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default to adjoint rep. Defaults to None.</span>
+<span class="sd">            kwargs: Pass through to LieAlgebra.quadratic_casimir</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Basic: The irrep&#39;s quadratic casimir.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">irrep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">quadratic_casimir</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">quadratic_casimir</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">irrep</span><span class="p">,</span> <span class="p">(</span><span class="n">Basic</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="n">irrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">irrep_lookup</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">irrep</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">algebra</span><span class="o">.</span><span class="n">quadratic_casimir</span><span class="p">(</span><span class="n">irrep</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Only sympy basic types and sympy.Matrix are allowed.&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
               </div>
@@ -405,7 +470,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

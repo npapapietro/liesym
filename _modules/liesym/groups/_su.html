@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>liesym.groups._su &#8212; liesym 0.5.5 documentation</title>
+    <title>liesym.groups._su &#8212; liesym 0.6.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -159,7 +159,7 @@
             <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="n">mat</span>
         <span class="k">return</span> <span class="n">_</span>
-    <span class="n">E</span> <span class="o">=</span> <span class="n">eij</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> 
+    <span class="n">E</span> <span class="o">=</span> <span class="n">eij</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span>
 
     <span class="c1"># Symmetric</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">):</span>
@@ -177,6 +177,7 @@
         <span class="n">sum_term</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">E</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)],</span> <span class="n">zeros</span><span class="p">(</span><span class="n">dimension</span><span class="p">))</span>
         <span class="k">yield</span> <span class="n">coeff</span> <span class="o">*</span> <span class="p">(</span><span class="n">sum_term</span> <span class="o">-</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">E</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
 
+
 <div class="viewcode-block" id="SU"><a class="viewcode-back" href="../../../group.html#liesym.SU">[docs]</a><span class="k">class</span> <span class="nc">SU</span><span class="p">(</span><span class="n">LieGroup</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The Special Unitary Group</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -190,7 +191,6 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_algebra</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span> <span class="o">=</span> <span class="kc">None</span>
-        
 
 <div class="viewcode-block" id="SU.generators"><a class="viewcode-back" href="../../../group.html#liesym.SU.generators">[docs]</a>    <span class="k">def</span> <span class="nf">generators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Generators for SU(N).  Based off the generalized Gell-Mann matrices $\lambda_a$</span>
@@ -202,7 +202,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># typical normalization</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">generalized_gell_mann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">generalized_gell_mann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimension</span><span class="p">)]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generators</span></div></div>
 </pre></div>
 
@@ -233,7 +234,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

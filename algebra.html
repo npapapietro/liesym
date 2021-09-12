@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Algebra &#8212; liesym 0.5.5 documentation</title>
+    <title>Algebra &#8212; liesym 0.6.0 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -204,6 +204,8 @@ representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
+<dt><a class="reference internal" href="#liesym.LieAlgebra.adjoint_rep" title="liesym.LieAlgebra.adjoint_rep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjoint_rep</span></code></a></dt><dd><p>Returns the adjoint irrep.</p>
+</dd>
 <dt><a class="reference internal" href="#liesym.LieAlgebra.cartan_matrix" title="liesym.LieAlgebra.cartan_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartan_matrix</span></code></a></dt><dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be</p>
 </dd>
 <dt><a class="reference internal" href="#liesym.LieAlgebra.cocartan_matrix" title="liesym.LieAlgebra.cocartan_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cocartan_matrix</span></code></a></dt><dd><p>The cocartan matrix rows are generated from the coroots of the algebra such that multiplication by a simple root will generate a row of the cartan matrix.</p>
@@ -249,17 +251,23 @@ representation.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dim_name" title="liesym.LieAlgebra.dim_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dim_name</span></code></a>(irrep[, basis])</p></td>
 <td><p>Returns a sympy formatted symbol for the irrep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.get_irrep_by_dim" title="liesym.LieAlgebra.get_irrep_by_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_irrep_by_dim</span></code></a>(dim[, max_dd, with_symbols])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.dynkin_index" title="liesym.LieAlgebra.dynkin_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dynkin_index</span></code></a>([irrep, basis])</p></td>
+<td><p>Calculates the dynkin index of an arbitrary irrep.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.get_irrep_by_dim" title="liesym.LieAlgebra.get_irrep_by_dim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_irrep_by_dim</span></code></a>(dim[, max_dd, with_symbols])</p></td>
 <td><p>Gets all irreps by dimension and max dynkin digit.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.irrep_lookup" title="liesym.LieAlgebra.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(dim)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.irrep_lookup" title="liesym.LieAlgebra.irrep_lookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">irrep_lookup</span></code></a>(dim[, max_dynkin_digit])</p></td>
 <td><p>Returns the irrep matrix for the dimension.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.max_dynkin_digit" title="liesym.LieAlgebra.max_dynkin_digit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_dynkin_digit</span></code></a>(irrep)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.max_dynkin_digit" title="liesym.LieAlgebra.max_dynkin_digit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_dynkin_digit</span></code></a>(irrep)</p></td>
 <td><p>Returns the max Dynkin Digit for the representations</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.orbit" title="liesym.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers, basis])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.orbit" title="liesym.LieAlgebra.orbit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbit</span></code></a>(weight[, stabilizers, basis])</p></td>
 <td><p>Returns the orbit of the weight or root by reflecting it a plane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#liesym.LieAlgebra.quadratic_casimir" title="liesym.LieAlgebra.quadratic_casimir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quadratic_casimir</span></code></a>([irrep, basis])</p></td>
+<td><p>Returns the quadratic casimir for an arbitrary irreducible representation, $R$.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#liesym.LieAlgebra.root_system" title="liesym.LieAlgebra.root_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_system</span></code></a>()</p></td>
 <td><p>Returns the entire rootsystem of the algebra.</p></td>
@@ -278,6 +286,13 @@ representation.</p>
 </tr>
 </tbody>
 </table>
+<dl class="py property">
+<dt class="sig sig-object py" id="liesym.LieAlgebra.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.LieAlgebra.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.LieAlgebra.cartan_matrix" title="Permalink to this definition">¶</a></dt>
@@ -372,9 +387,23 @@ sympy.Symbol.</p>
 <p>Abstract</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieAlgebra.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.dynkin_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieAlgebra.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.LieAlgebra.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.LieAlgebra.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -417,7 +446,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.irrep_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieAlgebra.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.irrep_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieAlgebra.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -500,13 +529,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.LieAlgebra.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.LieAlgebra.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.LieAlgebra.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="reference internal" href="_modules/liesym/algebras/_base.html#LieAlgebra.quadratic_casimir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#liesym.LieAlgebra.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -519,7 +564,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.LieAlgebra.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.LieAlgebra.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -548,7 +593,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.LieAlgebra.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.LieAlgebra.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.LieAlgebra.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -673,6 +718,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.A.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.A.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.A.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.A.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -759,9 +811,23 @@ one greater than the rank of the algebra.</p>
 \[n + 1\]</div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.A.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.A.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.A.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.A.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.A.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -804,7 +870,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.A.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.A.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.A.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -889,13 +955,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.A.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.A.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.A.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.A.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.A.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -908,7 +990,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.A.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.A.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.A.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -937,7 +1019,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.A.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.A.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.A.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -1059,6 +1141,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.B.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.B.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.B.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.B.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -1152,9 +1241,23 @@ sympy.Symbol.</p>
 equal to the rank of the algebra.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.B.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.B.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.B.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.B.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.B.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -1197,7 +1300,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.B.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.B.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.B.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -1282,13 +1385,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.B.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.B.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.B.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.B.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.B.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1301,7 +1420,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.B.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.B.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.B.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -1330,7 +1449,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.B.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.B.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.B.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -1452,6 +1571,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.C.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.C.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.C.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.C.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -1545,9 +1671,23 @@ sympy.Symbol.</p>
 equal to the rank of the algebra.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.C.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.C.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.C.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.C.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.C.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -1590,7 +1730,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.C.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.C.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.C.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -1675,13 +1815,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.C.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.C.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.C.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.C.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.C.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1694,7 +1850,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.C.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.C.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.C.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -1723,7 +1879,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.C.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.C.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.C.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -1845,6 +2001,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.D.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.D.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.D.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.D.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -1938,9 +2101,23 @@ sympy.Symbol.</p>
 equal to the rank of the algebra.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.D.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.D.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.D.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.D.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.D.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -1983,7 +2160,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.D.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.D.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.D.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -2068,13 +2245,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.D.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.D.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.D.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.D.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.D.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2087,7 +2280,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.D.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.D.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.D.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -2116,7 +2309,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.D.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.D.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.D.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -2252,6 +2445,13 @@ type E.</p>
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.E.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.E.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.E.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.E.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -2345,9 +2545,23 @@ sympy.Symbol.</p>
 <p>Abstract</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.E.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.E.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.E.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.E.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.E.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -2390,7 +2604,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.E.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.E.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.E.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -2473,13 +2687,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.E.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.E.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.E.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.E.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.E.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2492,7 +2722,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.E.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.E.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.E.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -2521,7 +2751,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.E.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.E.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.E.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -2643,6 +2873,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.G2.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.G2.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.G2.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.G2.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -2736,9 +2973,23 @@ sympy.Symbol.</p>
 <p>Abstract</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.G2.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.G2.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.G2.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.G2.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.G2.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -2781,7 +3032,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.G2.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.G2.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.G2.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -2864,13 +3115,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.G2.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.G2.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.G2.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.G2.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.G2.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2883,7 +3150,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.G2.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.G2.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.G2.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -2912,7 +3179,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.G2.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.G2.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.G2.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -3034,6 +3301,13 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
 </tbody>
 </table>
 <dl class="py property">
+<dt class="sig sig-object py" id="liesym.F4.adjoint_rep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">adjoint_rep</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.F4.adjoint_rep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the adjoint irrep. This is the highest weight of the 
+root system.</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="liesym.F4.cartan_matrix">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cartan_matrix</span></span><em class="property"><span class="pre">:</span> <span class="pre">sympy.Matrix</span></em><a class="headerlink" href="#liesym.F4.cartan_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given simple Lie algebra the elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> can be
@@ -3127,9 +3401,23 @@ sympy.Symbol.</p>
 <p>Abstract</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.F4.dynkin_index">
+<span class="sig-name descname"><span class="pre">dynkin_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.F4.dynkin_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the dynkin index of an arbitrary irrep. This
+is also called in literature second-order index, <span class="math notranslate nohighlight">\(I_2(R)\)</span>. If no irrep 
+is passed, basis and rep default to the algebra’s adjoint rep.
+For arbitrary irrep, <span class="math notranslate nohighlight">\(R\)</span>, the dynkin index, <span class="math notranslate nohighlight">\(I_2(R)\)</span> can be calculated 
+as:</p>
+<div class="math notranslate nohighlight">
+\[I_2(R) = \frac{Dim(R)}{Dim(adj)}c(R)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(dim\)</span> is the dimension formula, <span class="math notranslate nohighlight">\(adj\)</span> is the adjoint irrep
+and <span class="math notranslate nohighlight">\(c\)</span> is the quadratic casimir (<cite>Liealgebra.casimir</cite>).</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.F4.fundamental_weights">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.F4.fundamental_weights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fundamental_weights</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.F4.fundamental_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fundamental weights of the algebra.</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
@@ -3172,7 +3460,7 @@ with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="liesym.F4.irrep_lookup">
-<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.F4.irrep_lookup" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">irrep_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Symbol</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dynkin_digit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matrix</span></span></span><a class="headerlink" href="#liesym.F4.irrep_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the irrep matrix for the dimension.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.</p>
@@ -3255,13 +3543,29 @@ theorem, integer iterable of simple root indexes. Defaults to None.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.F4.positive_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.F4.positive_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">positive_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.F4.positive_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the postive roots of the algebra. They are sorted 
 first by their distance from the highest root and then by 
 tuple ordering (convention).</p>
 <p>Basis: Orthogonal</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>list[Matrix]: list of Sympy Matrices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="liesym.F4.quadratic_casimir">
+<span class="sig-name descname"><span class="pre">quadratic_casimir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">irrep</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Matrix</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'omega'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Basic</span></span></span><a class="headerlink" href="#liesym.F4.quadratic_casimir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the quadratic casimir for an arbitrary irreducible
+representation, <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{2}&lt;R | R + \rho&gt; \]</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>irrep (Matrix): Irreducible representation 
+basis (str, optional): Basis of irrep. Defaults to “omega”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Basic: Rational number</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3274,7 +3578,7 @@ tuple ordering (convention).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.F4.reflection_matricies">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.F4.reflection_matricies" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reflection_matricies</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.F4.reflection_matricies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of reflection matrices built from
 rotations about each simple root.</p>
 <dl class="simple">
@@ -3303,7 +3607,7 @@ includes the positive, negative and zeros of the algebra.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="liesym.F4.simple_roots">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list[Matrix]</span></em><a class="headerlink" href="#liesym.F4.simple_roots" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">simple_roots</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Matrix</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#liesym.F4.simple_roots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Sympy matrix (1,dimension)
 objects representing a chosen basis of the algebra.</p>
 <p>Basis: Orthogonal</p>
@@ -3427,7 +3731,7 @@ basis (optional): If <cite>basis</cite> attribute is not set on <cite>x</cite> d
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     

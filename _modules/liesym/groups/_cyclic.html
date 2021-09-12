@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>liesym.groups._cyclic &#8212; liesym 0.5.5 documentation</title>
+    <title>liesym.groups._cyclic &#8212; liesym 0.6.0 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -231,15 +231,15 @@
             <span class="n">cleaned_rep</span> <span class="o">=</span> <span class="n">Symbol</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">rep</span>
             <span class="n">math_rep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookups</span><span class="p">[</span><span class="n">cleaned_rep</span><span class="p">]</span>
             <span class="n">conj_rep</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">math_rep</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">conj_rep</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">conj_rep</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">rep</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">rep</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Rep not in cyclic group.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Z.irrep_lookup"><a class="viewcode-back" href="../../../group.html#liesym.Z.irrep_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">irrep_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">irrep</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the symbol of irrep</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        =========</span>
 <span class="sd">        &gt;&gt;&gt; from liesym import Z</span>
@@ -279,7 +279,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.1.2.<br/>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
 </p>
     </div>
     
