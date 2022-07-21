@@ -98,7 +98,7 @@ setup(
     setup_requires=setup_requires,
     python_requires=">=3.7",
     packages=find_packages(),
-    test_requires=test_requires,
+    # test_requires=test_requires,
     zip_safe=False,
     include_package_data=True,
     author="Nathan Papapietro <npapapietro95@gmail.com>",
