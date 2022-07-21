@@ -86,7 +86,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='liesym',
-    version='0.6.0',
+    version='0.7.0',
     description='Sympy Lie Algebra extensions powered by rust.',
     rust_extensions=[RustExtension(
         'liesym.liesym',
@@ -110,6 +110,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     long_description=long_description,
     long_description_content_type='text/markdown',

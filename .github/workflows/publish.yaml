@@ -3,7 +3,7 @@
 name: Publish Module
 on:
   release:
-    types: 
+    types:
       - created
 env:
   CARGO_TERM_COLOR: always
@@ -14,11 +14,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.8, 3.9]
-        platform: [
-          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
-          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-        ]
+        python-version: [3.7, 3.8, 3.9, 3.10]
+        platform:
+          [
+            {
+              os: "macOS-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-apple-darwin",
+            },
+            {
+              os: "windows-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-pc-windows-msvc",
+            },
+          ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -43,7 +52,7 @@ jobs:
           TWINE_USERNAME: __token__
         run: |
           python setup.py bdist_wheel 
-          twine upload dist/*  
+          twine upload dist/*
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -61,5 +70,3 @@ jobs:
           python -m pip install twine wheel setuptools-rust
           docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
           python -m twine upload dist/*
-
-
