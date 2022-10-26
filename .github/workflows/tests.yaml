@@ -11,124 +11,124 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt
-      - name: Check rust formatting (rustfmt)
-        run: cargo fmt --all -- --check
-  sphinx-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      # - name: Set up Python ${{ matrix.python-version }}
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: 3.8
-      # - name: Install Deps
-      #   run: pip install .[docs]
-      # - name: Build Warnings As Errors
-      #   run: |
-      #     cd docs
-      #     make html SPHINXOPTS="-W"
+  # fmt:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         components: rustfmt
+  #     - name: Check rust formatting (rustfmt)
+  #       run: cargo fmt --all -- --check
+  # sphinx-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  # - name: Set up Python ${{ matrix.python-version }}
+  #   uses: actions/setup-python@v4
+  #   with:
+  #     python-version: 3.8
+  # - name: Install Deps
+  #   run: pip install .[docs]
+  # - name: Build Warnings As Errors
+  #   run: |
+  #     cd docs
+  #     make html SPHINXOPTS="-W"
 
-  build-mac-win:
-    needs: [fmt, sphinx-test]
-    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
-    runs-on: ${{ matrix.platform.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.10"]
-        platform:
-          [
-            {
-              os: "macOS-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-apple-darwin",
-              env-cmd: "source env/bin/activate",
-            },
-            {
-              os: "windows-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-pc-windows-msvc",
-              env-cmd: "env\\Scripts\\activate",
-            },
-          ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.platform.python-architecture }}
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: ${{ matrix.platform.rust-target }}
-      - name: Install dependencies
-        run: |
-          python -m venv env
-          ${{ matrix.platform.env-cmd }}
-          python -m pip install -U pip maturin
-          python -m pip install .[test]
-      - name: Run rust tests
-        run: cd rootsystem && cargo test --target ${{ matrix.platform.rust-target }}
-      - name: Run python tests
-        run: |
-          ${{ matrix.platform.env-cmd }}
-          maturin develop
-          pytest
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
+  # build-mac-win:
+  #   needs: [fmt, sphinx-test]
+  #   name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+  #   runs-on: ${{ matrix.platform.os }}
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       python-version: ["3.10"]
+  #       platform:
+  #         [
+  #           {
+  #             os: "macOS-latest",
+  #             python-architecture: "x64",
+  #             rust-target: "x86_64-apple-darwin",
+  #             env-cmd: "source env/bin/activate",
+  #           },
+  #           {
+  #             os: "windows-latest",
+  #             python-architecture: "x64",
+  #             rust-target: "x86_64-pc-windows-msvc",
+  #             env-cmd: "env\\Scripts\\activate",
+  #           },
+  #         ]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #         architecture: ${{ matrix.platform.python-architecture }}
+  #     - name: Install Rust toolchain
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         target: ${{ matrix.platform.rust-target }}
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m venv env
+  #         ${{ matrix.platform.env-cmd }}
+  #         python -m pip install -U pip maturin
+  #         python -m pip install .[test]
+  #     - name: Run rust tests
+  #       run: cd rootsystem && cargo test --target ${{ matrix.platform.rust-target }}
+  #     - name: Run python tests
+  #       run: |
+  #         ${{ matrix.platform.env-cmd }}
+  #         maturin develop
+  #         pytest
+  #   env:
+  #     RUST_BACKTRACE: 1
+  #     RUSTFLAGS: "-D warnings"
 
-  test-linux:
-    needs: [fmt, sphinx-test]
-    name: Test linux
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.10"]
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: x86_64-unknown-linux-gnu
-      - name: Prepare LD_LIBRARY_PATH
-        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
-      - name: Install dependencies
-        run: |
-          python -m venv env
-          source env/bin/activate
-          python -m pip install -U pip maturin
-          python -m pip install .[test]
-      - name: Run rust tests
-        run: cd rootsystem && cargo test --target x86_64-unknown-linux-gnu
-      - name: Run python tests
-        run: |
-          source env/bin/activate
-          maturin develop
-          pytest
+  # test-linux:
+  #   needs: [fmt, sphinx-test]
+  #   name: Test linux
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       python-version: ["3.10"]
+  #   env:
+  #     RUST_BACKTRACE: 1
+  #     RUSTFLAGS: "-D warnings"
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #         architecture: x64
+  #     - name: Install Rust toolchain
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         target: x86_64-unknown-linux-gnu
+  #     - name: Prepare LD_LIBRARY_PATH
+  #       run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m venv env
+  #         source env/bin/activate
+  #         python -m pip install -U pip maturin
+  #         python -m pip install .[test]
+  #     - name: Run rust tests
+  #       run: cd rootsystem && cargo test --target x86_64-unknown-linux-gnu
+  #     - name: Run python tests
+  #       run: |
+  #         source env/bin/activate
+  #         maturin develop
+  #         pytest
 
   test-publish-mac-win:
-    needs: [build-mac-win, test-linux]
+    # needs: [build-mac-win, test-linux]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
@@ -176,7 +176,7 @@ jobs:
       RUSTFLAGS: "-D warnings"
 
   test-publish-linux:
-    needs: [build-mac-win, test-linux]
+    # needs: [build-mac-win, test-linux]
     name: Test Publish linux
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2014_x86_64
