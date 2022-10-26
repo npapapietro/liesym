@@ -50,11 +50,13 @@ jobs:
               os: "macOS-latest",
               python-architecture: "x64",
               rust-target: "x86_64-apple-darwin",
+              env-cmd: "source env/bin/activate",
             },
             {
               os: "windows-latest",
               python-architecture: "x64",
               rust-target: "x86_64-pc-windows-msvc",
+              env-cmd: "env\\Scripts\\activate",
             },
           ]
     steps:
@@ -72,14 +74,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m venv env
-          source env/bin/activate
+          ${{ matrix.platform.env-cmd }}
           python -m pip install -U pip maturin
           python -m pip install .[test]
       - name: Run rust tests
         run: cd rootsystem && cargo test --target ${{ matrix.platform.rust-target }}
       - name: Run python tests
         run: |
-          source env/bin/activate
+          ${{ matrix.platform.env-cmd }}
           maturin develop
           pytest
     env:
@@ -139,11 +141,13 @@ jobs:
               os: "macOS-latest",
               python-architecture: "x64",
               rust-target: "x86_64-apple-darwin",
+              env-cmd: "source env/bin/activate",
             },
             {
               os: "windows-latest",
               python-architecture: "x64",
               rust-target: "x86_64-pc-windows-msvc",
+              env-cmd: "env\\Scripts\\activate",
             },
           ]
     steps:
