@@ -177,15 +177,13 @@ jobs:
 
   test-publish-linux:
     needs: [build-mac-win, test-linux]
-    name: Publish linux
+    name: Test Publish linux
     runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2014_x86_64
     steps:
       - uses: actions/checkout@v3
       - name: Publish
         env:
           MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           MATURIN_USERNAME: __token__
-        run: |
-          python -m pip install wheel maturin
-          docker run --rm -v ${pwd}:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
-          maturin upload -r testpypi
+        run: bash build-wheels.sh

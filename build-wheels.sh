@@ -14,3 +14,7 @@ done
 for whl in target/wheels/*.whl; do
     auditwheel repair "${whl}"
 done
+
+for PYBIN in /opt/python/cp{310}*/bin; do
+    "${PYBIN}/python" -m maturin upload -r testpypi
+done
