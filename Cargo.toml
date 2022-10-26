@@ -9,6 +9,9 @@ repository = "https://github.com/npapapietro/liesym"
 description = "Sympy Lie Algebra extensions powered by rust."
 readme = "README.md"
 
+[package.metadata.maturin]
+python-source = "python"
+
 [lib]
 name = "liesym"
 crate-type = [ "cdylib",]
