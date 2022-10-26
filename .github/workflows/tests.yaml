@@ -15,26 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt
-      - name: Check rust formatting (rustfmt)
-        run: cargo fmt --all -- --check
-  sphinx-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-      - name: Install Deps
-        run: pip install .[docs]
-      - name: Build Warnings As Errors
-        run: |
-          cd docs
-          make html SPHINXOPTS="-W"
+  #     - uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         components: rustfmt
+  #     - name: Check rust formatting (rustfmt)
+  #       run: cargo fmt --all -- --check
+  # sphinx-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: 3.8
+  #     - name: Install Deps
+  #       run: pip install .[docs]
+  #     - name: Build Warnings As Errors
+  #       run: |
+  #         cd docs
+  #         make html SPHINXOPTS="-W"
 
   build-mac-win:
     needs: [fmt, sphinx-test]
@@ -71,7 +71,7 @@ jobs:
           target: ${{ matrix.platform.rust-target }}
       - name: Install dependencies
         run: |
-          python -m venv venv
+          python -m venv env
           source env/bin/activate
           python -m pip install -U pip maturin
           python -m pip install .[test]
@@ -113,7 +113,7 @@ jobs:
         run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
       - name: Install dependencies
         run: |
-          python -m venv venv
+          python -m venv env
           source env/bin/activate
           python -m pip install -U pip maturin
           python -m pip install .[test]
