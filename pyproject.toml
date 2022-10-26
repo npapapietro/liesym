@@ -1,36 +1,43 @@
 [build-system]
-requires = ["maturin>=0.13,<0.14"]
 build-backend = "maturin"
+requires = ["maturin>=0.13,<0.14"]
 
 [project]
-name = "liesym"
-version = "0.7.0"
-description = "Sympy Lie Algebra extensions powered by rust."
-authors = [{ name = "Nathan Papapietro", email = "<npapapietro95@gmail.com>" }]
-readme = "README.md"
+authors = [{name = "Nathan Papapietro", email = "<npapapietro95@gmail.com>"}]
 classifiers = [
-    "Topic :: Scientific/Engineering :: Mathematics",
-    "Topic :: Scientific/Engineering :: Physics",
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
 ]
 dependencies = ['numpy>=1.19', 'sympy>=1.7.1', 'symengine>=0.7.2']
+description = "Sympy Lie Algebra extensions powered by rust."
+name = "liesym"
+readme = "README.md"
+version = "0.7.0"
+
 [project.urls]
-Homepage = "https://github.com/npapapietro/liesym"
 Documentation = "https://npapapietro.github.io/liesym"
+Homepage = "https://github.com/npapapietro/liesym"
 
 [project.optional-dependencies]
+dev = [
+  "autopep8>=1.5.6",
+  "jupyter>=1.0.0",
+]
 docs = [
-    "Sphinx>=4.1.1",
-    "groundwork-sphinx-theme>=1.1.1",
-    "numpydoc>=1.1.0",
-    "pydata_sphinx_theme>=0.5.2",
-    "sphinx-math-dollar>=1.2",
+  "Sphinx>=4.1.1",
+  "groundwork-sphinx-theme>=1.1.1",
+  "numpydoc>=1.1.0",
+  "pydata_sphinx_theme>=0.5.2",
+  "sphinx-math-dollar>=1.2",
 ]
 test = ["pytest>=6.2.3"]
 
-[tool.maturin]
-python-source = "python"
-sdist-include = ["liesym/*"]
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = [
+  "tests",
+]

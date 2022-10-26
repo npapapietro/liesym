@@ -6,17 +6,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 cd /io
 
-for PYBIN in /opt/python/cp{37,38,39}*/bin; do
-    "${PYBIN}/pip" install -U setuptools wheel setuptools-rust
-    "${PYBIN}/python" setup.py bdist_wheel
+for PYBIN in /opt/python/cp{38,39,310}*/bin; do
+    "${PYBIN}/pip" install -U wheel maturin
+    "${PYBIN}/python" -m build
 done
 
-"${PYBIN}/python" setup.py sdist
-
-for whl in dist/*.whl; do
-    auditwheel repair "$whl" -w dist/
-done
-
-for whl in dist/*-linux*; do
-    rm "$whl"
+for whl in target/wheels/*.whl; do
+    auditwheel repair "${whl}"
 done

@@ -1,37 +1,34 @@
 [package]
-name = "liesym"
-version = "0.6.0"
-authors = [ "Nathan Papapietro <npapapietro95@gmail.com>",]
+authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
+description = "Sympy Lie Algebra extensions powered by rust."
+documentation = "https://npapapietro.github.io/liesym"
 edition = "2018"
 license-file = "LICENSE"
-documentation = "https://npapapietro.github.io/liesym"
-repository = "https://github.com/npapapietro/liesym"
-description = "Sympy Lie Algebra extensions powered by rust."
+name = "liesym"
 readme = "README.md"
-
-[package.metadata.maturin]
-python-source = "python"
+repository = "https://github.com/npapapietro/liesym"
+version = "0.7.0"
 
 [lib]
+crate-type = ["cdylib"]
 name = "liesym"
-crate-type = [ "cdylib",]
 
 [dependencies]
-num-traits = "0.2.14"
-numpy = "0.14.1"
-num = "0.4.0"
-itertools = "0.10.1"
+itertools = ">= 0.10.1"
+num = ">= 0.4.0"
+num-traits = ">= 0.2.14"
+numpy = ">= 0.17.2"
 
 [workspaces]
-members = [ "rootsystem",]
+members = ["rootsystem"]
 
 [dependencies.rootsystem]
 path = "./rootsystem"
 
 [dependencies.ndarray]
-version = "0.15.3"
-features = [ "approx", "rayon",]
+features = ["approx", "rayon"]
+version = ">= 0.15.3"
 
 [dependencies.pyo3]
-version = "0.14.1"
-features = [ "extension-module",]
+features = ["extension-module"]
+version = ">= 0.17.2"
