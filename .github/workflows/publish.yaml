@@ -3,47 +3,54 @@
 name: Publish Module
 on:
   release:
-    types: 
+    types:
       - created
 env:
   CARGO_TERM_COLOR: always
 jobs:
   publish-mac-win:
-    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+    name: Publish python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        python-version: [3.7, 3.8, 3.9]
-        platform: [
-          { os: "macOS-latest",   python-architecture: "x64", rust-target: "x86_64-apple-darwin" },
-          { os: "windows-latest", python-architecture: "x64", rust-target: "x86_64-pc-windows-msvc" },
-        ]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        platform:
+          [
+            {
+              os: "macOS-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-apple-darwin",
+              env-cmd: "source env/bin/activate",
+            },
+            {
+              os: "windows-latest",
+              python-architecture: "x64",
+              rust-target: "x86_64-pc-windows-msvc",
+              env-cmd: "env\\Scripts\\activate",
+            },
+          ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.platform.python-architecture }}
       - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           target: ${{ matrix.platform.rust-target }}
-          profile: minimal
-          default: true
-      - name: Install cargo test and setup.py dependencies
-        run: |
-          python -m pip install -U pip 
-          python -m pip install twine wheel setuptools-rust
-      - name: publish
+      - name: Install dependencies
+        run: python -m pip install -U pip maturin wheel
+      - name: Publish
         env:
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          TWINE_USERNAME: __token__
+          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          MATURIN_USERNAME: __token__
         run: |
-          python setup.py bdist_wheel 
-          twine upload dist/*  
+          maturin build
+          maturin upload
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -51,15 +58,33 @@ jobs:
   publish-linux:
     name: Publish linux
     runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2014_x86_64
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install nightly rust
+        run: curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
+      # Insert steps here to install you other dependencies. Note that you're running inside of cent os 7, not ubuntu
+      - name: Installing custom dependency
+        run: echo "Installing custom dependency"
+      - name: Build
+        run: |
+          source $HOME/.cargo/env
+          for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
+            "${PYBIN}/pip" install maturin
+            "${PYBIN}/maturin" build -m Cargo.toml -i "${PYBIN}/python" --release --manylinux 2014
+          done
+      # Auditwheel isn't generally necessary. This is only shown as refernce for cases where you link
+      # external libraries, in which case you have to set manylinux to off and then use auditwheel repair
+      - name: Auditwheel repair
+        run: |
+          for wheel in target/wheels/*.whl; do
+              auditwheel repair "${wheel}"
+          done
       - name: Publish
         env:
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          TWINE_USERNAME: __token__
+          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          MATURIN_USERNAME: __token__
         run: |
-          python -m pip install twine wheel setuptools-rust
-          docker run --rm -v `pwd`:/io quay.io/pypa/manylinux2014_x86_64 /io/build-wheels.sh
-          python -m twine upload dist/*
-
-
+          for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
+            "${PYBIN}/python" -m maturin upload
+          done
