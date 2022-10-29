@@ -170,7 +170,7 @@ jobs:
           MATURIN_USERNAME: __token__
         run: |
           maturin build
-          maturin upload -r testpypi
+          maturin upload -r testpypi --skip-existing target/wheels/*.whl
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -207,5 +207,5 @@ jobs:
           MATURIN_USERNAME: __token__
         run: |
           for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
-            "${PYBIN}/python" -m maturin upload -r testpypi
+            "${PYBIN}/python" -m maturin upload -r testpypi --skip-existing target/wheels/*.whl
           done

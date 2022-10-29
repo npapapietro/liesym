@@ -86,5 +86,5 @@ jobs:
           MATURIN_USERNAME: __token__
         run: |
           for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
-            "${PYBIN}/python" -m maturin upload
+            "${PYBIN}/python" -m maturin upload --skip-existing target/wheels/*.whl
           done
