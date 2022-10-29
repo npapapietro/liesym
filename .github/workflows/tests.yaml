@@ -127,53 +127,53 @@ jobs:
   #         maturin develop
   #         pytest
 
-  test-publish-mac-win:
-    # needs: [build-mac-win, test-linux]
-    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
-    runs-on: ${{ matrix.platform.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.10"]
-        platform:
-          [
-            {
-              os: "macOS-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-apple-darwin",
-              env-cmd: "source env/bin/activate",
-            },
-            {
-              os: "windows-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-pc-windows-msvc",
-              env-cmd: "env\\Scripts\\activate",
-            },
-          ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.platform.python-architecture }}
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: ${{ matrix.platform.rust-target }}
-      - name: Install dependencies
-        run: python -m pip install -U pip maturin wheel
-      - name: test publish
-        env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          MATURIN_USERNAME: __token__
-        run: |
-          maturin build
-          maturin upload -r testpypi
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
+  # test-publish-mac-win:
+  #   # needs: [build-mac-win, test-linux]
+  #   name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
+  #   runs-on: ${{ matrix.platform.os }}
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       python-version: ["3.10"]
+  #       platform:
+  #         [
+  #           {
+  #             os: "macOS-latest",
+  #             python-architecture: "x64",
+  #             rust-target: "x86_64-apple-darwin",
+  #             env-cmd: "source env/bin/activate",
+  #           },
+  #           {
+  #             os: "windows-latest",
+  #             python-architecture: "x64",
+  #             rust-target: "x86_64-pc-windows-msvc",
+  #             env-cmd: "env\\Scripts\\activate",
+  #           },
+  #         ]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #         architecture: ${{ matrix.platform.python-architecture }}
+  #     - name: Install Rust toolchain
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         target: ${{ matrix.platform.rust-target }}
+  #     - name: Install dependencies
+  #       run: python -m pip install -U pip maturin wheel
+  #     - name: test publish
+  #       env:
+  #         MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+  #         MATURIN_USERNAME: __token__
+  #       run: |
+  #         maturin build
+  #         maturin upload -r testpypi
+  #   env:
+  #     RUST_BACKTRACE: 1
+  #     RUSTFLAGS: "-D warnings"
 
   test-publish-linux:
     # needs: [build-mac-win, test-linux]
@@ -182,7 +182,6 @@ jobs:
     container: quay.io/pypa/manylinux2014_x86_64
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/checkout@v1
       - name: Install nightly rust
         run: curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
       # Insert steps here to install you other dependencies. Note that you're running inside of cent os 7, not ubuntu
