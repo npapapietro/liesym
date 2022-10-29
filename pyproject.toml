@@ -3,7 +3,7 @@ build-backend = "maturin"
 requires = ["maturin>=0.13,<0.14"]
 
 [project]
-authors = [{name = "Nathan Papapietro", email = "<npapapietro95@gmail.com>"}]
+authors = [{name = "Nathan Papapietro", email = "npapapietro95@gmail.com"}]
 classifiers = [
   "Topic :: Scientific/Engineering :: Mathematics",
   "Topic :: Scientific/Engineering :: Physics",

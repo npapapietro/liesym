@@ -49,8 +49,7 @@ jobs:
           MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           MATURIN_USERNAME: __token__
         run: |
-          maturin build
-          maturin upload
+          maturin publish --skip-existing
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -86,5 +85,5 @@ jobs:
           MATURIN_USERNAME: __token__
         run: |
           for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
-            "${PYBIN}/python" -m maturin upload
+            "${PYBIN}/python" -m maturin upload --skip-existing target/wheels/*.whl
           done

@@ -166,15 +166,13 @@ jobs:
         run: python -m pip install -U pip maturin wheel
       - name: test publish
         env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
           MATURIN_USERNAME: __token__
         run: |
-          maturin build
-          maturin upload -r testpypi
+          maturin publish -r testpypi --skip-existing
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
-
   test-publish-linux:
     needs: [test-mac-win, test-linux]
     name: Test Publish linux
@@ -203,9 +201,9 @@ jobs:
           done
       - name: Publish
         env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
           MATURIN_USERNAME: __token__
         run: |
           for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
-            "${PYBIN}/python" -m maturin upload -r testpypi
+            "${PYBIN}/python" -m maturin upload -r testpypi --skip-existing target/wheels/*.whl
           done

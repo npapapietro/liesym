@@ -2,7 +2,7 @@
 authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
 description = "Sympy Lie Algebra extensions powered by rust."
 documentation = "https://npapapietro.github.io/liesym"
-edition = "2018"
+edition = "2021"
 license-file = "LICENSE"
 name = "liesym"
 readme = "README.md"
