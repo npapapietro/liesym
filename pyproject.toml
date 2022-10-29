@@ -1,21 +1,43 @@
 [build-system]
-requires = [ "setuptools", "wheel", "setuptools-rust",]
-build-backend = "setuptools.build_meta"
+build-backend = "maturin"
+requires = ["maturin>=0.13,<0.14"]
 
-[tools.poetry]
-name = "liesym"
-version = "0.6.0"
+[project]
+authors = [{name = "Nathan Papapietro", email = "<npapapietro95@gmail.com>"}]
+classifiers = [
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dependencies = ['numpy>=1.19', 'sympy>=1.7.1', 'symengine>=0.7.2']
 description = "Sympy Lie Algebra extensions powered by rust."
-authors = "Nathan Papapietro <npapapietro95@gmail.com>"
+name = "liesym"
 readme = "README.md"
-documentations = "https://npapapietro.github.io/liesym"
-classifiers = [ "Topic :: Scientific/Engineering :: Mathematics", "Topic :: Scientific/Engineering :: Physics", "Programming Language :: Rust", "Programming Language :: Python :: 3.7", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9",]
-url = "https://github.com/npapapietro/liesym"
+version = "0.7.0"
 
-[tool.poetry.dependencies]
-python = "^3.7"
-numpy = "^1.19"
-sympy = "^1.7.1"
-[[tool.poetry.dependencies.packages]]
-include = "liesym/*"
+[project.urls]
+Documentation = "https://npapapietro.github.io/liesym"
+Homepage = "https://github.com/npapapietro/liesym"
 
+[project.optional-dependencies]
+dev = [
+  "autopep8>=1.5.6",
+  "jupyter>=1.0.0",
+]
+docs = [
+  "Sphinx>=4.1.1",
+  "groundwork-sphinx-theme>=1.1.1",
+  "numpydoc>=1.1.0",
+  "pydata_sphinx_theme>=0.5.2",
+  "sphinx-math-dollar>=1.2",
+]
+test = ["pytest>=6.2.3"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = [
+  "tests",
+]
