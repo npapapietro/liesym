@@ -169,7 +169,6 @@ jobs:
           MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
           MATURIN_USERNAME: __token__
         run: |
-          maturin build
           maturin publish -r testpypi
     env:
       RUST_BACKTRACE: 1
