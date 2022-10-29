@@ -206,6 +206,6 @@ jobs:
           MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           MATURIN_USERNAME: __token__
         run: |
-          for PYBIN in /opt/python/cp{310}*/bin; do
-              "${PYBIN}/python" -m maturin upload -r testpypi
+          for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
+            "${PYBIN}/python" -m maturin upload -r testpypi
           done
