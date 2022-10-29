@@ -49,8 +49,7 @@ jobs:
           MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           MATURIN_USERNAME: __token__
         run: |
-          maturin build
-          maturin upload
+          maturin publish --skip-existing
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
