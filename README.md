@@ -139,10 +139,7 @@ $\displaystyle \bar{4}$
 A3.irrep_lookup(r"\bar{4}")
 ```
 
-
-
-
-$\displaystyle \left[\begin{matrix}0 & 0 & 1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}0 & 0 & 1\end{matrix}\right]$$
 
 
 
@@ -195,7 +192,7 @@ is a simple top level layout of this repository. When the rust code is
 build into a lib binary, it is put into into `./liesym` so it can be
 imported in `./liesym/__init__.py`
 
-Formatt
+Format
 
 ```
 .
