@@ -1,7 +1,8 @@
-import toml
-from os.path import join, abspath, dirname
-import sys
 import re
+import sys
+from os.path import abspath, dirname, join
+
+import toml
 
 root = abspath(join(dirname(__file__), ".."))
 
@@ -9,7 +10,7 @@ root = abspath(join(dirname(__file__), ".."))
 def update_cargo(ver):
     path = join(root, "Cargo.toml")
     raw = toml.load(path)
-    raw['package']['version'] = ver
+    raw["package"]["version"] = ver
     with open(path, "w") as f:
         toml.dump(raw, f)
 
@@ -17,7 +18,7 @@ def update_cargo(ver):
 def update_pyproject(ver):
     path = join(root, "pyproject.toml")
     raw = toml.load(path)
-    raw['tools']['poetry']['version'] = ver
+    raw["tools"]["poetry"]["version"] = ver
     with open(path, "w") as f:
         toml.dump(raw, f)
 
@@ -27,7 +28,7 @@ def update_setuppy(ver):
     with open(path) as f:
         raw = f.read()
     pat = r"version\=\'(\d+\.\d+\.\d+)\'\,"
-    raw = re.sub(pat, "version=\'" + ver + "\',", raw)
+    raw = re.sub(pat, "version='" + ver + "',", raw)
     with open(path, "w") as f:
         f.write(raw)
 
@@ -37,7 +38,7 @@ def update_sphinx(ver):
     with open(path) as f:
         raw = f.read()
     pat = r"release\s\=\s\'(\d+\.\d+\.\d+)\'"
-    raw = re.sub(pat, "release = \'" + ver + "\'", raw)
+    raw = re.sub(pat, "release = '" + ver + "'", raw)
     with open(path, "w") as f:
         f.write(raw)
 

@@ -1,24 +1,24 @@
 # from __future__ import annotations
 from functools import reduce
 
-from sympy import exp, I, pi, Symbol, conjugate
+from sympy import conjugate, exp, I, pi, Symbol
 
 from ._base import Group
 
 
 class Z(Group):
-    """Cyclic Group
-    """
+    """Cyclic Group"""
 
     def __new__(cls, dim: int):
         return super().__new__(cls, "Z", dim)
 
     def __init__(self, *args, **kwargs):
-        self._lookups = {Symbol(f"Z_{idx}"): x for idx,
-                         x in enumerate(self.generators())}
+        self._lookups = {
+            Symbol(f"Z_{idx}"): x for idx, x in enumerate(self.generators())
+        }
 
     def generators(self, indexed=False) -> list:
-        """The basis for the generators in the cyclic group are 
+        """The basis for the generators in the cyclic group are
         in the exponential imaginary basis.
 
         Args:
@@ -54,7 +54,7 @@ class Z(Group):
         >>> z5.product(g[0], g[1], g[2], g[3], g[4])
         [1]
         """
-        return [reduce(lambda a, b: a*b, args)]
+        return [reduce(lambda a, b: a * b, args)]
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
         """Will take the product symbolically of Cyclic representations

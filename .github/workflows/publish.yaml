@@ -45,9 +45,6 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -U pip maturin wheel
       - name: Publish
-        env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          MATURIN_USERNAME: __token__
         run: |
           maturin publish --skip-existing
     env:
@@ -80,9 +77,6 @@ jobs:
               auditwheel repair "${wheel}"
           done
       - name: Publish
-        env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          MATURIN_USERNAME: __token__
         run: |
           for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
             "${PYBIN}/python" -m maturin upload --skip-existing target/wheels/*.whl

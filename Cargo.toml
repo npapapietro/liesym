@@ -19,9 +19,6 @@ num = ">= 0.4.0"
 num-traits = ">= 0.2.14"
 numpy = ">= 0.17.2"
 
-[workspaces]
-members = ["rootsystem"]
-
 [dependencies.rootsystem]
 path = "./rootsystem"
 
@@ -30,5 +27,8 @@ features = ["approx", "rayon"]
 version = ">= 0.15.3"
 
 [dependencies.pyo3]
-features = ["extension-module"]
-version = ">= 0.17.2"
+version = ">= 0.20.0"
+
+[features]
+extension-module = ["pyo3/extension-module"]
+default = ["extension-module"]

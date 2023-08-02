@@ -1,8 +1,8 @@
 import numpy as np
-from sympy import S, Rational, Matrix
+from liesym.algebras import A, B, C, D
 
 from liesym.algebras._backend import _LieAlgebraBackendWrapped
-from liesym.algebras import A, B, C, D
+from sympy import Matrix, Rational, S
 
 
 def testBackendA():
@@ -27,7 +27,7 @@ def testBackendA():
         cartan_matrix_inverse,
         omega_matrix,
         omega_matrix_inverse,
-        cocartan_matrix
+        cocartan_matrix,
     ):
         assert isinstance(rank, int)
         assert isinstance(roots, int)
@@ -57,18 +57,20 @@ def testBackendA():
             return (np.array([[[1, 1], [2, 2]]]), np.array([[[2, 2], [3, 3]]]))
 
         _test_backend.root_system = lambda: (
-            np.array([[[1, 1], [2, 2]]]), np.array([[[2, 2], [3, 3]]]))
+            np.array([[[1, 1], [2, 2]]]),
+            np.array([[[2, 2], [3, 3]]]),
+        )
         _test_backend.orbit = orb
-        _test_backend.tensor_product_decomposition = lambda x, _: orb(
-            x,  np.array([]))
-        _test_backend.irrep_by_dim = lambda *_:  (
-            np.array([[[1, 1], [2, 2]]]), np.array([[[2, 2], [3, 3]]]))
+        _test_backend.tensor_product_decomposition = lambda x, _: orb(x, np.array([]))
+        _test_backend.irrep_by_dim = lambda *_: (
+            np.array([[[1, 1], [2, 2]]]),
+            np.array([[[2, 2], [3, 3]]]),
+        )
 
         return _test_backend
 
     obj = _LieAlgebraBackendWrapped(*args, backend=_test_backend)
-    expected = [Matrix([[S.Half, S.Half]]), Matrix(
-        [[Rational(2, 3), Rational(2, 3)]])]
+    expected = [Matrix([[S.Half, S.Half]]), Matrix([[Rational(2, 3), Rational(2, 3)]])]
 
     assert obj.root_system() == expected
     assert obj.orbit(expected[0], [1, 2, 3]) == expected
@@ -99,7 +101,7 @@ def testBackendBCD():
             cartan_matrix_inverse,
             omega_matrix,
             omega_matrix_inverse,
-            cocartan_matrix
+            cocartan_matrix,
         ):
             assert isinstance(rank, int)
             assert rank == 3

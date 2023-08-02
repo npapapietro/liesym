@@ -1,16 +1,18 @@
 from __future__ import annotations
 
 from typing import Generator
-from sympy import I, Basic
-from sympy.core.backend import zeros, sqrt
+
+from sympy import Basic, I
+from sympy.core.backend import sqrt, zeros
+
+from ..algebras import A
 
 from ._base import LieGroup
-from ..algebras import A
 
 
 def generalized_gell_mann(dimension: int) -> Generator:
     """Generator of generalized Gell-Mann Matrices. Note order may
-    be different than usual because we generate symmetric, then antisymmetric, 
+    be different than usual because we generate symmetric, then antisymmetric,
     then diagonal.
 
     Args:
@@ -23,12 +25,15 @@ def generalized_gell_mann(dimension: int) -> Generator:
         - https://mathworld.wolfram.com/GeneralizedGell-MannMatrix.html
 
     """
+
     def eij(dim):
         def _(i, j):
             mat = zeros(dim)
             mat[i, j] = 1
             return mat
+
         return _
+
     E = eij(dimension)
 
     # Symmetric
@@ -43,14 +48,13 @@ def generalized_gell_mann(dimension: int) -> Generator:
 
     # Diagonal
     for l in range(dimension - 1):
-        coeff = sqrt(2) / sqrt((l+1) * (l + 2))
-        sum_term = sum([E(j, j) for j in range(l+1)], zeros(dimension))
-        yield coeff * (sum_term - (l+1) * E(l+1, l+1))
+        coeff = sqrt(2) / sqrt((l + 1) * (l + 2))
+        sum_term = sum([E(j, j) for j in range(l + 1)], zeros(dimension))
+        yield coeff * (sum_term - (l + 1) * E(l + 1, l + 1))
 
 
 class SU(LieGroup):
-    """The Special Unitary Group
-    """
+    """The Special Unitary Group"""
 
     def __new__(cls, dim: int):
         if dim < 2:
@@ -62,16 +66,20 @@ class SU(LieGroup):
         self._algebra = A(self.dimension - 1)
         self._generators = None
 
-    def generators(self):
-        r"""Generators for SU(N).  Based off the generalized Gell-Mann matrices $\lambda_a$
+    def generators(self, cartan_only=False,  **kwargs):
+        r"""Returns the generators representations of the group.
+        Generators for SU(N). Based off the generalized Gell-Mann matrices $\lambda_a$
         the generators, $T_a$ are
 
         .. math::
 
-            T_a = \frac{\lambda_a}{2}            
+            T_a = \frac{\lambda_a}{2}
+
+        Args:
+            cartan_only (bool, optional): Only return the cartan generators (diagonalized generators). Defaults to False.
         """
-        if self._generators is None:
-            # typical normalization
-            self._generators = [
-                x / 2 for x in generalized_gell_mann(self.dimension)]
-        return self._generators
+        return super().generators(cartan_only=cartan_only, **kwargs)
+
+        
+    def _calc_generator(self, **_):
+        return [x / 2 for x in generalized_gell_mann(self.dimension)]

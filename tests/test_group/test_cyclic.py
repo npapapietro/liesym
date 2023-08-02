@@ -1,6 +1,5 @@
-from sympy import Symbol, pi, I, exp
-
 from liesym import Z
+from sympy import exp, I, pi, Symbol
 
 
 def test_z():
@@ -12,5 +11,6 @@ def test_z():
 
     assert [Symbol("Z_3")] == z5.sym_product("Z_1", "Z_2")
 
-    assert [(Symbol("Z_2"), exp(4*I*pi/5))
-            ] == z5.sym_product("Z_3", "Z_4", as_tuple=True)
+    assert [(Symbol("Z_2"), exp(4 * I * pi / 5))] == z5.sym_product(
+        "Z_3", "Z_4", as_tuple=True
+    )

@@ -1,5 +1,6 @@
-from sympy import exp, I, simplify, conjugate, log, sympify, Symbol, expand_log
 from functools import reduce
+
+from sympy import conjugate, exp, expand_log, I, log, simplify, Symbol, sympify
 
 from ._base import Group
 
@@ -15,8 +16,7 @@ class U1(Group):
         self._theta = Symbol(r"\theta", real=True)
 
     def generators(self) -> list:
-        """Infinite circle group generators
-        """
+        """Infinite circle group generators"""
         return [exp(I * self._theta)]
 
     def _from_charge(self, q):
@@ -24,7 +24,7 @@ class U1(Group):
 
     def product(self, *args, **kwargs) -> list:
         """Sums up all the charges"""
-        return [simplify(reduce(lambda a, b: a*b, args))]
+        return [simplify(reduce(lambda a, b: a * b, args))]
 
     def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
         """Sums up all the charges, symbolically"""

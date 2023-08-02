@@ -154,60 +154,62 @@ pub mod test {
 
     #[test]
     fn test_to_rational_list() {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        get_np_locals(py);
-        let mat = "[[[1, 2], [2, 1], [3, 1]], [[2, 1], [1, 2], [3, 4]]]";
-        let input = py3darray(py, mat.to_string()).readonly();
-        let result = to_rational_list(input);
+        pyo3::prepare_freethreaded_python();
+        Python::with_gil(|py| {
+            get_np_locals(py);
+            let mat = "[[[1, 2], [2, 1], [3, 1]], [[2, 1], [1, 2], [3, 4]]]";
+            let input = py3darray(py, mat.to_string()).readonly();
+            let result = to_rational_list(input);
 
-        let expected = vec![
-            array![[
-                Ratio::new(1i64, 2),
-                Ratio::new(2i64, 1),
-                Ratio::new(3i64, 1)
-            ]],
-            array![[
-                Ratio::new(2i64, 1),
-                Ratio::new(1i64, 2),
-                Ratio::new(3i64, 4)
-            ]],
-        ];
-        assert_eq!(result, expected);
+            let expected = vec![
+                array![[
+                    Ratio::new(1i64, 2),
+                    Ratio::new(2i64, 1),
+                    Ratio::new(3i64, 1)
+                ]],
+                array![[
+                    Ratio::new(2i64, 1),
+                    Ratio::new(1i64, 2),
+                    Ratio::new(3i64, 4)
+                ]],
+            ];
+            assert_eq!(result, expected);
+        });
     }
 
     #[test]
     fn test_to_rational_matrix() {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        get_np_locals(py);
-        let mat = "
+        pyo3::prepare_freethreaded_python();
+        Python::with_gil(|py| {
+            get_np_locals(py);
+            let mat = "
         [
             [[2,1], [-1,1], [0,1]],
             [[-1, 1], [2, 1], [-1,1]],
             [[0,1], [-1,1], [2, 1]]
         ]";
-        let input = py3darray(py, mat.to_string()).readonly();
-        let result = to_rational_matrix(input);
+            let input = py3darray(py, mat.to_string()).readonly();
+            let result = to_rational_matrix(input);
 
-        let expected = array![
-            [
-                Ratio::new(2i64, 1),
-                Ratio::new(-1i64, 1),
-                Ratio::new(0i64, 1)
-            ],
-            [
-                Ratio::new(-1i64, 1),
-                Ratio::new(2i64, 1),
-                Ratio::new(-1i64, 1)
-            ],
-            [
-                Ratio::new(0i64, 1),
-                Ratio::new(-1i64, 1),
-                Ratio::new(2i64, 1)
-            ]
-        ];
-        assert_eq!(result, expected);
+            let expected = array![
+                [
+                    Ratio::new(2i64, 1),
+                    Ratio::new(-1i64, 1),
+                    Ratio::new(0i64, 1)
+                ],
+                [
+                    Ratio::new(-1i64, 1),
+                    Ratio::new(2i64, 1),
+                    Ratio::new(-1i64, 1)
+                ],
+                [
+                    Ratio::new(0i64, 1),
+                    Ratio::new(-1i64, 1),
+                    Ratio::new(2i64, 1)
+                ]
+            ];
+            assert_eq!(result, expected);
+        });
     }
 
     #[test]

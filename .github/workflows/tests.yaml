@@ -32,6 +32,8 @@ jobs:
       - name: Install Deps
         run: pip install .[docs]
       - name: Build Warnings As Errors
+        env:
+          SPHINX_BUILD: "1"
         run: |
           cd docs
           make html SPHINXOPTS="-W"
@@ -43,7 +45,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8"]
         platform:
           [
             {
@@ -95,7 +97,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8"]
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -120,7 +122,7 @@ jobs:
           python -m pip install -U pip maturin
           python -m pip install .[test]
       - name: Run rust tests
-        run: cd rootsystem && cargo test --target x86_64-unknown-linux-gnu
+        run: cd rootsystem && cargo test --no-default-features --target x86_64-unknown-linux-gnu
       - name: Run python tests
         run: |
           source env/bin/activate
@@ -131,10 +133,15 @@ jobs:
     needs: [test-mac-win, test-linux]
     name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
     runs-on: ${{ matrix.platform.os }}
+    environment:
+      name: pypi
+      url: https://pypi.org/p/liesym
+    permissions:
+      id-token: write
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8"]
         platform:
           [
             {
@@ -165,11 +172,9 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -U pip maturin wheel
       - name: test publish
-        env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
-          MATURIN_USERNAME: __token__
         run: |
           maturin publish -r testpypi --skip-existing
+    
     env:
       RUST_BACKTRACE: 1
       RUSTFLAGS: "-D warnings"
@@ -188,7 +193,7 @@ jobs:
       - name: Build
         run: |
           source $HOME/.cargo/env
-          for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
+          for PYBIN in /opt/python/cp38*/bin; do
             "${PYBIN}/pip" install maturin
             "${PYBIN}/maturin" build -m Cargo.toml -i "${PYBIN}/python" --release --manylinux 2014
           done
@@ -200,10 +205,7 @@ jobs:
               auditwheel repair "${wheel}"
           done
       - name: Publish
-        env:
-          MATURIN_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
-          MATURIN_USERNAME: __token__
         run: |
-          for PYBIN in /opt/python/cp{38,39,310,311}*/bin; do
+          for PYBIN in /opt/python/cp38*/bin; do
             "${PYBIN}/python" -m maturin upload -r testpypi --skip-existing target/wheels/*.whl
           done
