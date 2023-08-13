@@ -19,9 +19,6 @@ num = ">= 0.4.0"
 num-traits = ">= 0.2.14"
 numpy = ">= 0.17.2"
 
-[workspaces]
-members = ["rootsystem"]
-
 [dependencies.rootsystem]
 path = "./rootsystem"
 

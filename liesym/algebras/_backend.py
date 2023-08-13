@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.lib.arraysetops import isin
-from sympy import Matrix, flatten, Rational
+from sympy import flatten, Matrix, Rational
 
-from .. import (_LieAlgebraBackend)
+from .. import _LieAlgebraBackend
 
 
 def _annotate(M: Matrix, basis: str) -> Matrix:
@@ -70,23 +70,27 @@ def _rust_wrapper(func=None, default=None):
         numer, denom = (x.squeeze() for x in result)
         shape = numer.shape
 
-        plain_values = [Rational(f"{x}/{y}")
-                        for x, y in zip(numer.flatten(), denom.flatten())]
+        plain_values = [
+            Rational(f"{x}/{y}") for x, y in zip(numer.flatten(), denom.flatten())
+        ]
         # vectorlike
         if len(shape) == 1:
             shape = (shape[0], 1) if rank == 1 else (1, shape[0])
 
         m = Matrix(*shape, plain_values)
         return [m.row(i) for i in range(m.shape[0])]
+
     return inner
 
 
 def _rust_new(func):
     """Transforms into rust acceptable types"""
+
     def inner(*args, **kwargs):
         cls = args[0]
         nargs = [_to_rational_tuple(x) for x in args[1:]]
         return func(cls, *nargs, **kwargs)
+
     return inner
 
 
@@ -132,9 +136,7 @@ def create_backend(algebra):
         algebra.rank,
         algebra.n_pos_roots,
         algebra.simple_roots,
-        # algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),
         algebra.omega_matrix,
         algebra.omega_matrix.pinv(),
-        # algebra.cocartan_matrix,
     )

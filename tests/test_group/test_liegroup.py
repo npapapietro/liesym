@@ -1,6 +1,5 @@
-from sympy import Matrix, I, LeviCivita, sympify
-
-from liesym import SU, SO, Sp, A, B, C, D
+from liesym import A, B, C, D, SO, Sp, SU
+from sympy import I, LeviCivita, Matrix, sympify
 
 
 def test_su():
@@ -10,15 +9,10 @@ def test_su():
     assert su2.group == "SU"
 
     assert su2.generators() == [
-        Matrix([
-            [0, 1],
-            [1, 0]]) / 2,
-        Matrix([
-            [0, -I],
-            [I,  0]]) / 2,
-        Matrix([
-            [1,  0],
-            [0, -1]]) / 2]
+        Matrix([[0, 1], [1, 0]]) / 2,
+        Matrix([[0, -I], [I, 0]]) / 2,
+        Matrix([[1, 0], [0, -1]]) / 2,
+    ]
 
     assert su2.algebra == A(1)
 
@@ -39,32 +33,15 @@ def test_so():
     assert so3.group == "SO"
 
     assert so3.generators() == [
-        Matrix([
-            [0, I, 0],
-            [-I, 0, 0],
-            [0, 0, 0]]),
-        Matrix([
-            [0, 0, I],
-            [0, 0, 0],
-            [-I, 0, 0]]),
-        Matrix([
-            [0,  0, 0],
-            [0,  0, I],
-            [0, -I, 0]])]
+        Matrix([[0, I, 0], [-I, 0, 0], [0, 0, 0]]),
+        Matrix([[0, 0, I], [0, 0, 0], [-I, 0, 0]]),
+        Matrix([[0, 0, 0], [0, 0, I], [0, -I, 0]]),
+    ]
 
-    assert so3.generators(True) == [
-        (Matrix([
-            [0, I, 0],
-            [-I, 0, 0],
-            [0, 0, 0]]), (1, 0)),
-        (Matrix([
-            [0, 0, I],
-            [0, 0, 0],
-            [-I, 0, 0]]), (2, 0)),
-        (Matrix([
-            [0,  0, 0],
-            [0,  0, I],
-            [0, -I, 0]]), (2, 1))
+    assert so3.generators(indexed=True) == [
+        (Matrix([[0, I, 0], [-I, 0, 0], [0, 0, 0]]), (1, 0)),
+        (Matrix([[0, 0, I], [0, 0, 0], [-I, 0, 0]]), (2, 0)),
+        (Matrix([[0, 0, 0], [0, 0, I], [0, -I, 0]]), (2, 1)),
     ]
 
     assert so3.algebra == B(1)

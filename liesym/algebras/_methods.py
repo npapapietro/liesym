@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from sympy import zeros, Matrix, eye, sqrt
 from enum import Enum
+
+from sympy import acos, eye, Matrix, pi, sqrt, zeros
 
 
 class Basis(Enum):
@@ -12,6 +13,7 @@ class Basis(Enum):
     OMEGA: The omega basis, also known as the dynkin basis, is the basis of the fundamental weights.
     ALPHA: The alpha basis is the basis of the simple roots.
     """
+
     ORTHO = 0
     OMEGA = 1
     ALPHA = 2
@@ -29,15 +31,15 @@ def _basis_lookup(x):
         if x.lower() == "alpha":
             return Basis.ALPHA
         raise ValueError(
-            "Unnsupported basis, string choices are 'ortho','alpha','omega'")
+            "Unnsupported basis, string choices are 'ortho','alpha','omega'"
+        )
     if x is None:
         return Basis.UNDEF
 
-    raise ValueError(
-        "Unnsupported basis, string choices are 'ortho','alpha','omega'")
+    raise ValueError("Unnsupported basis, string choices are 'ortho','alpha','omega'")
 
 
-def _annotate_matrix(M, basis=Basis.ORTHO):
+def annotate_matrix(M, basis=Basis.ORTHO):
     if getattr(M, "basis", None) is None:
         proper_basis = _basis_lookup(basis)
         setattr(M, "basis", proper_basis)
@@ -49,7 +51,7 @@ def _annotate_matrix(M, basis=Basis.ORTHO):
     return M
 
 
-def _cartan_matrix(simple_roots: list[Matrix]) -> Matrix:
+def cartan_matrix(simple_roots: list[Matrix]) -> Matrix:
     rank = len(simple_roots)
     cartan_matrix = zeros(rank, rank)
     for i, sr_i in enumerate(simple_roots):
@@ -58,11 +60,11 @@ def _cartan_matrix(simple_roots: list[Matrix]) -> Matrix:
     return cartan_matrix
 
 
-def _cocartan_matrix(simple_roots: list[Matrix]) -> Matrix:
+def cocartan_matrix(simple_roots: list[Matrix]) -> Matrix:
     return Matrix([2 * x / x.dot(x) for x in simple_roots])
 
 
-def _quadratic_form(cartan_matrix: Matrix, simple_roots: list[Matrix]) -> Matrix:
+def quadratic_form(cartan_matrix: Matrix, simple_roots: list[Matrix]) -> Matrix:
     rank = len(simple_roots)
     quadratic_form = zeros(rank, rank)
 
@@ -75,7 +77,28 @@ def _quadratic_form(cartan_matrix: Matrix, simple_roots: list[Matrix]) -> Matrix
     return cartan_matrix.pinv() * quadratic_form
 
 
-def _reflection_matricies(simple_roots: list[Matrix]) -> list[Matrix]:
-    def reflection_matrix(v): return (
-        eye(len(v)) - 2 * v.T * v / v.dot(v)).as_immutable()
+def reflection_matrix(v):
+    return (eye(len(v)) - 2 * v.T * v / v.dot(v)).as_immutable()
+
+
+def reflection_matricies(simple_roots: list[Matrix]) -> list[Matrix]:
     return [reflection_matrix(x) for x in simple_roots]
+
+
+def root_angle(a: Matrix, b: Matrix):
+    """Calculates the angle between two roots a and b.
+
+    Args:
+        a (Matrix): A vector like matrix
+        b (Matrix): A vector like matrix
+
+    Returns:
+        Integer: Resulting angle
+
+    Examples
+    =========
+    >>> import liesym as ls
+    >>> sr = ls.C(3).simple_roots
+    >>> assert ls.root_angle(sr[0], sr[1]) == 120
+    """
+    return acos(a.dot(b) / sqrt(a.dot(a) * b.dot(b))) * 360 / (2 * pi)

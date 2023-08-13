@@ -1150,15 +1150,5 @@ pub mod test {
                 "Group A\nTwo term get_irrep_by_dim is not correct"
             );
         }
-        // {
-        //     let algebra = helper_liealgebra(GroupTestType::B);
-
-        //     let irreps = algebra.get_irrep_by_dim(2800, 3);
-        //     let expected = vec![to_ratio(array![[1, 2, 1]])];
-        //     assert_eq!(
-        //         irreps, expected,
-        //         "Group B\nTwo term get_irrep_by_dim is not correct"
-        //     );
-        // }
     }
 }

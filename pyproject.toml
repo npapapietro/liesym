@@ -2,6 +2,9 @@
 build-backend = "maturin"
 requires = ["maturin>=0.13,<0.14"]
 
+[tool.maturin]
+module-name="liesym._liesym_rust"
+
 [project]
 authors = [{name = "Nathan Papapietro", email = "npapapietro95@gmail.com"}]
 classifiers = [
@@ -11,12 +14,14 @@ classifiers = [
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
 ]
 dependencies = ['numpy>=1.19', 'sympy>=1.7.1', 'symengine>=0.7.2']
 description = "Sympy Lie Algebra extensions powered by rust."
 name = "liesym"
 readme = "README.md"
 version = "0.7.0"
+requires-python = ">=3.8"
 
 [project.urls]
 Documentation = "https://npapapietro.github.io/liesym"
@@ -26,6 +31,7 @@ Homepage = "https://github.com/npapapietro/liesym"
 dev = [
   "autopep8>=1.5.6",
   "jupyter>=1.0.0",
+  "ufmt>=2.2.0"
 ]
 docs = [
   "Sphinx>=4.1.1",
@@ -41,3 +47,4 @@ addopts = "--doctest-modules"
 testpaths = [
   "tests",
 ]
+pythonpath = ["liesym"]

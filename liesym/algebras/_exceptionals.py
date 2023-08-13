@@ -1,4 +1,4 @@
-from sympy import Matrix, S, flatten, sympify
+from sympy import flatten, Matrix, S, sympify
 
 from ._base import LieAlgebra
 
@@ -6,9 +6,9 @@ from ._base import LieAlgebra
 class F4(LieAlgebra):
     r"""The compact lie group of type F4. The dynkin diagram for this algebra is
 
-        .. image:: ../../docs/source/images/type_F4.png
-           :height: 50px
-           :align: center
+    .. image:: ../../docs/source/images/type_F4.png
+       :height: 50px
+       :align: center
 
     """
 
@@ -41,20 +41,18 @@ class F4(LieAlgebra):
 class G2(LieAlgebra):
     r"""The compact lie group of type G2. The dynkin diagram for this algebra is
 
-        .. image:: ../../docs/source/images/type_G2.png
-           :height: 50px
-           :align: center
+    .. image:: ../../docs/source/images/type_G2.png
+       :height: 50px
+       :align: center
 
     """
+
     def __new__(cls):
         return super().__new__(cls, "G", sympify(2))
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self._simple_roots = [
-            Matrix([[0, 1, -1]]),
-            Matrix([[1, -2, 1]])
-        ]
+        self._simple_roots = [Matrix([[0, 1, -1]]), Matrix([[1, -2, 1]])]
 
     @property
     def dimension(self) -> int:
@@ -72,18 +70,17 @@ class G2(LieAlgebra):
 
 def _e_series_default_roots(n):
     e8 = [
-        [S.Half, -S.Half, -S.Half,
-         -S.Half, -S.Half, -S.Half,
-         -S.Half, S.Half],
+        [S.Half, -S.Half, -S.Half, -S.Half, -S.Half, -S.Half, -S.Half, S.Half],
         [-1, 1, 0, 0, 0, 0, 0, 0],
         [0, -1, 1, 0, 0, 0, 0, 0],
         [0, 0, -1, 1, 0, 0, 0, 0],
         [0, 0, 0, -1, 1, 0, 0, 0],
         [0, 0, 0, 0, -1, 1, 0, 0],
         [0, 0, 0, 0, 0, -1, 1, 0],
-        [1, 1, 0, 0, 0, 0, 0, 0]]
+        [1, 1, 0, 0, 0, 0, 0, 0],
+    ]
 
-    roots = e8[:n - 1] + [e8[-1]]
+    roots = e8[: n - 1] + [e8[-1]]
     return [Matrix([roots[i]]) for i in range(n)]
 
 
@@ -113,6 +110,7 @@ class E(LieAlgebra):
            E8
 
     """
+
     def __new__(cls, n):
         if n not in [6, 7, 8]:
             raise ValueError("Algebra series E only defined for 6, 7 and 8}")
@@ -128,7 +126,7 @@ class E(LieAlgebra):
 
     @property
     def n_pos_roots(self) -> int:
-        return [36, 63, 120][self.rank-6]
+        return [36, 63, 120][self.rank - 6]
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""

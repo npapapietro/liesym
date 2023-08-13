@@ -1,10 +1,11 @@
 from __future__ import annotations
+from functools import lru_cache
 
 from typing import Tuple, Union
-from sympy import Symbol, Basic, I, Basic, trace, sympify, Matrix
+
+from sympy import Basic, Basic, I, Matrix, Symbol, sympify, trace
 from sympy.core.backend import Matrix as _CMatrix
 from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
-
 
 from ..algebras import LieAlgebra
 
@@ -17,7 +18,7 @@ def commutator(A: Basic, B: Basic, anti=False) -> Basic:
     .. math::
         [ A, B ] = A * B - B * A
 
-    Otherwise 
+    Otherwise
 
     .. math::
         \{A, B\} = A * B + B * A
@@ -38,7 +39,7 @@ def commutator(A: Basic, B: Basic, anti=False) -> Basic:
 class Group(Basic):
     """The base class for all (lie) groups. The methods and properties
     in this class are basis independent and apply in a general sense. In
-    order to write down the roots as matricies and vectors, we choose a 
+    order to write down the roots as matricies and vectors, we choose a
     representation.
     """
 
@@ -49,14 +50,12 @@ class Group(Basic):
 
     @property
     def group(self) -> str:
-        """Group type
-        """
+        """Group type"""
         return self._group
 
     @property
     def dimension(self) -> int:
-        """Group dimension
-        """
+        """Group dimension"""
         return self.args[0]
 
     def generators(self) -> list:
@@ -96,23 +95,20 @@ class Group(Basic):
 
 
 class LieGroup(Group):
-    """Group that has a Lie Algebra associated with it.
-    """
+    """Group that has a Lie Algebra associated with it."""
 
     def __init__(self, *args, **kwargs):
-        """Used to set lazy properties
-        """
+        """Used to set lazy properties"""
         self._algebra = None
         self._structure_constants = (None, None)
 
     @property
     def algebra(self) -> LieAlgebra:
-        """Backing Lie Algebra
-        """
+        """Backing Lie Algebra"""
         return self._algebra
 
-    def product(self, *args, **kwargs) -> list['Matrix']:
-        """Uses tensor product decomposition to find the products between the 
+    def product(self, *args, **kwargs) -> list["Matrix"]:
+        """Uses tensor product decomposition to find the products between the
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`
 
         Returns:
@@ -130,8 +126,10 @@ class LieGroup(Group):
         # type: ignore
         return self.algebra.tensor_product_decomposition(args, **kwargs)
 
-    def sym_product(self, *args, as_tuple=False, **kwargs) -> list[Union[Symbol, Tuple[Matrix, Symbol]]]:
-        r"""Uses tensor product decomposition to find the products between the 
+    def sym_product(
+        self, *args, as_tuple=False, **kwargs
+    ) -> list[Union[Symbol, Tuple[Matrix, Symbol]]]:
+        r"""Uses tensor product decomposition to find the products between the
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`.
 
         Args:
@@ -144,7 +142,7 @@ class LieGroup(Group):
         ========
         >>> from liesym import SO
         >>> so10 = SO(10)
-        >>> so10.sym_product("10","45")        
+        >>> so10.sym_product("10","45")
         [120, 10, 320]
         >>> so10.sym_product("10","45", as_tuple=True)
         [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]
@@ -212,7 +210,8 @@ class LieGroup(Group):
         if len(idxs) > 0:
             if len(idxs) != 3:
                 raise ValueError(
-                    "3 indices need to be passed in if calling `structure_constants` with indices")
+                    "3 indices need to be passed in if calling `structure_constants` with indices"
+                )
             else:
                 [i, j, k] = idxs
                 return self._structure_constants[0][i, j, k]
@@ -231,11 +230,10 @@ class LieGroup(Group):
         for i in range(n):
             for j in range(n):
                 for k in range(n):
-                    f[i, j, k] = -2 * I * \
-                        trace(commutator(gens[i], gens[j]) * gens[k])
-                    d[i, j, k] = 2 * \
-                        trace(commutator(
-                            gens[i], gens[j], anti=True) * gens[k])
+                    f[i, j, k] = -2 * I * trace(commutator(gens[i], gens[j]) * gens[k])
+                    d[i, j, k] = 2 * trace(
+                        commutator(gens[i], gens[j], anti=True) * gens[k]
+                    )
         return (f, d)
 
     def d_coeffecients(self, *idxs: int) -> Union[Basic, Matrix]:
@@ -261,18 +259,21 @@ class LieGroup(Group):
         if len(idxs) > 0:
             if len(idxs) != 3:
                 raise ValueError(
-                    "3 indices need to be passed in if calling `structure_constants` with indices")
+                    "3 indices need to be passed in if calling `structure_constants` with indices"
+                )
             else:
                 [i, j, k] = idxs
                 return self._structure_constants[1][i, j, k]
         return self._structure_constants[1]
 
-    def dynkin_index(self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs) -> Basic:
-        """Returns the dykin index for the arbitrary irreducible representation. This method 
+    def dynkin_index(
+        self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs
+    ) -> Basic:
+        """Returns the dykin index for the arbitrary irreducible representation. This method
         extends the underlying algebra method by allowing symbolic dim names to be passed.
 
         Args:
-            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default 
+            irrep (Union[Basic, Matrix, str, int], optional): If None is passed, will default
             to adjoint rep. Defaults to None.
             kwargs: Pass through to LieAlgebra.dynkin_index
 
@@ -287,10 +288,11 @@ class LieGroup(Group):
             irrep = self.algebra.irrep_lookup(str(irrep))
             return self.algebra.dynkin_index(irrep)
         else:
-            raise TypeError(
-                "Only sympy basic types and sympy.Matrix are allowed.")
+            raise TypeError("Only sympy basic types and sympy.Matrix are allowed.")
 
-    def quadratic_casimir(self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs) -> Basic:
+    def quadratic_casimir(
+        self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs
+    ) -> Basic:
         """Returns the quadratic casimir for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing
         symbolic dim names to be passed.
 
@@ -309,5 +311,23 @@ class LieGroup(Group):
             irrep = self.algebra.irrep_lookup(str(irrep))
             return self.algebra.quadratic_casimir(irrep)
         else:
-            raise TypeError(
-                "Only sympy basic types and sympy.Matrix are allowed.")
+            raise TypeError("Only sympy basic types and sympy.Matrix are allowed.")
+
+    @lru_cache
+    def generators(self, cartan_only=False, **kwargs):
+        """Returns the generators representations of the group.
+
+        Args:
+            cartan_only (bool, optional): Only return the cartan generators (diagonalized generators). Defaults to False.
+
+        Abstract
+        """
+        generators = self._calc_generator(**kwargs)
+        
+        if cartan_only:
+            return [x for x in generators if x.is_diagonal()]
+        else:
+            return generators
+        
+    def _calc_generator(self, **_):
+        raise NotImplementedError("This method needs calculation")
