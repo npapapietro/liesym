@@ -3,10 +3,10 @@ build-backend = "maturin"
 requires = ["maturin>=0.13,<0.14"]
 
 [tool.maturin]
-module-name="liesym._liesym_rust"
+module-name = "liesym._liesym_rust"
 features = ["pyo3/extension-module"]
 [project]
-authors = [{name = "Nathan Papapietro", email = "npapapietro95@gmail.com"}]
+authors = [{ name = "Nathan Papapietro", email = "npapapietro95@gmail.com" }]
 classifiers = [
   "Topic :: Scientific/Engineering :: Mathematics",
   "Topic :: Scientific/Engineering :: Physics",
@@ -28,11 +28,7 @@ Documentation = "https://npapapietro.github.io/liesym"
 Homepage = "https://github.com/npapapietro/liesym"
 
 [project.optional-dependencies]
-dev = [
-  "autopep8>=1.5.6",
-  "jupyter>=1.0.0",
-  "ufmt>=2.2.0"
-]
+dev = ["autopep8>=1.5.6", "jupyter>=1.0.0", "ufmt>=2.2.0", "mypy>=1.6.1"]
 docs = [
   "Sphinx>=4.1.1",
   "groundwork-sphinx-theme>=1.1.1",
@@ -44,7 +40,4 @@ test = ["pytest>=6.2.3"]
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules"
-testpaths = [
-  "tests",
-]
-pythonpath = ["liesym"]
+testpaths = ["tests"]

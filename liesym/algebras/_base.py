@@ -2,15 +2,12 @@ from __future__ import annotations
 
 import re
 from copy import deepcopy
-from functools import cmp_to_key, lru_cache
-from typing import Tuple, Union
+from functools import cached_property, cmp_to_key, lru_cache
+from typing import Callable, Literal, Tuple, TYPE_CHECKING, TypeVar, Union
 
-from sympy import Matrix, ones, Symbol, sympify
-
-from sympy.core import Basic
+from sympy import Basic, Matrix, ones, Symbol, sympify
 
 from ._backend import create_backend
-
 from ._methods import (
     _basis_lookup,
     annotate_matrix,
@@ -20,6 +17,17 @@ from ._methods import (
     quadratic_form,
     reflection_matricies,
 )
+
+if TYPE_CHECKING:
+    F = TypeVar("F", bound=Callable)
+
+    def lru_cache(func: F) -> F:
+        ...
+
+else:
+    from functools import lru_cache  # noqa
+
+BASIS = Literal["ortho", "omega", "alpha"]
 
 
 class NumericSymbol(Symbol):
@@ -56,42 +64,28 @@ class LieAlgebra(Basic):
 
     """
 
-    def __new__(cls, series: str, rank: int):
+    _series: str
+    _simple_roots: list[Matrix]
+
+    def __new__(cls, series: str, rank: int, simple_roots: list[Matrix]):
         """
         Returns a new instance of a Sympy object
 
         Args:
             series (str): The series type
             rank (int): The rank of the algebra
+            simple_roots (list[Matrix]): Simple roots of the algebra
         """
         obj = super().__new__(cls, sympify(rank))
         obj._series = series
+
+        assert (
+            len(simple_roots) == rank
+        ), "Number of simple roots do not match rank of algebra"
+
+        obj._simple_roots = [sympify(x) for x in simple_roots]
+
         return obj
-
-    def __init__(self, *args, **kwargs):
-        """Used to set lazy properties
-
-        We avoid using functools.cached_property to allow
-        the gc to collect as well as mutation of the simple
-        roots to propogate
-        """
-        self._simple_roots = None
-        # init all to none
-        self._clear_cached_properties()
-
-    def _clear_cached_properties(self):
-        """Clears all the cached properties. Useful if checking
-        calculation, performance or updating simple roots"""
-        self._positive_roots = None
-        self._cartan_matrix = None
-        self._omega_matrix = None
-        self._quadratic_form = None
-        self._cocartan_matrix = None
-        self._reflection_matricies = None
-        self._fundamental_weights = None
-        self._backend = None
-        self._root_system = None
-        self._adjoint_casimir = None
 
     @property
     def series(self) -> str:
@@ -101,7 +95,7 @@ class LieAlgebra(Basic):
     @property
     def rank(self) -> int:
         """Algebra rank"""
-        return self.args[0]
+        return self.args[0]  # type:ignore
 
     @property
     def dimension(self) -> int:
@@ -109,6 +103,7 @@ class LieAlgebra(Basic):
 
         Abstract
         """
+        raise NotImplementedError()
 
     @property
     def n_pos_roots(self) -> int:
@@ -116,51 +111,29 @@ class LieAlgebra(Basic):
 
         Abstract
         """
+        raise NotImplementedError()
 
     @property
     def n_roots(self) -> int:
         """Total number of roots in the algebra"""
         return 2 * self.n_pos_roots + self.rank
 
-    @property
-    def simple_roots(self) -> list[Matrix]:
+    @lru_cache
+    def simple_roots(self, basis: BASIS = "ortho") -> list[Matrix]:
         """Returns a list of Sympy matrix (1,dimension)
         objects representing a chosen basis of the algebra.
+        `simple_roots` define the entire representation of the algebra.
 
-        Basis: Orthogonal
 
-
-        This method can be overridden to choose your own basis,
-        be sure to do this before any other properties are called
-        as they are lazily evaluated and the simple_roots define
-        the entire representation of the algebra.
-
-        Examples
-        ========
-
-        .. code-block:: python
-
-            from liesym import F4
-
-            algebra = F4()
-            my_simple_roots = [
-                    # my basis
-                ]
-            algebra.simple_roots = my_simple_roots
-
+        Args:
+            basis ("ortho" | "omega" | "alpha", optional): Basis to return simple roots in. Defaults to "ortho".
         """
-        return [annotate_matrix(x) for x in self._simple_roots]
+        if basis == "ortho":
+            return [annotate_matrix(x) for x in self._simple_roots]
+        else:
+            return [self._to_basis(x, basis, "ortho") for x in self.simple_roots()]
 
-    @simple_roots.setter
-    def simple_roots(self, val: list[Matrix]):
-        """Overrides the default representation of the algebras simple_roots.
-        Please ensure that roots are in Orthogonal Basis
-        """
-        assert len(val) == len(self._simple_roots), "Incorrect number of simple roots"
-        self._simple_roots = val
-        self._clear_cached_properties()
-
-    @property
+    @cached_property
     def cartan_matrix(self) -> Matrix:
         r"""For a given simple Lie algebra the elements $a_{ij}$ can be
         generated by
@@ -177,11 +150,9 @@ class LieAlgebra(Basic):
         Returns:
             Matrix: Cartan Matrix as a Sympy object
         """
-        if self._cartan_matrix is None:
-            self._cartan_matrix = cartan_matrix(self.simple_roots)
-        return self._cartan_matrix
+        return cartan_matrix(self.simple_roots())
 
-    @property
+    @cached_property
     def cocartan_matrix(self) -> Matrix:
         """The cocartan matrix rows are generated from the coroots of
         the algebra such that multiplication by a simple root will
@@ -190,11 +161,9 @@ class LieAlgebra(Basic):
         Returns:
             Matrix: Cocartan Matrix as a Sympy object
         """
-        if self._cocartan_matrix is None:
-            self._cocartan_matrix = cocartan_matrix(self.simple_roots)
-        return self._cocartan_matrix
+        return cocartan_matrix(self.simple_roots())
 
-    @property
+    @cached_property
     def omega_matrix(self) -> Matrix:
         """The rows of the omega matrix are the fundamental weights
         of the algebra.
@@ -202,11 +171,9 @@ class LieAlgebra(Basic):
         Returns:
             Matrix: Omega Matrix as a Sympy object
         """
-        if self._omega_matrix is None:
-            self._omega_matrix = self.cocartan_matrix.pinv().T
-        return self._omega_matrix
+        return self.cocartan_matrix.pinv().T
 
-    @property
+    @cached_property
     def metric_tensor(self) -> Matrix:
         """Also known as the quadratic form, the metric tensor
         serves as the metrix for the inner product of two roots or weights
@@ -215,11 +182,9 @@ class LieAlgebra(Basic):
         Returns:
             Matrix: Metric Tensor as a Sympy object
         """
-        if self._quadratic_form is None:
-            self._quadratic_form = quadratic_form(self.cartan_matrix, self.simple_roots)
-        return self._quadratic_form
+        return quadratic_form(self.cartan_matrix, self.simple_roots())
 
-    @property
+    @cached_property
     def reflection_matricies(self) -> list[Matrix]:
         """Returns a list of reflection matrices built from
         rotations about each simple root.
@@ -227,48 +192,56 @@ class LieAlgebra(Basic):
         Returns:
             list[Matrix]: list of Sympy Matrices
         """
-        if self._reflection_matricies is None:
-            self._reflection_matricies = reflection_matricies(self.simple_roots)
-        return self._reflection_matricies
+        return reflection_matricies(self.simple_roots())
 
-    @property
-    def fundamental_weights(self) -> list[Matrix]:
+    @lru_cache
+    def fundamental_weights(self, basis: BASIS = "ortho") -> list[Matrix]:
         """Returns the fundamental weights of the algebra.
 
-        Basis: Orthogonal
+        Args:
+            basis ("ortho" | "omega" | "alpha", optional): Basis to return result in. Defaults to "ortho".
 
         Returns:
             list[Matrix]: list of Sympy Matrices
         """
-        if self._fundamental_weights is None:
-            self._fundamental_weights = [
+        if basis == "ortho":
+            return [
                 annotate_matrix(self.omega_matrix.row(i))
                 for i in range(self.omega_matrix.rows)
             ]
-        return self._fundamental_weights
+        else:
+            return [
+                self._to_basis(x, basis, "ortho") for x in self.fundamental_weights()
+            ]
 
-    @property
-    def positive_roots(self) -> list[Matrix]:
+    @lru_cache
+    def positive_roots(self, basis: BASIS = "ortho") -> list[Matrix]:
         """Returns the postive roots of the algebra. They are sorted
         first by their distance from the highest root and then by
         tuple ordering (convention).
 
-        Basis: Orthogonal
+        Args:
+            basis ("ortho" | "omega" | "alpha", optional): Basis to return result in. Defaults to "ortho".
 
         Returns:
             list[Matrix]: list of Sympy Matrices
         """
-        if self._positive_roots is None:
-            self._positive_roots = self.root_system()[: self.n_pos_roots]
-        return self._positive_roots
+        if basis == "ortho":
+            return self.root_system()[: self.n_pos_roots]
+        else:
+            return [self._to_basis(x, basis, "ortho") for x in self.positive_roots()]
 
-    @property
+    @cached_property
     def _backend_instance(self):
-        if self._backend is None:
-            self._backend = create_backend(self)
-        return self._backend
+        return create_backend(self)
 
-    def orbit(self, weight: Matrix, stabilizers=None, basis="ortho") -> list[Matrix]:
+    def orbit(
+        self,
+        weight: Matrix,
+        stabilizers=None,
+        basis: BASIS = "ortho",
+        weight_basis: BASIS = "ortho",
+    ) -> list[Matrix]:
         """Returns the orbit of the weight or root by reflecting it
         a plane. A stabilizer may be passed to calculate the orbit using
         the Orbit-Stabilizer theorem.
@@ -279,6 +252,8 @@ class LieAlgebra(Basic):
             weight (Matrix): A Matrix of shape (1, rank)
             stabilizer (Iterable of ints, optional): Per Orbit-Stabilizer
             theorem, integer iterable of simple root indexes. Defaults to None.
+            basis ("ortho" | "omega" | "alpha", optional): Basis to return orbit in, Defaults to "ortho".
+            weight_basis ("ortho" | "omega" | "alpha", optional): Basis of weight, this will be a fallback if weight is not annotated. Defaults to "ortho".
 
         Sources:
         - https://en.wikipedia.org/wiki/Coadjoint_representation#Coadjoint_orbit
@@ -286,11 +261,38 @@ class LieAlgebra(Basic):
 
         """
 
-        weight = self.to_ortho(weight, "ortho")
-        return [
-            self.to_ortho(x, "ortho")
-            for x in self._backend_instance.orbit(weight, stabilizers)
-        ]
+        self._orbit(sympify(weight), stabilizers, basis, weight_basis)
+
+    @lru_cache
+    def _orbit(
+        self,
+        weight: Matrix,
+        stabilizers=None,
+        basis: BASIS = "ortho",
+        weight_basis: BASIS = "ortho",
+    ) -> list[Matrix]:
+        if basis == "ortho":
+            weight = self.to_ortho(weight, weight_basis)
+            return [
+                self.to_ortho(x, "ortho")
+                for x in self._backend_instance.orbit(weight, stabilizers)
+            ]
+        elif basis == "omega":
+            return [
+                self.to_omega(x, "ortho")
+                for x in self.orbit(
+                    weight, stabilizers=stabilizers, weight_basis=weight_basis
+                )
+            ]
+        elif basis == "alpha":
+            return [
+                self.to_alpha(x, "ortho")
+                for x in self.orbit(
+                    weight, stabilizers=stabilizers, weight_basis=weight_basis
+                )
+            ]
+        else:
+            raise ValueError(f"Unsupported basis `{basis}`")
 
     def dim_name(self, irrep: Matrix, basis="omega") -> NumericSymbol:
         r"""Returns a sympy formatted symbol for the irrep.
@@ -305,6 +307,14 @@ class LieAlgebra(Basic):
         >>> a3 = A(3)
         >>> assert str(a3.dim_name(Matrix([[1, 1, 0]]))) == '\\bar{20}'
         """
+        hashable = sympify(irrep)
+        annotate_matrix(hashable, basis)
+        return self._dim_name(hashable, basis)
+
+    @lru_cache
+    def _dim_name(self, irrep: Matrix, basis="omega") -> NumericSymbol:
+        """See docstring on LieAlgebra.dim_name for info, this is the caching
+        version it calls"""
         irrep = self.to_omega(irrep, basis)
 
         dim = self.dim(irrep)
@@ -336,7 +346,9 @@ class LieAlgebra(Basic):
         return self._dim_name_fmt(dim, has_conjugate, num_primes, so8label)
 
     @lru_cache
-    def irrep_lookup(self, dim: Union[Symbol, str], max_dynkin_digit=5) -> Matrix:
+    def irrep_lookup(
+        self, dim: Union[Symbol, str], max_dynkin_digit=5, basis: BASIS = "omega"
+    ) -> Matrix:
         """Returns the irrep matrix for the dimension.
 
         Args:
@@ -371,10 +383,10 @@ class LieAlgebra(Basic):
             dd += 1
             for c in self.get_irrep_by_dim(n_dim, dd):
                 if self.dim_name(c) == dim:
-                    return c
+                    return self._to_basis(c, basis, "omega")
         raise KeyError(f"Irrep {dim} not found.")
 
-    def conjugate(self, irrep: Matrix) -> Matrix:
+    def conjugate(self, irrep: Matrix, basis: BASIS = "omega") -> Matrix:
         """Finds the conjugate irrep. If it is the same
         as the original irrep, you have a Real Irrep, otherwise
         it's a Complex Irrep.
@@ -395,7 +407,10 @@ class LieAlgebra(Basic):
             irrep_10 = Matrix([[1, 0, 0, 0, 0]])
             assert irrep_10 == SO10.conjugate(irrep_10)
         """
-        return self.to_omega(self._backend_instance.conjugate(irrep)[0], "omega")
+        raw = self._backend_instance.conjugate(irrep)
+        if len(raw) == 0:
+            raise ValueError(f"Conjugate for {irrep} could not be found")
+        return self._to_basis(raw[0], basis, "omega")
 
     def _is_s08(self, irrep):
         return ""
@@ -411,7 +426,7 @@ class LieAlgebra(Basic):
     def _congruency_class(self, irrep):
         return 0
 
-    def max_dynkin_digit(self, irrep: Matrix) -> int:
+    def max_dynkin_digit(self, irrep: Matrix) -> int:  # type: ignore
         """Returns the max Dynkin Digit for the representations"""
         pass
 
@@ -431,7 +446,11 @@ class LieAlgebra(Basic):
 
     @lru_cache
     def get_irrep_by_dim(
-        self, dim: int, max_dd: int = 3, with_symbols=False
+        self,
+        dim: int,
+        max_dd: int = 3,
+        with_symbols: bool = False,
+        basis: BASIS = "omega",
     ) -> list[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
         r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by using `itertools.product`
         which can become expensive for large so searching max_dd > 3 will be
@@ -441,6 +460,7 @@ class LieAlgebra(Basic):
             dim (int): Dimension to query
             max_dd (int, optional): The max dynkin digit to use. Defaults to 3.
             with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defaults to False.
+            basis ("ortho" | "omega" | "alpha", optional): Basis to return orbit in, Defaults to "ortho".
 
         Returns:
             list[Union[Matrix, Tuple[Matrix,NumericSymbol]]]: If `with_symbols=True` will return a list of tuples.
@@ -462,15 +482,27 @@ class LieAlgebra(Basic):
         >>> a3.get_irrep_by_dim(20, with_symbols=True)
         [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]
         """
-        backend_results: list[Matrix] = (
-            self._backend_instance.get_irrep_by_dim(dim, max_dd) or []
-        )
-        results = [self.to_omega(x, "omega") for x in backend_results]
-        if with_symbols:
-            results = [(x, self.dim_name(x)) for x in results]
-        return results
 
-    def dim(self, irrep: Matrix, basis="omega") -> int:
+        if basis == "omega":
+            backend_results: list[Matrix] = (
+                self._backend_instance.get_irrep_by_dim(dim, max_dd) or []
+            )
+            results = [self.to_omega(x, "omega") for x in backend_results]
+            if with_symbols:
+                results = [(x, self.dim_name(x)) for x in results]
+            return results
+        else:
+            omega_results = self.get_irrep_by_dim(
+                dim=dim, max_dd=max_dd, with_symbols=False, basis="omega"
+            )
+            results = [self._to_basis(x, basis, "omega") for x in omega_results]
+            if with_symbols:
+                results = [
+                    (x, self.dim_name(y)) for x, y in zip(results, omega_results)
+                ]
+            return results
+
+    def dim(self, irrep: Matrix, basis: BASIS = "omega") -> int:
         r"""Returns the dimension of the weight, root or irreducible representations.
         This follows Weyl's dimension formula:
 
@@ -487,30 +519,33 @@ class LieAlgebra(Basic):
         >>> a2 = A(2)
         >>> assert a2.dim(Matrix([[1,0]])) == 3
         """
-        basis = _basis_lookup(basis)
-        annotate_matrix(irrep, basis)
-        irrep = self.to_omega(irrep)
+        irrep = self.to_omega(sympify(irrep), basis)
+        return self._backend_instance.dim(irrep)
 
-        return sympify(self._backend_instance.dim(irrep))
-
-    def root_system(self) -> list[Matrix]:
+    @lru_cache
+    def root_system(self, basis: BASIS = "omega") -> list[Matrix]:
         """Returns the entire rootsystem of the algebra. This
         includes the positive, negative and zeros of the algebra.
 
-        Basis: Orthogonal
+        Args:
+            basis ("ortho" | "omega" | "alpha", optional): Basis of incoming weights. If not set, will implicitly set. Defaults to 'omega'.
 
         Returns:
             list[Matrix]: list of ordered roots.
         """
-        if self._root_system is None:
-            self._root_system = [
-                self.to_ortho(x, basis="omega")
+        if basis == "omega":
+            return [
+                self._to_basis(x, to_basis="omega", from_basis="omega")
                 for x in self._backend_instance.root_system()
             ]
-        return self._root_system
+        else:
+            return [
+                self._to_basis(x, to_basis=basis, from_basis="omega")
+                for x in self.root_system()
+            ]
 
     def tensor_product_decomposition(
-        self, weights: list[Matrix], basis="omega", **_
+        self, weights: list[Matrix], basis: BASIS = "omega", **_
     ) -> list[Matrix]:
         """Returns the tensor product between irreducible representations
         as a the tensor sum of the irreducible representations of their
@@ -519,10 +554,10 @@ class LieAlgebra(Basic):
 
         Args:
             weights (list[Matrix]): A list of fundamental weights to take the tensor product between
-            basis (str, Optional): Basis of incoming weights. If not set, will implicitly set. Defaults to 'omega'.
+            basis ("ortho" | "omega" | "alpha", optional): Basis of incoming weights and result. If not set, will implicitly set. Defaults to 'omega'.
 
         Returns:
-            list[Matrix]: list of weights decomposed from the tensor product. Basis: Omega
+            list[Matrix]: list of weights decomposed from the tensor product
 
 
         Examples
@@ -550,7 +585,7 @@ class LieAlgebra(Basic):
                 # i,j reversed because pop takes from -1 index
                 results += self._backend_instance.tensor_product_decomposition(j, i)
             decomp = results
-        return [self.to_omega(x, "omega") for x in decomp]
+        return [self._to_basis(x, basis, "omega") for x in decomp]
 
     def to_ortho(self, x: Matrix, basis=None) -> Matrix:
         """Rotates to orthogonal basis
@@ -595,7 +630,6 @@ class LieAlgebra(Basic):
         Returns:
             Matrix: Matrix in omega basis.
         """
-        basis = _basis_lookup(basis)
         annotate_matrix(x, basis)
 
         if x.basis is Basis.OMEGA:
@@ -664,15 +698,12 @@ class LieAlgebra(Basic):
         Returns:
             Basic: Rational number
         """
-        if irrep is None:
-            # return sympify(1)
-            irrep = self.adjoint_rep
-            basis = irrep.basis
-        irrep = self.to_omega(irrep, basis=basis)
+        adj = self.adjoint_rep("omega")
+        irrep = self.to_omega(irrep, basis) or adj
         rho = 2 * ones(1, self.rank)
         return self._scalar_product(irrep, irrep + rho, basis="omega") / 2
 
-    def dynkin_index(self, irrep: Matrix = None, basis="omega") -> Basic:
+    def dynkin_index(self, irrep: Matrix = None, basis: BASIS = "omega") -> Basic:
         r"""Calculates the dynkin index of an arbitrary irrep. This
         is also called in literature second-order index, $I_2(R)$. If no irrep
         is passed, basis and rep default to the algebra's adjoint rep.
@@ -685,15 +716,26 @@ class LieAlgebra(Basic):
         where the $dim$ is the dimension formula, $adj$ is the adjoint irrep
         and $c$ is the quadratic casimir (`Liealgebra.casimir`).
         """
-        irrep = irrep or self.adjoint_rep
-        basis = basis if irrep else self.adjoint_rep.basis
-        d_r = self.dim(irrep, basis=basis)
-        d_a = self.dim(self.adjoint_rep)
-        c_r = self.quadratic_casimir(irrep, basis=basis)
+        adj = self.adjoint_rep("omega")
+        irrep = self.to_omega(irrep, basis) or adj
+        d_r = self.dim(irrep, basis="omega")
+        d_a = self.dim(adj)
+        c_r = self.quadratic_casimir(irrep, basis="omega")
         return d_r * c_r / d_a
 
-    @property
-    def adjoint_rep(self) -> Matrix:
+    def adjoint_rep(self, basis: BASIS = "ortho") -> Matrix:
         """Returns the adjoint irrep. This is the highest weight of the
         root system."""
-        return self.positive_roots[0]
+        return self.positive_roots(basis)[0]
+
+    def _to_basis(self, x: Matrix, to_basis: BASIS, from_basis: BASIS):
+        if to_basis == "ortho":
+            fn = self.to_ortho
+        elif to_basis == "omega":
+            fn = self.to_omega
+        elif to_basis == "alpha":
+            fn = self.to_alpha
+        else:
+            raise ValueError(f"Unsupported basis `{to_basis}`")
+
+        return fn(x, from_basis)

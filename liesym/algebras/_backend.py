@@ -1,14 +1,7 @@
 import numpy as np
-from numpy.lib.arraysetops import isin
-from sympy import flatten, Matrix, Rational
+from sympy import flatten, Matrix, Rational, sympify
 
 from .. import _LieAlgebraBackend
-
-
-def _annotate(M: Matrix, basis: str) -> Matrix:
-    """Adds basis attribute to sympy.Matrix"""
-    setattr(M, "basis", basis)
-    return M
 
 
 def _to_rational_tuple(obj):
@@ -77,7 +70,7 @@ def _rust_wrapper(func=None, default=None):
         if len(shape) == 1:
             shape = (shape[0], 1) if rank == 1 else (1, shape[0])
 
-        m = Matrix(*shape, plain_values)
+        m = sympify(Matrix(*shape, plain_values))
         return [m.row(i) for i in range(m.shape[0])]
 
     return inner
@@ -135,7 +128,7 @@ def create_backend(algebra):
     return _LieAlgebraBackendWrapped(
         algebra.rank,
         algebra.n_pos_roots,
-        algebra.simple_roots,
+        algebra.simple_roots(),
         algebra.cartan_matrix.pinv(),
         algebra.omega_matrix,
         algebra.omega_matrix.pinv(),

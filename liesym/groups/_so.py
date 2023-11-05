@@ -26,7 +26,9 @@ class SO(LieGroup):
         else:
             self._algebra = B((n - 1) / 2)
 
-    def generators(self, cartan_only=False, indexed=False) -> list[Union[Matrix, Tuple[Matrix, tuple]]]:
+    def generators(
+        self, cartan_only=False, indexed=False
+    ) -> list[Union[Matrix, Tuple[Matrix, tuple]]]:
         """Generators for SO(N).
 
         Args:

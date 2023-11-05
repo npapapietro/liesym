@@ -9,14 +9,14 @@ def test_F4():
     assert F4_.dimension == 4
     assert F4_.n_pos_roots == 24
 
-    assert F4_.simple_roots == [
+    assert F4_.simple_roots() == [
         Matrix([[1, -1, 0, 0]]),
         Matrix([[0, 1, -1, 0]]),
         Matrix([[0, 0, 1, 0]]),
         Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
     ]
 
-    fw = F4_.fundamental_weights[0]
+    fw = F4_.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert F4_.to_omega(fw) == Matrix([[1, 0, 0, 0]])
 
@@ -51,7 +51,7 @@ def test_F4():
             ]
         ),
     ]
-    assert F4_.fundamental_weights == [
+    assert F4_.fundamental_weights() == [
         Matrix([[1, 0, 0, -1]]),
         Matrix([[1, 1, 0, -2]]),
         Matrix([[S.Half, S.Half, S.Half, -3 * S.Half]]),
@@ -122,7 +122,7 @@ def test_E6():
     assert E6.dimension == 6
     assert E6.n_pos_roots == 36
 
-    assert E6.simple_roots == [
+    assert E6.simple_roots() == [
         Matrix(
             [[S.Half, -S.Half, -S.Half, -S.Half, -S.Half, -S.Half, -S.Half, S.Half]]
         ),
@@ -133,7 +133,7 @@ def test_E6():
         Matrix([[1, 1, 0, 0, 0, 0, 0, 0]]),
     ]
 
-    fw = E6.fundamental_weights[0]
+    fw = E6.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert E6.to_omega(fw) == Matrix([[1, 0, 0, 0, 0, 0]])
 
@@ -270,7 +270,7 @@ def test_E6():
         Matrix([[0, 0, 0, 0, 0, -1]]),
     ]
 
-    assert [E6.to_omega(x) for x in E6.positive_roots] == [
+    assert [E6.to_omega(x) for x in E6.positive_roots()] == [
         Matrix([[0, 0, 0, 0, 0, 1]]),
         Matrix([[0, 0, 1, 0, 0, -1]]),
         Matrix([[0, 1, -1, 1, 0, 0]]),

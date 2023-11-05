@@ -15,7 +15,7 @@ def _euclidean_root(i, n):
 
 
 class A(LieAlgebra):
-    r"""The compact lie group of type A. The dynkin diagram for this algebra is
+    r"""The compact lie algebra of type A. The dynkin diagram for this algebra is
 
     .. image:: ../../docs/source/images/type_A.png
        :width: 300px
@@ -23,13 +23,21 @@ class A(LieAlgebra):
 
     """
 
-    def __new__(cls, n):
-        return super().__new__(cls, "A", _sympify(n))
+    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+        """Creates the A algebra of rank `n`
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        n = self.rank
-        self._simple_roots = [_euclidean_root(i, n + 1) for i in range(n)]
+        Args:
+            n (int): Dimension of algbera
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
+
+        """
+        return super().__new__(
+            cls,
+            "A",
+            _sympify(n),
+            simple_roots or [_euclidean_root(i, n + 1) for i in range(n)],
+        )
 
     @property
     def dimension(self) -> int:
@@ -60,7 +68,7 @@ class A(LieAlgebra):
                 return self._dim_name_fmt(6)
             elif irrep == Matrix([[0, 2]]):
                 return self._dim_name_fmt(6, True)
-        return super().dim_name(irrep, basis)
+        return super().dim_name(irrep, basis="omega")
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""
@@ -82,13 +90,21 @@ class B(LieAlgebra):
 
     """
 
-    def __new__(cls, n):
-        return super().__new__(cls, "B", _sympify(n))
+    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+        """Creates the B algebra of dimension `n`
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        n = self.rank
-        self._simple_roots = [_euclidean_root(i, n) for i in range(n)]
+        Args:
+            n (int): Dimension of algbera
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
+
+        """
+        return super().__new__(
+            cls,
+            "B",
+            _sympify(n),
+            simple_roots or [_euclidean_root(i, n) for i in range(n)],
+        )
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""
@@ -125,17 +141,23 @@ class C(LieAlgebra):
        :align: center
     """
 
-    def __new__(cls, n):
-        return super().__new__(cls, "C", _sympify(n))
+    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+        """Creates the C algebra of dimension `n`
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        n = self.rank
-        c_root = [0] * n
-        c_root[-1] = 2
-        self._simple_roots = [_euclidean_root(i, n) for i in range(n - 1)] + [
-            Matrix([c_root])
-        ]
+        Args:
+            n (int): Dimension of algbera
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
+
+        """
+        if simple_roots is None:
+            c_root = [0] * n
+            c_root[-1] = 2
+            simple_roots = [_euclidean_root(i, n) for i in range(n - 1)] + [
+                Matrix([c_root])
+            ]
+
+        return super().__new__(cls, "C", _sympify(n), simple_roots)
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""
@@ -173,20 +195,26 @@ class D(LieAlgebra):
        :align: center
     """
 
-    def __new__(cls, n):
+    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+        """Creates the D algebra of dimension `n`
+
+        Args:
+            n (int): Dimension of algbera
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
+
+        """
         if n < 2:
             raise ValueError("Min dimension for type 'D' is 2")
-        return super().__new__(cls, "D", _sympify(n))
+        if simple_roots is None:
+            d_root = [0] * n
+            d_root[-1] = 1
+            d_root[-2] = 1
+            simple_roots = [_euclidean_root(i, n) for i in range(n - 1)] + [
+                Matrix([d_root])
+            ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        n = self.rank
-        d_root = [0] * n
-        d_root[-1] = 1
-        d_root[-2] = 1
-        self._simple_roots = [_euclidean_root(i, n) for i in range(n - 1)] + [
-            Matrix([d_root])
-        ]
+        return super().__new__(cls, "D", _sympify(n), simple_roots)
 
     def max_dynkin_digit(self, irrep: Matrix) -> int:
         """Returns the max Dynkin Digit for the representation"""

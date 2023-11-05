@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from functools import lru_cache
 
 from typing import Tuple, Union
@@ -323,11 +324,11 @@ class LieGroup(Group):
         Abstract
         """
         generators = self._calc_generator(**kwargs)
-        
+
         if cartan_only:
             return [x for x in generators if x.is_diagonal()]
         else:
             return generators
-        
+
     def _calc_generator(self, **_):
         raise NotImplementedError("This method needs calculation")

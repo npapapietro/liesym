@@ -1,5 +1,5 @@
-from sympy import flatten, Matrix, S, sympify
-
+from sympy import flatten, Matrix, S
+from sympy.core.sympify import _sympify
 from ._base import LieAlgebra
 
 
@@ -11,18 +11,25 @@ class F4(LieAlgebra):
        :align: center
 
     """
+    
+    def __new__(cls, simple_roots: "list[Matrix] | None" = None):
+        """Creates the F4 algebra
+        Args:
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
 
-    def __new__(cls):
-        return super().__new__(cls, "F", sympify(4))
-
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self._simple_roots = [
+        """
+        return super().__new__(
+            cls,
+            "F",
+            _sympify(4),
+            simple_roots or [
             Matrix([[1, -1, 0, 0]]),
             Matrix([[0, 1, -1, 0]]),
             Matrix([[0, 0, 1, 0]]),
             Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
-        ]
+        ],
+        )
 
     @property
     def dimension(self) -> int:
@@ -46,13 +53,19 @@ class G2(LieAlgebra):
        :align: center
 
     """
+    def __new__(cls, simple_roots: "list[Matrix] | None" = None):
+        """Creates the G2 algebra
+        Args:
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
 
-    def __new__(cls):
-        return super().__new__(cls, "G", sympify(2))
-
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self._simple_roots = [Matrix([[0, 1, -1]]), Matrix([[1, -2, 1]])]
+        """
+        return super().__new__(
+            cls,
+            "G",
+            _sympify(2),
+            simple_roots or [Matrix([[0, 1, -1]]), Matrix([[1, -2, 1]])]
+        )
 
     @property
     def dimension(self) -> int:
@@ -110,15 +123,24 @@ class E(LieAlgebra):
            E8
 
     """
+    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+        """Creates the E algebra of rank `n`
 
-    def __new__(cls, n):
+        Args:
+            n (int): Dimension of algbera
+            simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
+            calculating the algebra in a different basis. Defaults to None.
+
+        """
         if n not in [6, 7, 8]:
-            raise ValueError("Algebra series E only defined for 6, 7 and 8}")
-        return super().__new__(cls, "E", sympify(n))
+            raise ValueError("Algebra series E only defined for 6, 7 and 8")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self._simple_roots = _e_series_default_roots(self.args[0])
+        return super().__new__(
+            cls,
+            "E",
+            _sympify(n),
+            simple_roots or _e_series_default_roots(n)
+        )
 
     @property
     def dimension(self) -> int:

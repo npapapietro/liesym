@@ -9,7 +9,7 @@ def test_A():
     assert A2.dimension == 3
     assert A2.n_pos_roots == 3
 
-    assert A2.simple_roots == [
+    assert A2.simple_roots() == [
         Matrix([[1, -1, 0]]),
         Matrix([[0, 1, -1]]),
     ]
@@ -17,12 +17,14 @@ def test_A():
     a = A2.to_alpha(Matrix([[1, -1, 0]]), "ortho")
     assert a == Matrix([[1, 0]]) and a.basis == Basis.ALPHA
 
+    A2.dim_name(Matrix([[1, -1, 0]]), basis="ortho")
+
     x = Matrix([[1, -1, 0]])
     x.basis = "ortho"
     a = A2.to_omega(x)
     assert a == Matrix([[2, -1]]) and a.basis == Basis.OMEGA
 
-    fw = A2.fundamental_weights[0]
+    fw = A2.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert A2.to_omega(fw) == Matrix([[1, 0]])
 
@@ -49,44 +51,38 @@ def test_A():
         Matrix([[1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]]),
         Matrix([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]),
     ]
-    assert A3.fundamental_weights == [
+    assert A3.fundamental_weights() == [
         Matrix([[Rational(3, 4), Rational(-1, 4), Rational(-1, 4), Rational(-1, 4)]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(-1, 2), Rational(-1, 2)]]),
         Matrix([[Rational(1, 4), Rational(1, 4), Rational(1, 4), Rational(-3, 4)]]),
     ]
 
     # backend
-    assert A3.root_system() == [
-        A3.to_ortho(x, "omega")
-        for x in [
-            Matrix([[1, 0, 1]]),
-            Matrix([[-1, 1, 1]]),
-            Matrix([[1, 1, -1]]),
-            Matrix([[-1, 2, -1]]),
-            Matrix([[0, -1, 2]]),
-            Matrix([[2, -1, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[-2, 1, 0]]),
-            Matrix([[0, 1, -2]]),
-            Matrix([[1, -2, 1]]),
-            Matrix([[-1, -1, 1]]),
-            Matrix([[1, -1, -1]]),
-            Matrix([[-1, 0, -1]]),
-        ]
+    assert A3.root_system(basis="omega") == [
+        Matrix([[1, 0, 1]]),
+        Matrix([[-1, 1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 0]]),
+        Matrix([[0, 1, -2]]),
+        Matrix([[1, -2, 1]]),
+        Matrix([[-1, -1, 1]]),
+        Matrix([[1, -1, -1]]),
+        Matrix([[-1, 0, -1]]),
     ]
 
-    assert A3.positive_roots == [
-        A3.to_ortho(x, "omega")
-        for x in [
-            Matrix([[1, 0, 1]]),
-            Matrix([[-1, 1, 1]]),
-            Matrix([[1, 1, -1]]),
-            Matrix([[-1, 2, -1]]),
-            Matrix([[0, -1, 2]]),
-            Matrix([[2, -1, 0]]),
-        ]
+    assert A3.positive_roots(basis="ortho") == [
+        Matrix([[1, 0, 1]]),
+        Matrix([[-1, 1, 1]]),
+        Matrix([[1, 1, -1]]),
+        Matrix([[-1, 2, -1]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
     ]
 
     fund = Matrix([[1, 0, 0]])
@@ -119,7 +115,7 @@ def test_A1():
     assert A1.dimension == 2
     assert A1.irrep_lookup("3") == Matrix([[2]])
     assert A1.root_system() == [
-        A1.to_ortho(x, "omega") for x in [Matrix([[2]]), Matrix([[0]]), Matrix([[-2]])]
+        x for x in [Matrix([[2]]), Matrix([[0]]), Matrix([[-2]])]
     ]
 
 
@@ -130,7 +126,7 @@ def test_B():
     assert B2.dimension == 2
     assert B2.n_pos_roots == 4
 
-    assert B2.simple_roots == [
+    assert B2.simple_roots() == [
         Matrix([[1, -1]]),
         Matrix([[0, 1]]),
     ]
@@ -143,7 +139,7 @@ def test_B():
     a = B2.to_omega(x)
     assert a == Matrix([[2, -2]]) and a.basis == Basis.OMEGA
 
-    fw = B2.fundamental_weights[0]
+    fw = B2.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert B2.to_omega(fw) == Matrix([[1, 0]])
 
@@ -162,7 +158,7 @@ def test_B():
         Matrix([[1, 0, 0], [0, 0, 1], [0, 1, 0]]),
         Matrix([[1, 0, 0], [0, 1, 0], [0, 0, -1]]),
     ]
-    assert B3.fundamental_weights == [
+    assert B3.fundamental_weights() == [
         Matrix([[1, 0, 0]]),
         Matrix([[1, 1, 0]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(1, 2)]]),
@@ -170,45 +166,39 @@ def test_B():
 
     # backend
     assert B3.root_system() == [
-        B3.to_ortho(x, "omega")
-        for x in [
-            Matrix([[0, 1, 0]]),
-            Matrix([[1, -1, 2]]),
-            Matrix([[-1, 0, 2]]),
-            Matrix([[1, 0, 0]]),
-            Matrix([[-1, 1, 0]]),
-            Matrix([[1, 1, -2]]),
-            Matrix([[-1, 2, -2]]),
-            Matrix([[0, -1, 2]]),
-            Matrix([[2, -1, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[0, 0, 0]]),
-            Matrix([[-2, 1, 0]]),
-            Matrix([[0, 1, -2]]),
-            Matrix([[1, -2, 2]]),
-            Matrix([[-1, -1, 2]]),
-            Matrix([[1, -1, 0]]),
-            Matrix([[-1, 0, 0]]),
-            Matrix([[1, 0, -2]]),
-            Matrix([[-1, 1, -2]]),
-            Matrix([[0, -1, 0]]),
-        ]
+        Matrix([[0, 1, 0]]),
+        Matrix([[1, -1, 2]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[1, 0, 0]]),
+        Matrix([[-1, 1, 0]]),
+        Matrix([[1, 1, -2]]),
+        Matrix([[-1, 2, -2]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[0, 0, 0]]),
+        Matrix([[-2, 1, 0]]),
+        Matrix([[0, 1, -2]]),
+        Matrix([[1, -2, 2]]),
+        Matrix([[-1, -1, 2]]),
+        Matrix([[1, -1, 0]]),
+        Matrix([[-1, 0, 0]]),
+        Matrix([[1, 0, -2]]),
+        Matrix([[-1, 1, -2]]),
+        Matrix([[0, -1, 0]]),
     ]
 
-    assert B3.positive_roots == [
-        B3.to_ortho(x, "omega")
-        for x in [
-            Matrix([[0, 1, 0]]),
-            Matrix([[1, -1, 2]]),
-            Matrix([[-1, 0, 2]]),
-            Matrix([[1, 0, 0]]),
-            Matrix([[-1, 1, 0]]),
-            Matrix([[1, 1, -2]]),
-            Matrix([[-1, 2, -2]]),
-            Matrix([[0, -1, 2]]),
-            Matrix([[2, -1, 0]]),
-        ]
+    assert B3.positive_roots() == [
+        Matrix([[0, 1, 0]]),
+        Matrix([[1, -1, 2]]),
+        Matrix([[-1, 0, 2]]),
+        Matrix([[1, 0, 0]]),
+        Matrix([[-1, 1, 0]]),
+        Matrix([[1, 1, -2]]),
+        Matrix([[-1, 2, -2]]),
+        Matrix([[0, -1, 2]]),
+        Matrix([[2, -1, 0]]),
     ]
 
     decomp = B3.tensor_product_decomposition(
@@ -244,7 +234,7 @@ def test_C():
     assert C2.dimension == 2
     assert C2.n_pos_roots == 4
 
-    assert C2.simple_roots == [
+    assert C2.simple_roots() == [
         Matrix([[1, -1]]),
         Matrix([[0, 2]]),
     ]
@@ -257,7 +247,7 @@ def test_C():
     a = C2.to_omega(x)
     assert a == Matrix([[2, -1]]) and a.basis == Basis.OMEGA
 
-    fw = C2.fundamental_weights[0]
+    fw = C2.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert C2.to_omega(fw) == Matrix([[1, 0]])
 
@@ -278,7 +268,7 @@ def test_C():
         Matrix([[1, 0, 0], [0, 0, 1], [0, 1, 0]]),
         Matrix([[1, 0, 0], [0, 1, 0], [0, 0, -1]]),
     ]
-    assert C3.fundamental_weights == [
+    assert C3.fundamental_weights() == [
         Matrix([[1, 0, 0]]),
         Matrix([[1, 1, 0]]),
         Matrix([[1, 1, 1]]),
@@ -308,7 +298,7 @@ def test_C():
         Matrix([[-2, 0, 0]]),
     ]
 
-    assert [C3.to_omega(x) for x in C3.positive_roots] == [
+    assert [C3.to_omega(x) for x in C3.positive_roots()] == [
         Matrix([[2, 0, 0]]),
         Matrix([[0, 1, 0]]),
         Matrix([[-2, 2, 0]]),
@@ -333,7 +323,7 @@ def test_D():
     assert D2.dimension == 2
     assert D2.n_pos_roots == 2
 
-    assert D2.simple_roots == [
+    assert D2.simple_roots() == [
         Matrix([[1, -1]]),
         Matrix([[1, 1]]),
     ]
@@ -346,7 +336,7 @@ def test_D():
     a = D2.to_omega(x)
     assert a == Matrix([[2, 0]]) and a.basis == Basis.OMEGA
 
-    fw = D2.fundamental_weights[0]
+    fw = D2.fundamental_weights()[0]
     assert fw.basis == Basis.ORTHO
     assert D2.to_omega(fw) == Matrix([[1, 0]])
 
@@ -373,7 +363,7 @@ def test_D():
         Matrix([[1, 0, 0], [0, 0, 1], [0, 1, 0]]),
         Matrix([[1, 0, 0], [0, 0, -1], [0, -1, 0]]),
     ]
-    assert D3.fundamental_weights == [
+    assert D3.fundamental_weights() == [
         Matrix([[1, 0, 0]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(-1, 2)]]),
         Matrix([[Rational(1, 2), Rational(1, 2), Rational(1, 2)]]),
@@ -398,7 +388,7 @@ def test_D():
         Matrix([[0, -1, -1]]),
     ]
 
-    assert [D3.to_omega(x) for x in D3.positive_roots] == [
+    assert [D3.to_omega(x) for x in D3.positive_roots()] == [
         Matrix([[0, 1, 1]]),
         Matrix([[1, -1, 1]]),
         Matrix([[1, 1, -1]]),

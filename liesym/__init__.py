@@ -7,7 +7,7 @@ except ImportError:
     if os.environ.get("SPHINX_BUILD") != "1":
         raise
     else:
-        _LieAlgebraBackend=""
+        _LieAlgebraBackend = ""
 
 from .groups import *
 from .algebras import *
@@ -36,5 +36,5 @@ __all__ = [
     "Group",
     "LieGroup",
     "Z",
-    "root_angle"
+    "root_angle",
 ]
