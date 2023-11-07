@@ -304,7 +304,7 @@ class LieAlgebra(Basic):
         sympy.Symbol.
 
         Examples
-        =========
+        ========
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
@@ -375,7 +375,6 @@ class LieAlgebra(Basic):
         """
         if isinstance(dim, str):
             dim = Symbol(dim)
-
         if isinstance(dim, Symbol) and not isinstance(dim, NumericSymbol):
             dim = NumericSymbol.from_symbol(dim)
 
@@ -470,7 +469,7 @@ class LieAlgebra(Basic):
 
 
         Examples
-        =========
+        ========
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a3 = A(3)
@@ -564,7 +563,7 @@ class LieAlgebra(Basic):
 
 
         Examples
-        =========
+        ========
         >>> from liesym import A
         >>> from sympy import Matrix
         >>> a2 = A(2)

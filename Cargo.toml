@@ -7,7 +7,7 @@ license-file = "LICENSE"
 name = "liesym"
 readme = "README.md"
 repository = "https://github.com/npapapietro/liesym"
-version = "0.7.0"
+version = "0.0.0" # managed by ci
 
 [lib]
 crate-type = ["cdylib"]
@@ -32,3 +32,9 @@ version = ">= 0.20.0"
 [features]
 extension-module = ["pyo3/extension-module"]
 default = ["extension-module"]
+
+[workspace]
+
+members = [
+    "rootsystem",
+]

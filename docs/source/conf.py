@@ -23,7 +23,7 @@ copyright = "2021, Nathan Papapietro"
 author = "Nathan Papapietro"
 
 # The full version, including alpha/beta/rc tags
-release = "0.7.0"
+release = os.environ["LIESYM_VERSION"]
 
 
 # -- General configuration ---------------------------------------------------

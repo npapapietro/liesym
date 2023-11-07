@@ -2,7 +2,7 @@
 authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
 edition = "2021"
 name = "rootsystem"
-version = "0.7.0"
+version = "0.0.0" # managed by ci
 
 [lib]
 name = "rootsystem"

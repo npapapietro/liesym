@@ -96,7 +96,7 @@ def root_angle(a: Matrix, b: Matrix):
         Integer: Resulting angle
 
     Examples
-    =========
+    ========
     >>> import liesym as ls
     >>> sr = ls.C(3).simple_roots
     >>> assert ls.root_angle(sr[0], sr[1]) == 120
