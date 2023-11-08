@@ -66,7 +66,7 @@ class SU(LieGroup):
         self._algebra = A(self.dimension - 1)
         self._generators = None
 
-    def generators(self, cartan_only=False,  **kwargs):
+    def generators(self, cartan_only=False, **kwargs):
         r"""Returns the generators representations of the group.
         Generators for SU(N). Based off the generalized Gell-Mann matrices $\lambda_a$
         the generators, $T_a$ are
@@ -80,6 +80,5 @@ class SU(LieGroup):
         """
         return super().generators(cartan_only=cartan_only, **kwargs)
 
-        
     def _calc_generator(self, **_):
         return [x / 2 for x in generalized_gell_mann(self.dimension)]

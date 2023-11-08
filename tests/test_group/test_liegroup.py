@@ -50,7 +50,7 @@ def test_so():
 
     for n in range(5, 7):
         g = SO(n)
-        r = g.algebra.fundamental_weights[0]
+        r = g.algebra.fundamental_weights()[0]
         assert g.quadratic_casimir(r) == sympify(n - 1) / 2
 
 
@@ -66,5 +66,5 @@ def test_sp():
 
     for n in range(2, 5):
         g = Sp(2 * n)
-        r = g.algebra.fundamental_weights[0]
+        r = g.algebra.fundamental_weights()[0]
         assert g.quadratic_casimir(r) == sympify(2 * n + 1) / 2

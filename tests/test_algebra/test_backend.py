@@ -11,7 +11,7 @@ def testBackendA():
     args = (
         algebra.rank,
         algebra.n_pos_roots,
-        algebra.simple_roots,
+        algebra.simple_roots(),
         algebra.cartan_matrix,
         algebra.cartan_matrix.pinv(),
         algebra.omega_matrix,
@@ -85,7 +85,7 @@ def testBackendBCD():
         args = (
             algebra.rank,
             algebra.n_pos_roots,
-            algebra.simple_roots,
+            algebra.simple_roots(),
             algebra.cartan_matrix,
             algebra.cartan_matrix.pinv(),
             algebra.omega_matrix,
