@@ -51,7 +51,7 @@ A3.cartan_matrix
 
 
 
-$\displaystyle \left[\begin{matrix}2 & -1 & 0\\-1 & 2 & -1\\0 & -1 & 2\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}2 & -1 & 0\\-1 & 2 & -1\\0 & -1 & 2\end{matrix}\right]$$
 
 
 
@@ -64,27 +64,27 @@ for i in A3.positive_roots():
 ```
 
 
-$\displaystyle \left[\begin{matrix}1 & 0 & 1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}1 & 0 & 1\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}-1 & 1 & 1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}-1 & 1 & 1\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}1 & 1 & -1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}1 & 1 & -1\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}-1 & 2 & -1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}-1 & 2 & -1\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}0 & -1 & 2\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}0 & -1 & 2\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}2 & -1 & 0\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}2 & -1 & 0\end{matrix}\right]$$
 
 
 #### Simple Roots
@@ -96,15 +96,15 @@ for i in A3.simple_roots():
 ```
 
 
-$\displaystyle \left[\begin{matrix}1 & -1 & 0 & 0\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}1 & -1 & 0 & 0\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}0 & 1 & -1 & 0\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}0 & 1 & -1 & 0\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}0 & 0 & 1 & -1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}0 & 0 & 1 & -1\end{matrix}\right]$$
 
 
 #### Fundamental Weights
@@ -116,15 +116,15 @@ for i in A3.fundamental_weights(): # defaulted to orthogonal basis
 ```
 
 
-$\displaystyle \left[\begin{matrix}\frac{3}{4} & - \frac{1}{4} & - \frac{1}{4} & - \frac{1}{4}\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}\frac{3}{4} & - \frac{1}{4} & - \frac{1}{4} & - \frac{1}{4}\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}\frac{1}{2} & \frac{1}{2} & - \frac{1}{2} & - \frac{1}{2}\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}\frac{1}{2} & \frac{1}{2} & - \frac{1}{2} & - \frac{1}{2}\end{matrix}\right]$$
 
 
 
-$\displaystyle \left[\begin{matrix}\frac{1}{4} & \frac{1}{4} & \frac{1}{4} & - \frac{3}{4}\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}\frac{1}{4} & \frac{1}{4} & \frac{1}{4} & - \frac{3}{4}\end{matrix}\right]$$
 
 
 #### Dimension of representation
@@ -167,7 +167,7 @@ A3.dim_name(Matrix([[0, 0, 1]]))
 
 
 
-$\displaystyle \bar{4}$
+$$\displaystyle \bar{4}$$
 
 
 
@@ -179,7 +179,7 @@ A3.irrep_lookup(r"\bar{4}")
 
 
 
-$\displaystyle \left[\begin{matrix}0 & 0 & 1\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}0 & 0 & 1\end{matrix}\right]$$
 
 
 
@@ -266,7 +266,7 @@ su2.structure_constants()
 
 
 
-$\displaystyle \left[\begin{matrix}\left[\begin{matrix}0 & 0 & 0\\0 & 0 & 1\\0 & -1 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 0 & -1\\0 & 0 & 0\\1 & 0 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 1 & 0\\-1 & 0 & 0\\0 & 0 & 0\end{matrix}\right]\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}\left[\begin{matrix}0 & 0 & 0\\0 & 0 & 1\\0 & -1 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 0 & -1\\0 & 0 & 0\\1 & 0 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 1 & 0\\-1 & 0 & 0\\0 & 0 & 0\end{matrix}\right]\end{matrix}\right]$$
 
 
 
@@ -278,7 +278,7 @@ for x in A1.simple_roots(basis="omega"):
 ```
 
 
-$\displaystyle \left[\begin{matrix}2\end{matrix}\right]$
+$$\displaystyle \left[\begin{matrix}2\end{matrix}\right]$$
 
 
 Quadratic Casimir
@@ -293,6 +293,6 @@ s.quadratic_casimir(r)
 
 
 
-$\displaystyle \frac{7}{2}$
+$$\displaystyle \frac{7}{2}$$
 
 
