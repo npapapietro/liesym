@@ -41,6 +41,9 @@ class NumericSymbol(Symbol):
         obj.numeric_dim = int(dim)
         return obj
 
+    def __len__(self):
+        return len(str(self))
+
     @classmethod
     def from_symbol(cls, symbol: Symbol):
         """Converts from sympy.Symbol into NumericSymbol by
