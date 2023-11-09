@@ -51,7 +51,7 @@ A3.cartan_matrix
 
 
 
-$$\displaystyle \left[\begin{matrix}2 & -1 & 0\\-1 & 2 & -1\\0 & -1 & 2\end{matrix}\right]$$
+$$\displaystyle \left[\begin{matrix}2 & -1 & 0\\\ -1 & 2 & -1\\\0 & -1 & 2\end{matrix}\right]$$
 
 
 
@@ -266,7 +266,7 @@ su2.structure_constants()
 
 
 
-$$\displaystyle \left[\begin{matrix}\left[\begin{matrix}0 & 0 & 0\\0 & 0 & 1\\0 & -1 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 0 & -1\\0 & 0 & 0\\1 & 0 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 1 & 0\\-1 & 0 & 0\\0 & 0 & 0\end{matrix}\right]\end{matrix}\right]$$
+$$\displaystyle \left[\begin{matrix}\left[\begin{matrix}0 & 0 & 0\\\0 & 0 & 1\\\0 & -1 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 0 & -1\\\0 & 0 & 0\\\1 & 0 & 0\end{matrix}\right] & \left[\begin{matrix}0 & 1 & 0\\\ -1 & 0 & 0\\\0 & 0 & 0\end{matrix}\right]\end{matrix}\right]$$
 
 
 
