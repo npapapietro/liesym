@@ -39,7 +39,7 @@ class U1(Group):
         r"""Finds the conjugate representation of the U1 representation
 
         Examples
-        =========
+        ========
         >>> from liesym import U1
         >>> from sympy import *
         >>> u1 = U1()

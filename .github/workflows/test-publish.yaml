@@ -1,0 +1,36 @@
+name: Test Publish
+on:
+  push:
+    branches:
+      - main
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  test-pypi-publish2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          args: --release --out dist --find-interpreter
+          sccache: 'true'
+          manylinux: auto
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+      - name: Publish to PyPI
+        uses: PyO3/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN_TEST }}
+          MATURIN_REPOSITORY: "testpypi"
+        with:
+          command: upload
+          args: --skip-existing dist/*

@@ -25,7 +25,7 @@ class Z(Group):
             indexed (bool, Optional): Returns tuple of named generators. Defaults to False.
 
         Examples
-        =========
+        ========
         >>> from liesym import Z
         >>> from sympy import I, pi
         >>> Z(3).generators()
@@ -47,7 +47,7 @@ class Z(Group):
             list: To keep types standard, returns a list of length 1
 
         Examples
-        =========
+        ========
         >>> from liesym import Z
         >>> z5 = Z(5)
         >>> g = z5.generators()
@@ -64,7 +64,7 @@ class Z(Group):
             list: To keep types standard, returns a list of length 1
 
         Examples
-        =========
+        ========
         >>> from liesym import Z
         >>> z5 = Z(5)
         >>> z5.sym_product("Z_1", "Z_2")
@@ -88,7 +88,7 @@ class Z(Group):
         """Finds the conjugate representation of the cyclic representation
 
         Examples
-        =========
+        ========
         >>> from liesym import Z
         >>> from sympy import sympify
         >>> z3 = Z(3)
@@ -111,7 +111,7 @@ class Z(Group):
         """Returns the symbol of irrep
 
         Examples
-        =========
+        ========
         >>> from liesym import Z
         >>> from sympy import sympify
         >>> z3 = Z(3)

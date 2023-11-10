@@ -1,211 +1,42 @@
-# Largely taken from https://github.com/PyO3/pyo3/blob/master/.github/workflows/ci.yml
-
-# Cargo test is broken right now because of extension module
-# https://github.com/PyO3/pyo3/issues/1084
-
-name: Test Module
+name: Pull Request Checks
 on:
   pull_request:
-    branches: [main, develop]
+    types: [opened, reopened, ready_for_review, synchronize, edited]
+    branches:
+      - main
 env:
   CARGO_TERM_COLOR: always
-
 jobs:
-  fmt:
+  pull-request-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           components: rustfmt
-      - name: Check rust formatting (rustfmt)
-        run: cargo fmt --all -- --check
-  sphinx-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+          target: x86_64-unknown-linux-gnu
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
-      - name: Install Deps
-        run: pip install .[docs]
-      - name: Build Warnings As Errors
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-in-project: true
+          virtualenvs-create: true
+      - name: Setup Python
+        run: |
+          poetry install --sync --no-root --with dev --with docs
+          source .venv/bin/activate && maturin develop
+      - name: Check rust formatting (rustfmt)
+        run: cargo fmt --all -- --check
+      - name: Run Rust Tests
+        run: source .venv/bin/activate && make rust-test
+      - name: Run Python Tests
+        run: source .venv/bin/activate && make pytest
+      - name: Test doc build
         env:
           SPHINX_BUILD: "1"
-        run: |
-          cd docs
-          make html SPHINXOPTS="-W"
-
-  test-mac-win:
-    needs: [fmt, sphinx-test]
-    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
-    runs-on: ${{ matrix.platform.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.8"]
-        platform:
-          [
-            {
-              os: "macOS-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-apple-darwin",
-              env-cmd: "source env/bin/activate",
-            },
-            {
-              os: "windows-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-pc-windows-msvc",
-              env-cmd: "env\\Scripts\\activate",
-            },
-          ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.platform.python-architecture }}
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: ${{ matrix.platform.rust-target }}
-      - name: Install dependencies
-        run: |
-          python -m venv env
-          ${{ matrix.platform.env-cmd }}
-          python -m pip install -U pip maturin
-          python -m pip install .[test]
-      - name: Run rust tests
-        run: cd rootsystem && cargo test --target ${{ matrix.platform.rust-target }}
-      - name: Run python tests
-        run: |
-          ${{ matrix.platform.env-cmd }}
-          maturin develop
-          pytest
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
-
-  test-linux:
-    needs: [fmt, sphinx-test]
-    name: Test linux
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.8"]
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: x86_64-unknown-linux-gnu
-      - name: Prepare LD_LIBRARY_PATH
-        run: echo LD_LIBRARY_PATH=${pythonLocation}/lib >> $GITHUB_ENV
-      - name: Install dependencies
-        run: |
-          python -m venv env
-          source env/bin/activate
-          python -m pip install -U pip maturin
-          python -m pip install .[test]
-      - name: Run rust tests
-        run: cd rootsystem && cargo test --no-default-features --target x86_64-unknown-linux-gnu
-      - name: Run python tests
-        run: |
-          source env/bin/activate
-          maturin develop
-          pytest
-
-  test-publish-mac-win:
-    needs: [test-mac-win, test-linux]
-    name: python${{ matrix.python-version }}-${{ matrix.platform.python-architecture }} ${{ matrix.platform.os }} ${{ matrix.msrv }}
-    runs-on: ${{ matrix.platform.os }}
-    environment:
-      name: pypi
-      url: https://pypi.org/p/liesym
-    permissions:
-      id-token: write
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: ["3.8"]
-        platform:
-          [
-            {
-              os: "macOS-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-apple-darwin",
-              env-cmd: "source env/bin/activate",
-            },
-            {
-              os: "windows-latest",
-              python-architecture: "x64",
-              rust-target: "x86_64-pc-windows-msvc",
-              env-cmd: "env\\Scripts\\activate",
-            },
-          ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.platform.python-architecture }}
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          target: ${{ matrix.platform.rust-target }}
-      - name: Install dependencies
-        run: python -m pip install -U pip maturin wheel
-      - name: test publish
-        run: |
-          maturin publish -r testpypi --skip-existing
-    
-    env:
-      RUST_BACKTRACE: 1
-      RUSTFLAGS: "-D warnings"
-  test-publish-linux:
-    needs: [test-mac-win, test-linux]
-    name: Test Publish linux
-    runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2014_x86_64
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install nightly rust
-        run: curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
-      # Insert steps here to install you other dependencies. Note that you're running inside of cent os 7, not ubuntu
-      - name: Installing custom dependency
-        run: echo "Installing custom dependency"
-      - name: Build
-        run: |
-          source $HOME/.cargo/env
-          for PYBIN in /opt/python/cp38*/bin; do
-            "${PYBIN}/pip" install maturin
-            "${PYBIN}/maturin" build -m Cargo.toml -i "${PYBIN}/python" --release --manylinux 2014
-          done
-      # Auditwheel isn't generally necessary. This is only shown as refernce for cases where you link
-      # external libraries, in which case you have to set manylinux to off and then use auditwheel repair
-      - name: Auditwheel repair
-        run: |
-          for wheel in target/wheels/*.whl; do
-              auditwheel repair "${wheel}"
-          done
-      - name: Publish
-        run: |
-          for PYBIN in /opt/python/cp38*/bin; do
-            "${PYBIN}/python" -m maturin upload -r testpypi --skip-existing target/wheels/*.whl
-          done
+          LIESYM_VERSION: "0.0.0-ci"
+        run: source .venv/bin/activate && make html

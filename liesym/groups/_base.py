@@ -116,7 +116,7 @@ class LieGroup(Group):
             list[Matrix]: Tensor sum of the product.
 
         Examples
-        =========
+        ========
         >>> from liesym import SO
         >>> from sympy import Matrix
         >>> so10 = SO(10)
@@ -167,7 +167,7 @@ class LieGroup(Group):
         r"""Uses the underlying algebra to find the conjugate representation.
 
         Examples
-        =========
+        ========
         >>> from liesym import SU
         >>> from sympy import Matrix
         >>> su3 = SU(3)
