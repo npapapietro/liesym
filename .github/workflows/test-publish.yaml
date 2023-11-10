@@ -6,7 +6,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
 jobs:
-  test-pypi-publish2:
+  test-pypi-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,11 +21,6 @@ jobs:
           args: --release --out dist --find-interpreter
           sccache: 'true'
           manylinux: auto
-      - name: Build sdist
-        uses: PyO3/maturin-action@v1
-        with:
-          command: sdist
-          args: --out dist
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
         env:

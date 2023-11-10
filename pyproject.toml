@@ -48,11 +48,7 @@ description = "Sympy Lie Algebra extensions powered by rust."
 name = "liesym"
 readme = "README.md"
 version = "0.0.0"
-dependencies = [
-  "mpmath==1.3.0 ; python_version >= \"3.8\" and python_version < \"4\"", 
-  "numpy==1.24.4 ; python_version >= \"3.8\" and python_version < \"4\"", 
-  "symengine==0.10.0 ; python_version >= \"3.8\" and python_version < \"4\"",
-  "sympy==1.12 ; python_version >= \"3.8\" and python_version < \"4\""]
+dependencies = ["mpmath==1.3.0 ; python_version >= \"3.8\" and python_version < \"4\"", "numpy==1.24.4 ; python_version >= \"3.8\" and python_version < \"4\"", "symengine==0.10.0 ; python_version >= \"3.8\" and python_version < \"4\"", "sympy==1.12 ; python_version >= \"3.8\" and python_version < \"4\""]
 
 [[project.authors]]
 name = "Nathan Papapietro"
