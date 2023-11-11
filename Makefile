@@ -25,7 +25,7 @@ gen-readme:
 
 tag-python:
 	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.tool.poetry.version |= $$tag' pyproject.toml 
-	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.tool.project.version |= $$tag' pyproject.toml 
+	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.project.version |= $$tag' pyproject.toml 
 
 tag-rust:
 	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.package.version |= $$tag' Cargo.toml 
