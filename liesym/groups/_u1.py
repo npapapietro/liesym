@@ -1,4 +1,5 @@
 from functools import reduce
+from typing import List, Literal, overload, Tuple
 
 from sympy import conjugate, exp, expand_log, I, log, simplify, Symbol, sympify
 
@@ -15,25 +16,31 @@ class U1(Group):
     def __init__(self, *args, **kwargs):
         self._theta = Symbol(r"\theta", real=True)
 
-    def generators(self) -> list:
+    def generators(self) -> list:  # type: ignore[override]
         """Infinite circle group generators"""
         return [exp(I * self._theta)]
 
     def _from_charge(self, q):
         return exp(I * self._theta * q)
 
-    def product(self, *args, **kwargs) -> list:
+    @overload
+    def product(self, as_tuple: Literal[False] = False) -> List[exp]:
+        ...
+
+    @overload
+    def product(self, as_tuple: Literal[True]) -> List[Tuple[Symbol, exp]]:
+        ...
+
+    def product(self, *args, as_tuple=False) -> list:
         """Sums up all the charges"""
-        return [simplify(reduce(lambda a, b: a * b, args))]
-
-    def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
-        """Sums up all the charges, symbolically"""
-
-        result = self.product(*[self._from_charge(x) for x in args], **kwargs)
+        if all([hasattr(x, "__mul__") for x in args]):
+            results = [simplify(reduce(lambda a, b: a * b, args))]
+        else:
+            results = self.product(*[self._from_charge(x) for x in args])
 
         if as_tuple:
-            return [(self._from_charge(x), x) for x in result]
-        return result
+            return [(self._from_charge(x), x) for x in results]
+        return results
 
     def conjugate(self, rep, symbolic=False, **kwargs):
         r"""Finds the conjugate representation of the U1 representation

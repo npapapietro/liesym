@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Generator
 
-from sympy import Basic, I
+from sympy import I
 from sympy.core.backend import sqrt, zeros
 
 from ..algebras import A
@@ -25,6 +25,8 @@ def generalized_gell_mann(dimension: int) -> Generator:
         - https://mathworld.wolfram.com/GeneralizedGell-MannMatrix.html
 
     """
+    if not isinstance(dimension, int):
+        dimension = int(dimension)
 
     def eij(dim):
         def _(i, j):

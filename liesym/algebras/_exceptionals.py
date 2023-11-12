@@ -1,5 +1,8 @@
+from typing import List, Optional
+
 from sympy import flatten, Matrix, S
 from sympy.core.sympify import _sympify
+
 from ._base import LieAlgebra
 
 
@@ -11,8 +14,8 @@ class F4(LieAlgebra):
        :align: center
 
     """
-    
-    def __new__(cls, simple_roots: "list[Matrix] | None" = None):
+
+    def __new__(cls, simple_roots: Optional[List[Matrix]] = None):
         """Creates the F4 algebra
         Args:
             simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
@@ -23,12 +26,13 @@ class F4(LieAlgebra):
             cls,
             "F",
             _sympify(4),
-            simple_roots or [
-            Matrix([[1, -1, 0, 0]]),
-            Matrix([[0, 1, -1, 0]]),
-            Matrix([[0, 0, 1, 0]]),
-            Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
-        ],
+            simple_roots
+            or [
+                Matrix([[1, -1, 0, 0]]),
+                Matrix([[0, 1, -1, 0]]),
+                Matrix([[0, 0, 1, 0]]),
+                Matrix([[-S.Half, -S.Half, -S.Half, -S.Half]]),
+            ],
         )
 
     @property
@@ -53,7 +57,8 @@ class G2(LieAlgebra):
        :align: center
 
     """
-    def __new__(cls, simple_roots: "list[Matrix] | None" = None):
+
+    def __new__(cls, simple_roots: Optional[List[Matrix]] = None):
         """Creates the G2 algebra
         Args:
             simple_roots (list[Matrix] | None, optional): Overrides default simple roots. Use this for
@@ -64,7 +69,7 @@ class G2(LieAlgebra):
             cls,
             "G",
             _sympify(2),
-            simple_roots or [Matrix([[0, 1, -1]]), Matrix([[1, -2, 1]])]
+            simple_roots or [Matrix([[0, 1, -1]]), Matrix([[1, -2, 1]])],
         )
 
     @property
@@ -123,7 +128,8 @@ class E(LieAlgebra):
            E8
 
     """
-    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+
+    def __new__(cls, n: int, simple_roots: Optional[List[Matrix]] = None):
         """Creates the E algebra of rank `n`
 
         Args:
@@ -136,10 +142,7 @@ class E(LieAlgebra):
             raise ValueError("Algebra series E only defined for 6, 7 and 8")
 
         return super().__new__(
-            cls,
-            "E",
-            _sympify(n),
-            simple_roots or _e_series_default_roots(n)
+            cls, "E", _sympify(n), simple_roots or _e_series_default_roots(n)
         )
 
     @property

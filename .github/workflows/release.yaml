@@ -11,7 +11,7 @@ env:
   SPHINX_BUILD: "1"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   linux:

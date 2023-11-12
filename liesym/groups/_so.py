@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple, Union
+from typing import List, Literal, overload, Tuple, Union
 
 from sympy import I, KroneckerDelta, Matrix, zeros
 
@@ -26,9 +26,21 @@ class SO(LieGroup):
         else:
             self._algebra = B((n - 1) / 2)
 
+    @overload
     def generators(
-        self, cartan_only=False, indexed=False
-    ) -> list[Union[Matrix, Tuple[Matrix, tuple]]]:
+        self, *, cartan_only: bool = False, indexed: Literal[True]
+    ) -> List[Tuple[Matrix, tuple]]:
+        ...
+
+    @overload
+    def generators(
+        self, cartan_only: bool = False, indexed: Literal[False] = False
+    ) -> List[Matrix]:
+        ...
+
+    def generators(
+        self, cartan_only: bool = False, indexed: bool = False
+    ) -> Union[List[Matrix], List[Tuple[Matrix, tuple]]]:
         """Generators for SO(N).
 
         Args:
