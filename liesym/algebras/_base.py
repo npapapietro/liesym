@@ -1,9 +1,20 @@
 from __future__ import annotations
 
 import re
-from copy import deepcopy
+
 from functools import cached_property, cmp_to_key, lru_cache
-from typing import Callable, Literal, Tuple, TYPE_CHECKING, TypeVar, Union
+from typing import (
+    Any,
+    cast,
+    List,
+    Literal,
+    Optional,
+    overload,
+    Sequence,
+    Tuple,
+    TYPE_CHECKING,
+    Union,
+)
 
 from sympy import Basic, Matrix, ones, Symbol, sympify
 
@@ -18,15 +29,6 @@ from ._methods import (
     reflection_matricies,
 )
 
-if TYPE_CHECKING:
-    F = TypeVar("F", bound=Callable)
-
-    def lru_cache(func: F) -> F:
-        ...
-
-else:
-    from functools import lru_cache  # noqa
-
 BASIS = Literal["ortho", "omega", "alpha"]
 
 
@@ -36,9 +38,11 @@ class NumericSymbol(Symbol):
     integer value. Useful for dimension representations
     of irreps"""
 
+    _numeric_dim: int
+
     def __new__(cls, dim: int, fmtted_dim: str):
         obj = super().__new__(cls, fmtted_dim)
-        obj.numeric_dim = int(dim)
+        obj._numeric_dim = int(dim)
         return obj
 
     def __len__(self):
@@ -46,17 +50,30 @@ class NumericSymbol(Symbol):
 
     @classmethod
     def from_symbol(cls, symbol: Symbol):
-        """Converts from sympy.Symbol into NumericSymbol by
+        r"""Converts from Symbol into NumericSymbol by
         regex search for digits from latex display pattern and
         returns a NumericSymbol. Will raise if no numeric is
         present in the symbol.
+
+
+        Example
+        =======
+        >>> import liesym as ls
+        >>> from sympy import Symbol
+        >>> anti_fundamental = Symbol(r"\bar{4}")
+        >>> assert NumericSymbol.from_symbol(anti_fundamental).numeric_dim == 4
         """
         try:
             s = symbol.__str__()
             num = re.findall(r"\d+", s)[0]
             return cls(int(num), s)
         except (IndexError, ValueError):
-            raise ValueError("Could not extract numerical from sympy.Symbol")
+            raise ValueError("Could not extract numerical from Symbol")
+
+    @property
+    def numeric_dim(self) -> int:
+        """Underlying integer value of this symbol"""
+        return self._numeric_dim
 
 
 class LieAlgebra(Basic):
@@ -188,7 +205,7 @@ class LieAlgebra(Basic):
         return quadratic_form(self.cartan_matrix, self.simple_roots())
 
     @cached_property
-    def reflection_matricies(self) -> list[Matrix]:
+    def reflection_matricies(self) -> List[Matrix]:
         """Returns a list of reflection matrices built from
         rotations about each simple root.
 
@@ -198,7 +215,7 @@ class LieAlgebra(Basic):
         return reflection_matricies(self.simple_roots())
 
     @lru_cache
-    def fundamental_weights(self, basis: BASIS = "ortho") -> list[Matrix]:
+    def fundamental_weights(self, basis: BASIS = "ortho") -> List[Matrix]:
         """Returns the fundamental weights of the algebra.
 
         Args:
@@ -218,7 +235,7 @@ class LieAlgebra(Basic):
             ]
 
     @lru_cache
-    def positive_roots(self, basis: BASIS = "ortho") -> list[Matrix]:
+    def positive_roots(self, basis: BASIS = "ortho") -> List[Matrix]:
         """Returns the postive roots of the algebra. They are sorted
         first by their distance from the highest root and then by
         tuple ordering (convention).
@@ -241,10 +258,10 @@ class LieAlgebra(Basic):
     def orbit(
         self,
         weight: Matrix,
-        stabilizers=None,
+        stabilizers: Optional[Sequence[int]] = None,
         basis: BASIS = "ortho",
         weight_basis: BASIS = "ortho",
-    ) -> list[Matrix]:
+    ) -> List[Matrix]:
         """Returns the orbit of the weight or root by reflecting it
         a plane. A stabilizer may be passed to calculate the orbit using
         the Orbit-Stabilizer theorem.
@@ -264,16 +281,16 @@ class LieAlgebra(Basic):
 
         """
 
-        self._orbit(sympify(weight), stabilizers, basis, weight_basis)
+        return self._orbit(sympify(weight), stabilizers, basis, weight_basis)
 
     @lru_cache
     def _orbit(
         self,
         weight: Matrix,
-        stabilizers=None,
+        stabilizers: Optional[Sequence[int]] = None,
         basis: BASIS = "ortho",
         weight_basis: BASIS = "ortho",
-    ) -> list[Matrix]:
+    ) -> List[Matrix]:
         if basis == "ortho":
             weight = self.to_ortho(weight, weight_basis)
             return [
@@ -301,7 +318,7 @@ class LieAlgebra(Basic):
         r"""Returns a sympy formatted symbol for the irrep.
         This is commonly used in physics literature. Returns
         a NumericSymbol object that is a simple extension of
-        sympy.Symbol.
+        Symbol.
 
         Examples
         ========
@@ -322,7 +339,7 @@ class LieAlgebra(Basic):
 
         dim = self.dim(irrep)
         max_dd = self.max_dynkin_digit(irrep)
-        same_dim_irreps: list[Matrix] = self.get_irrep_by_dim(dim, max_dd)
+        same_dim_irreps: list[Matrix] = self.get_irrep_by_dim(dim, max_dd=max_dd)
         num_primes = 0
         conjugate = 0
         so8label = ""
@@ -350,12 +367,12 @@ class LieAlgebra(Basic):
 
     @lru_cache
     def irrep_lookup(
-        self, dim: Union[Symbol, str], max_dynkin_digit=5, basis: BASIS = "omega"
+        self, dim: Any, max_dynkin_digit=5, basis: BASIS = "omega"
     ) -> Matrix:
         """Returns the irrep matrix for the dimension.
 
         Args:
-            dim (Union[Symbol, str]): Can either be a sympy.Symbol or string.
+            dim (Any): Can either be any sympy object.
 
         Raises:
             KeyError: Dim not found
@@ -373,17 +390,17 @@ class LieAlgebra(Basic):
         >>> A3.irrep_lookup("4")
         Matrix([[1, 0, 0]])
         """
-        if isinstance(dim, str):
-            dim = Symbol(dim)
+        if not isinstance(dim, Symbol):
+            dim = Symbol(str(dim))
         if isinstance(dim, Symbol) and not isinstance(dim, NumericSymbol):
             dim = NumericSymbol.from_symbol(dim)
 
-        n_dim = dim.numeric_dim
+        n_dim = cast(NumericSymbol, dim).numeric_dim
 
         dd = 0
         while dd < max_dynkin_digit:
             dd += 1
-            for c in self.get_irrep_by_dim(n_dim, dd):
+            for c in self.get_irrep_by_dim(n_dim, max_dd=dd):
                 if self.dim_name(c) == dim:
                     return self._to_basis(c, basis, "omega")
         raise KeyError(f"Irrep {dim} not found.")
@@ -446,14 +463,36 @@ class LieAlgebra(Basic):
 
         return NumericSymbol(dim, irrep)
 
-    @lru_cache
+    @overload
+    def get_irrep_by_dim(
+        self,
+        dim: int,
+        *,
+        max_dd: int = 3,
+        with_symbols: Literal[True],
+        basis: BASIS = "omega",
+    ) -> List[Tuple[Matrix, NumericSymbol]]:
+        ...
+
+    @overload
+    def get_irrep_by_dim(
+        self,
+        dim: int,
+        *,
+        max_dd: int = 3,
+        with_symbols: Literal[False] = False,
+        basis: BASIS = "omega",
+    ) -> List[Matrix]:
+        ...
+
+    @lru_cache  # type:ignore
     def get_irrep_by_dim(
         self,
         dim: int,
         max_dd: int = 3,
         with_symbols: bool = False,
         basis: BASIS = "omega",
-    ) -> list[Union[Matrix, Tuple[Matrix, NumericSymbol]]]:
+    ) -> Union[List[Tuple[Matrix, NumericSymbol]], List[Matrix]]:
         r"""Gets all irreps by dimension and max dynkin digit. `max_dd` is . This algorithm brute forces searches by using `itertools.product`
         which can become expensive for large so searching max_dd > 3 will be
         very expensive
@@ -491,7 +530,7 @@ class LieAlgebra(Basic):
             )
             results = [self.to_omega(x, "omega") for x in backend_results]
             if with_symbols:
-                results = [(x, self.dim_name(x)) for x in results]
+                return [(x, self.dim_name(x)) for x in results]
             return results
         else:
             omega_results = self.get_irrep_by_dim(
@@ -499,9 +538,7 @@ class LieAlgebra(Basic):
             )
             results = [self._to_basis(x, basis, "omega") for x in omega_results]
             if with_symbols:
-                results = [
-                    (x, self.dim_name(y)) for x, y in zip(results, omega_results)
-                ]
+                return [(x, self.dim_name(y)) for x, y in zip(results, omega_results)]
             return results
 
     def dim(self, irrep: Matrix, basis: BASIS = "omega") -> int:
@@ -547,7 +584,7 @@ class LieAlgebra(Basic):
             ]
 
     def tensor_product_decomposition(
-        self, weights: list[Matrix], basis: BASIS = "omega", **_
+        self, *weights: Matrix, basis: BASIS = "omega"
     ) -> list[Matrix]:
         """Returns the tensor product between irreducible representations
         as a the tensor sum of the irreducible representations of their
@@ -555,7 +592,7 @@ class LieAlgebra(Basic):
 
 
         Args:
-            weights (list[Matrix]): A list of fundamental weights to take the tensor product between
+            weights (Matrix: tuple[Matrix, ...]): Fundamental weights to take the tensor product between
             basis ("ortho" | "omega" | "alpha", optional): Basis of incoming weights and result. If not set, will implicitly set. Defaults to 'omega'.
 
         Returns:
@@ -573,8 +610,13 @@ class LieAlgebra(Basic):
 
 
         """
-        weights = [self.to_omega(x, basis) for x in weights]
-        w = deepcopy(weights)
+
+        if len(weights) < 2:
+            raise ValueError(
+                "At least two weights must be passed to take the tensor product"
+            )
+
+        w = [self.to_omega(x, basis) for x in weights]
         i = w.pop()
         j = w.pop()
 
@@ -605,18 +647,18 @@ class LieAlgebra(Basic):
         basis = _basis_lookup(basis)
         annotate_matrix(x, basis)
 
-        if x.basis is Basis.ORTHO:
+        if x.basis is Basis.ORTHO:  # type: ignore[attr-defined]
             r = x
-        elif x.basis is Basis.OMEGA:
+        elif x.basis is Basis.OMEGA:  # type: ignore[attr-defined]
             r = x * self.omega_matrix
-        elif x.basis is Basis.ALPHA:
+        elif x.basis is Basis.ALPHA:  # type: ignore[attr-defined]
             r = x * self.cartan_matrix * self.omega_matrix
         else:
             raise ValueError(
                 "Basis arg cannot be None if attribute `basis` has not been set on Matrix."
             )
 
-        r.basis = Basis.ORTHO
+        r.basis = Basis.ORTHO  # type: ignore[attr-defined]
         return r
 
     def to_omega(self, x: Matrix, basis=None) -> Matrix:
@@ -634,18 +676,18 @@ class LieAlgebra(Basic):
         """
         annotate_matrix(x, basis)
 
-        if x.basis is Basis.OMEGA:
+        if x.basis is Basis.OMEGA:  # type: ignore[attr-defined]
             r = x
-        elif x.basis is Basis.ORTHO:
+        elif x.basis is Basis.ORTHO:  # type: ignore[attr-defined]
             r = x * self.omega_matrix.pinv()
-        elif x.basis is Basis.ALPHA:
+        elif x.basis is Basis.ALPHA:  # type: ignore[attr-defined]
             r = x * self.cartan_matrix
         else:
             raise ValueError(
                 "Basis arg cannot be None if attribute `basis` has not been set on Matrix."
             )
 
-        r.basis = Basis.OMEGA
+        r.basis = Basis.OMEGA  # type: ignore[attr-defined]
         return r
 
     def to_alpha(self, x: Matrix, basis=None) -> Matrix:
@@ -664,18 +706,18 @@ class LieAlgebra(Basic):
         basis = _basis_lookup(basis)
         annotate_matrix(x, basis)
 
-        if x.basis is Basis.ALPHA:
+        if x.basis is Basis.ALPHA:  # type: ignore[attr-defined]
             r = x
-        elif x.basis is Basis.ORTHO:
+        elif x.basis is Basis.ORTHO:  # type: ignore[attr-defined]
             r = x * self.omega_matrix.pinv() * self.cartan_matrix.pinv()
-        elif x.basis is Basis.OMEGA:
+        elif x.basis is Basis.OMEGA:  # type: ignore[attr-defined]
             r = x * self.cartan_matrix.pinv()
         else:
             raise ValueError(
                 "Basis arg cannot be None if attribute `basis` has not been set on Matrix."
             )
 
-        r.basis = Basis.ALPHA
+        r.basis = Basis.ALPHA  # type: ignore[attr-defined]
         return r
 
     def _scalar_product(self, irrep1, irrep2, basis="ortho"):
@@ -685,7 +727,9 @@ class LieAlgebra(Basic):
 
         return irrep1.dot(irrep2)
 
-    def quadratic_casimir(self, irrep: Matrix = None, basis="omega", **kwargs) -> Basic:
+    def quadratic_casimir(
+        self, irrep: Optional[Matrix] = None, basis: BASIS = "omega"
+    ) -> Basic:
         r"""Returns the quadratic casimir for an arbitrary irreducible
         representation, $R$.
 
@@ -701,11 +745,13 @@ class LieAlgebra(Basic):
             Basic: Rational number
         """
         adj = self.adjoint_rep("omega")
-        irrep = self.to_omega(irrep, basis) or adj
+        irrep = self.to_omega(irrep, basis) if irrep else adj
         rho = 2 * ones(1, self.rank)
         return self._scalar_product(irrep, irrep + rho, basis="omega") / 2
 
-    def dynkin_index(self, irrep: Matrix = None, basis: BASIS = "omega") -> Basic:
+    def dynkin_index(
+        self, irrep: Optional[Matrix] = None, basis: BASIS = "omega"
+    ) -> Basic:
         r"""Calculates the dynkin index of an arbitrary irrep. This
         is also called in literature second-order index, $I_2(R)$. If no irrep
         is passed, basis and rep default to the algebra's adjoint rep.
@@ -719,11 +765,11 @@ class LieAlgebra(Basic):
         and $c$ is the quadratic casimir (`Liealgebra.casimir`).
         """
         adj = self.adjoint_rep("omega")
-        irrep = self.to_omega(irrep, basis) or adj
-        d_r = self.dim(irrep, basis="omega")
-        d_a = self.dim(adj)
+        irrep = self.to_omega(irrep, basis) if irrep else adj
+        d_r = cast(Basic, self.dim(irrep, basis="omega"))
+        d_a = cast(Basic, self.dim(adj))
         c_r = self.quadratic_casimir(irrep, basis="omega")
-        return d_r * c_r / d_a
+        return d_r * c_r / d_a  # type:ignore[operator]
 
     def adjoint_rep(self, basis: BASIS = "ortho") -> Matrix:
         """Returns the adjoint irrep. This is the highest weight of the

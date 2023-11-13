@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from sympy import flatten, Matrix
 from sympy.core.sympify import _sympify
 
@@ -23,7 +25,7 @@ class A(LieAlgebra):
 
     """
 
-    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+    def __new__(cls, n: int, simple_roots: Optional[List[Matrix]] = None):
         """Creates the A algebra of rank `n`
 
         Args:
@@ -90,7 +92,7 @@ class B(LieAlgebra):
 
     """
 
-    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+    def __new__(cls, n: int, simple_roots: Optional[List[Matrix]] = None):
         """Creates the B algebra of dimension `n`
 
         Args:
@@ -141,7 +143,7 @@ class C(LieAlgebra):
        :align: center
     """
 
-    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+    def __new__(cls, n: int, simple_roots: Optional[List[Matrix]] = None):
         """Creates the C algebra of dimension `n`
 
         Args:
@@ -150,6 +152,8 @@ class C(LieAlgebra):
             calculating the algebra in a different basis. Defaults to None.
 
         """
+        if not isinstance(n, int):
+            n = int(n)
         if simple_roots is None:
             c_root = [0] * n
             c_root[-1] = 2
@@ -195,7 +199,7 @@ class D(LieAlgebra):
        :align: center
     """
 
-    def __new__(cls, n: int, simple_roots: "list[Matrix] | None" = None):
+    def __new__(cls, n: int, simple_roots: Optional[List[Matrix]] = None):
         """Creates the D algebra of dimension `n`
 
         Args:

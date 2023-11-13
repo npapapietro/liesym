@@ -1,7 +1,9 @@
 import os
 
 try:
-    from ._liesym_rust import LieAlgebraBackend as _LieAlgebraBackend
+    from ._liesym_rust import (  # type: ignore[import-untyped]
+        LieAlgebraBackend as _LieAlgebraBackend,
+    )
 except ImportError:
     # suppress import error during sphinx builds
     if os.environ.get("SPHINX_BUILD") != "1":

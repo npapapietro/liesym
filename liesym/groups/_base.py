@@ -1,14 +1,41 @@
 from __future__ import annotations
 
-from functools import lru_cache
+from typing import (
+    Any,
+    Callable,
+    cast,
+    List,
+    Literal,
+    Optional,
+    overload,
+    Tuple,
+    TYPE_CHECKING,
+    TypeVar,
+    Union,
+)
 
-from typing import Tuple, Union
+if TYPE_CHECKING:
+    F = TypeVar("F", bound=Callable)
 
-from sympy import Basic, Basic, I, Matrix, Symbol, sympify, trace
+    def lru_cache(f: F) -> F:
+        ...
+
+else:
+    from functools import lru_cache
+
+from sympy import Basic, I, Matrix, Symbol, sympify, trace
 from sympy.core.backend import Matrix as _CMatrix
+from sympy.matrices import MatrixBase
 from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
 
-from ..algebras import LieAlgebra
+from ..algebras import BASIS, LieAlgebra, NumericSymbol
+
+
+def _cast_func(typ):
+    def inner(f: Callable[..., Any]):
+        return f
+
+    return cast(Callable[..., Callable[..., typ]], inner)
 
 
 def commutator(A: Basic, B: Basic, anti=False) -> Basic:
@@ -33,8 +60,12 @@ def commutator(A: Basic, B: Basic, anti=False) -> Basic:
         Basic: The (anti)commutation bracket result
     """
     if anti:
-        return A * B + B * A
-    return A * B - B * A
+        return A * B + B * A  # type: ignore[operator]
+    return A * B - B * A  # type: ignore[operator]
+
+
+def _not_impl():
+    raise NotImplementedError("Call this method on a concrete subclass")
 
 
 class Group(Basic):
@@ -43,6 +74,8 @@ class Group(Basic):
     order to write down the roots as matricies and vectors, we choose a
     representation.
     """
+
+    _group: str
 
     def __new__(cls, group: str, dim: int):
         obj = super().__new__(cls, sympify(dim))
@@ -55,32 +88,26 @@ class Group(Basic):
         return self._group
 
     @property
-    def dimension(self) -> int:
-        """Group dimension"""
+    def dimension(self) -> Basic:
+        """Group dimension as sympy object"""
         return self.args[0]
 
-    def generators(self) -> list:
+    @_cast_func(List[Any])
+    def generators(self, *args, **kwargs):
         """Generalized matrix generators of the group.
 
         Abstract
         """
-        pass
+        raise NotImplementedError("Call this method on a concrete subclass")
 
-    def product(self, *args, **kwargs) -> list:
+    @_cast_func(List[Any])
+    def product(self, *args, **kwargs):
         """Calculates the product between several group representations.
         If backing algebra is a Lie Algebra, defaults to `LieAlgebra.tensor_product_decomposition`.
 
         Abstract
         """
-        pass
-
-    def sym_product(self, *args, as_tuple=False, **kwargs) -> list:
-        """Calculates the product between several group representations passed by the symbolic name.
-        If backing algebra is a Lie Algebra, defaults to `LieAlgebra.tensor_product_decomposition`
-
-        Abstract
-        """
-        pass
+        raise NotImplementedError("Call this method on a concrete subclass")
 
     def conjugate(self, rep, symbolic=False):
         """Returns the conjugate representation. If the incoming rep is symbolic/named then it will return as such.
@@ -108,12 +135,55 @@ class LieGroup(Group):
         """Backing Lie Algebra"""
         return self._algebra
 
-    def product(self, *args, **kwargs) -> list["Matrix"]:
+    @overload
+    def product(
+        self, *args: Matrix, basis: BASIS = "omega", return_type: None = None
+    ) -> List[Matrix]:
+        ...
+
+    @overload
+    def product(
+        self,
+        *args: Union[NumericSymbol, str],
+        basis: BASIS = "omega",
+        return_type: None = None,
+    ) -> List[NumericSymbol]:
+        ...
+
+    @overload
+    def product(
+        self,
+        *args: Union[Matrix, NumericSymbol, str],
+        basis: BASIS = "omega",
+        return_type: Literal["matrix"],
+    ) -> List[Matrix]:
+        ...
+
+    @overload
+    def product(
+        self,
+        *args: Union[Matrix, NumericSymbol, str],
+        basis: BASIS = "omega",
+        return_type: Literal["rep"],
+    ) -> List[NumericSymbol]:
+        ...
+
+    def product(
+        self,
+        *args: Union[Matrix, NumericSymbol, str],
+        basis: BASIS = "omega",
+        return_type: Optional[Literal["matrix", "rep"]] = None,
+    ) -> Union[List[Matrix], List[NumericSymbol]]:
         """Uses tensor product decomposition to find the products between the
         representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`
 
+        Args:
+            args: Objects to take product of
+            basis ("ortho" | "omega" | "alpha", optional): Basis of incoming weights and result. If not set, will implicitly set. Defaults to 'omega'.
+            return_type ("matrix" | "rep" | None, optional): Returns either as matrices or symbolic representation. Will default to the type of the args unless explicitly set here. Defaults to None.
+
         Returns:
-            list[Matrix]: Tensor sum of the product.
+            Union[List[Matrix], List[NumericSymbol]]: Tensor sum of the product.
 
         Examples
         ========
@@ -124,44 +194,37 @@ class LieGroup(Group):
         [Matrix([[0, 0, 0, 0, 0]]), Matrix([[0, 1, 0, 0, 0]]), Matrix([[2, 0, 0, 0, 0]])]
         """
 
-        # type: ignore
-        return self.algebra.tensor_product_decomposition(args, **kwargs)
+        # check args types are all the same
+        if not all([type(x) for x in args]):
+            raise TypeError(
+                "All product types must be the same type, no mixing allowed."
+            )
 
-    def sym_product(
-        self, *args, as_tuple=False, **kwargs
-    ) -> list[Union[Symbol, Tuple[Matrix, Symbol]]]:
-        r"""Uses tensor product decomposition to find the products between the
-        representations. Supported kwargs can be found on `LieAlgebra.tensor_product_decomposition`.
+        if return_type not in ["matrix", "rep", None]:
+            raise TypeError("Allowed values of return_type are 'matrix', 'rep' or None")
 
-        Args:
-            as_tuple (bool, optional): If True, returns tuple of matrix rep with symbol. Defaults to False.
+        ret_type = None
 
-        Returns:
-            list[Union[Symbol, Tuple[Matrix, Symbol]]]: list of symbols or list of (Matrix, Symbol)
+        if all([isinstance(x, MatrixBase) for x in args]):
+            results = self.algebra.tensor_product_decomposition(
+                *cast(Tuple[Matrix, ...], args), basis=basis
+            )
+            ret_type = return_type or "matrix"
+        if all([isinstance(x, str) or isinstance(x, Symbol) for x in args]):
+            mats = [self.algebra.irrep_lookup(x) for x in args]
+            results = self.algebra.tensor_product_decomposition(
+                *cast(Tuple[Matrix, ...], mats), basis=basis
+            )
+            ret_type = return_type or "rep"
+        else:
+            raise TypeError(
+                "Unsupported product arg. All product types must be either a matrix type or str/symbol type."
+            )
 
-        Examples
-        ========
-        >>> from liesym import SO
-        >>> so10 = SO(10)
-        >>> so10.sym_product("10","45")
-        [120, 10, 320]
-        >>> so10.sym_product("10","45", as_tuple=True)
-        [(Matrix([[0, 0, 1, 0, 0]]), 120), (Matrix([[1, 0, 0, 0, 0]]), 10), (Matrix([[1, 1, 0, 0, 0]]), 320)]
-        >>> from liesym import SU
-        >>> su3 = SU(3)
-        >>> su3.sym_product('3', r'\bar{3}')
-        [1, 8]
-        """
-        mats = [self.algebra.irrep_lookup(x) for x in args]
-
-        results = []
-        for rep in self.algebra.tensor_product_decomposition(mats, **kwargs):
-            symbol = self.algebra.dim_name(rep)
-            if as_tuple:
-                results.append((rep, symbol))
-            else:
-                results.append(symbol)
-        return results
+        if ret_type == "matrix":
+            return results
+        else:
+            return [self.algebra.dim_name(x) for x in results]
 
     def conjugate(self, rep, symbolic=False):
         r"""Uses the underlying algebra to find the conjugate representation.
@@ -268,7 +331,7 @@ class LieGroup(Group):
         return self._structure_constants[1]
 
     def dynkin_index(
-        self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs
+        self, irrep: Optional[Union[Basic, Matrix, str, int]] = None, **kwargs
     ) -> Basic:
         """Returns the dykin index for the arbitrary irreducible representation. This method
         extends the underlying algebra method by allowing symbolic dim names to be passed.
@@ -292,7 +355,9 @@ class LieGroup(Group):
             raise TypeError("Only sympy basic types and sympy.Matrix are allowed.")
 
     def quadratic_casimir(
-        self, irrep: Union[Basic, Matrix, str, int] = None, **kwargs
+        self,
+        irrep: Optional[Union[Basic, Matrix, str, int]] = None,
+        basis: BASIS = "omega",
     ) -> Basic:
         """Returns the quadratic casimir for the arbitrary irreducible representation. This method extends the underlying algebra method by allowing
         symbolic dim names to be passed.
@@ -305,17 +370,20 @@ class LieGroup(Group):
             Basic: The irrep's quadratic casimir.
         """
         if irrep is None:
-            return self.algebra.quadratic_casimir()
+            return self.algebra.quadratic_casimir(basis=basis)
         elif isinstance(irrep, Matrix):
-            return self.algebra.quadratic_casimir(irrep, **kwargs)
+            return self.algebra.quadratic_casimir(irrep, basis=basis)
         elif isinstance(irrep, (Basic, str, int)):
-            irrep = self.algebra.irrep_lookup(str(irrep))
-            return self.algebra.quadratic_casimir(irrep)
+            irrep = self.algebra.irrep_lookup(irrep)
+            return self.algebra.quadratic_casimir(irrep, basis=basis)
         else:
-            raise TypeError("Only sympy basic types and sympy.Matrix are allowed.")
+            raise TypeError(
+                "Only sympy basic types, str, int and sympy.Matrix are allowed."
+            )
 
+    @_cast_func(List[Any])
     @lru_cache
-    def generators(self, cartan_only=False, **kwargs):
+    def generators(self, cartan_only: bool = False, **kwargs: bool):
         """Returns the generators representations of the group.
 
         Args:
@@ -330,5 +398,5 @@ class LieGroup(Group):
         else:
             return generators
 
-    def _calc_generator(self, **_):
+    def _calc_generator(self, **kwargs):
         raise NotImplementedError("This method needs calculation")
