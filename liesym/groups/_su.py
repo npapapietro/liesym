@@ -64,9 +64,9 @@ class SU(LieGroup):
         return super().__new__(cls, "SU", dim)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self._algebra = A(self.dimension - 1)
         self._generators = None
+        super().__init__(*args, **kwargs)
 
     def generators(self, cartan_only=False, **kwargs):
         r"""Returns the generators representations of the group.

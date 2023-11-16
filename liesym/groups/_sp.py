@@ -39,8 +39,8 @@ class Sp(LieGroup):
         return super().__new__(cls, "Sp", dim)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self._algebra = C(self.dimension / 2)
+        super().__init__(*args, **kwargs)
 
     def generators(self, cartan_only=False, **kwargs):
         """Generators for Sp(2N). There are a lot of possible choices, so

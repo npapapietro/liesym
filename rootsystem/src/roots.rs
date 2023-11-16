@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use ndarray::parallel::prelude::{IntoParallelIterator, ParallelIterator};
+use ndarray::Zip;
 use num::rational::Ratio;
 use std::cmp::Ordering;
 use std::collections::HashSet;
@@ -81,13 +82,13 @@ impl RootSystem {
     /// * `stabilizers` - Optional list of indexes matching simple root generated reflection matrices.
     fn reflect_weights(
         &self,
-        weights: Vec<Array2R>,
-        stablizers: Option<Vec<usize>>,
+        weights: &Vec<Array2R>,
+        stablizers: &Option<Vec<usize>>,
     ) -> Vec<Array2R> {
-        let reflection_matrices = self.reflection_matrices();
+        let ref_mats = self.reflection_matrices();
         let ref_mats = match stablizers {
-            Some(x) => x.iter().map(|&i| reflection_matrices[i].clone()).collect(),
-            None => reflection_matrices,
+            Some(x) => x.iter().map(|&i| ref_mats[i].clone()).collect(),
+            None => ref_mats,
         };
 
         reflect_weights(&weights, &ref_mats)
@@ -98,11 +99,19 @@ impl RootSystem {
     /// * `a` - Weight in omega basis
     /// * `b` - Weight in omega basis
     pub fn scalar_product(&self, a: &Array2R, b: &Array2R) -> Ratio<i64> {
-        self.omega_to_ortho(a).dot(&self.omega_to_ortho(b).t())[[0, 0]]
+        let v1 = self.omega_to_ortho(a);
+        let v2 = self.omega_to_ortho(b);
+        let mut p = Array2R::zeros(v1.raw_dim());
+        Zip::from(&mut p)
+            .and(&v1)
+            .and(&v2)
+            .par_for_each(|c, &x, &y| *c += x * y);
+
+        p.sum()
     }
 
     pub fn index_irrep<'a>(&self, irrep: &'a Array2R, dim: i64) -> Ratio<i64> {
-        let delta = &Array2R::ones((1, self.rank));
+        let delta = Array2R::ones((1, self.rank));
         self.scalar_product(irrep, &(irrep + delta * 2)) * dim / (self.n_roots as i64)
     }
 
@@ -128,7 +137,7 @@ impl RootSystem {
     fn to_dominant(&self, weight: Array2R) -> Array2R {
         let mut orbits = vec![weight];
         loop {
-            orbits = self.reflect_weights(orbits, None);
+            orbits = self.reflect_weights(&orbits, &None);
             match self.find_dom(&orbits) {
                 Some(x) => break x,
                 None => continue,
@@ -138,9 +147,9 @@ impl RootSystem {
 
     /// Returns the full orbit with optional stabilization for the weight
     fn full_orbit(&self, weight: Array2R, stablizers: Option<Vec<usize>>) -> Vec<Array2R> {
-        let mut orbit = vec![weight];
+        let mut orbit = vec![weight.clone()];
         for _ in 0..self.n_roots {
-            orbit = self.reflect_weights(orbit, stablizers.clone());
+            orbit = self.reflect_weights(&orbit, &stablizers);
         }
         orbit
     }
@@ -172,7 +181,6 @@ impl RootSystem {
             roots.push(Array2R::zeros((1, self.rank)));
         }
         roots.sort_by(|a, b| self.sort_by_omega(a, b));
-
         roots
     }
 
@@ -203,18 +211,6 @@ impl RootSystem {
 
     pub fn get_postive_roots(&self) -> Vec<Array2R> {
         self.root_system()[..self.n_roots].to_vec()
-    }
-
-    pub fn dim(&self, irrep: &Array2R) -> i64 {
-        let rho = &Array2R::ones((1, self.rank));
-
-        let mut dim = Ratio::from(1);
-
-        for root in self.get_postive_roots().iter() {
-            dim *= self.scalar_product(&(irrep + rho), root) / self.scalar_product(rho, root);
-        }
-
-        dim.to_integer()
     }
 
     fn xis<'a>(&self, stabs: &'a Vec<usize>) -> Vec<Array2R> {
@@ -297,13 +293,12 @@ impl RootSystem {
             let (d, _) = self.reflect_to_dominant(w.clone(), None);
 
             let num = self.scalar_product(w, xi).clone()
-                * self.weight_multiplicity(&d, irrep)
+                * self.weight_multiplicity(&d, &irrep)
                 * (*m as i64);
 
-            let i_r = irrep + &rho;
-            let d_r = &dom + &rho;
-            let d1 = self.scalar_product(&i_r, &i_r);
-            let d2 = self.scalar_product(&d_r, &d_r);
+            let d1 = self.scalar_product(&(irrep + &rho), &(irrep + &rho));
+            let f = &dom + &rho;
+            let d2 = self.scalar_product(&f, &f);
 
             multiplicity += num / (d1 - d2);
         }
@@ -546,25 +541,6 @@ pub mod test {
 
             assert_eq!(result, to_ratio(array![[1, 1, 0, 0]]));
         }
-        // {
-        //     let algebra = helper_liealgebra(GroupTestType::B);
-
-        //     let non_dom = array![[
-        //         Ratio::<i64>::new(1, 2),
-        //         Ratio::<i64>::new(-1, 2),
-        //         Ratio::<i64>::new(-1, 2)
-        //     ]];
-        //     let result = algebra.to_dominant(non_dom);
-
-        //     assert_eq!(
-        //         result,
-        //         array![[
-        //             Ratio::<i64>::new(1, 2),
-        //             Ratio::<i64>::new(1, 2),
-        //             Ratio::<i64>::new(1, 2)
-        //         ]]
-        //     );
-        // }
     }
 
     #[test]
@@ -593,7 +569,7 @@ pub mod test {
             let stabs = vec![0, 1];
             let root = to_ratio(array![[1, 0, 0, 0]]);
 
-            let results = algebra.reflect_weights(vec![root], Option::Some(stabs));
+            let results = algebra.reflect_weights(&vec![root], &Option::Some(stabs));
 
             assert_eq!(
                 results,
@@ -610,7 +586,7 @@ pub mod test {
             let stabs = vec![0, 1];
             let root = to_ratio(array![[1, 0, 0]]);
 
-            let results = algebra.reflect_weights(vec![root], Option::Some(stabs));
+            let results = algebra.reflect_weights(&vec![root], &Option::Some(stabs));
 
             assert_eq!(
                 results,
@@ -1043,7 +1019,7 @@ pub mod test {
     // fn test_dim() {
     //     let algebra = helper_liealgebra(GroupTestType::A1);
 
-    //     let irreps = algebra.dim(to_ratio(array![[2]]));
+    //     let irreps = algebra.dim(&to_ratio(array![[2]]));
     //     let expected = 3;
     //     assert_eq!(
     //         irreps, expected,

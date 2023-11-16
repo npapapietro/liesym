@@ -113,6 +113,20 @@ impl<T> Tap for T {
     }
 }
 
+/// Finds the multiples
+pub fn find_n_and_m(product: usize) -> Vec<(usize, usize)> {
+    let mut v = Vec::new();
+    for n in 2..=product {
+        if product % n == 0 {
+            let m = product / n;
+            if !v.iter().any(|&i| i == (n, m) || i == (m, n)) {
+                v.push((n, m))
+            }
+        }
+    }
+    v
+}
+
 #[cfg(test)]
 pub mod test {
     use super::*;

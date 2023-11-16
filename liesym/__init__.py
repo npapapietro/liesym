@@ -2,7 +2,10 @@ import os
 
 try:
     from ._liesym_rust import (  # type: ignore[import-untyped]
-        LieAlgebraBackend as _LieAlgebraBackend,
+        BranchingRule as _BranchingRuleBackend,
+        LieAlgebra as _LieAlgebraBackend,
+        LieGroup as _LieGroupBackend,
+        setup_logging as _setup_backend_logging,
     )
 except ImportError:
     # suppress import error during sphinx builds
@@ -10,9 +13,14 @@ except ImportError:
         raise
     else:
         _LieAlgebraBackend = ""
+        _LieGroupBackend = ""
+        _BranchingRuleBackend = ""
+        _setup_backend_logging = ""
 
-from .groups import *
+import liesym.algebras as algebras
+import liesym.groups as groups
 from .algebras import *
+from .groups import *
 
 
 # C++ backend for sympy. Symbolic speed ups
@@ -39,4 +47,6 @@ __all__ = [
     "LieGroup",
     "Z",
     "root_angle",
+    "algebras",
+    "groups",
 ]
