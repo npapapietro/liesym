@@ -1,257 +1,300 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" data-content_root="" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to liesym’s documentation! &#8212; liesym 0.6.0 documentation</title>
-  <script>
+    <title>Welcome to liesym’s documentation! &#8212; liesym 0.8.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link rel="stylesheet"
-    href="_static/vendor/fontawesome/6.1.2/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=ce6c0465"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Algebra" href="algebra.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
+  
 
 <a class="navbar-brand logo" href="#">
-
   
   
   
   
   
   
+    <p class="title logo__title">liesym 0.8.1 documentation</p>
   
-
-  
-  
-    <p class="title logo__title">liesym 0.6.0 documentation</p>
-  
-</a>
+</a></div>
     
   </div>
-
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
-                <li class="nav-item">
-                    <a class="nav-link" href="algebra.html">
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="algebra.html">
                         Algebra
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="group.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="group.html">
                         Groups
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
 
-    <div id="navbar-end">
-      <div class="navbar-end-item navbar-end__search-button-container">
-        
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
-      </div>
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
       
-      <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
-    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
-</span>
-      </div>
       
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
       
     </div>
+    
   </div>
+  
+  
+    <div class="navbar-persistent--mobile">
 
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
 
   
-  <div class="search-button-container--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
-  </div>
-
-  
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
       <span class="fa-solid fa-outdent"></span>
-  </label>
+    </label>
   
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item">
-                    <a class="nav-link" href="algebra.html">
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="algebra.html">
                         Algebra
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="group.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="group.html">
                         Groups
-                    </a>
-                </li>
+                      </a>
+                    </li>
                 
-    </ul>
-</nav>
-      </div>
-      
+  </ul>
+</nav></div>
+        
       </div>
     
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
 
-    
-    
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
-    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
-    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
-    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
-</span>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
       </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
     
   </div>
-
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
+  
+  <div id="rtd-footer-container"></div>
+
 
       </div>
-      <main class="bd-main">
+      
+      <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="welcome-to-liesym-s-documentation">
 <h1>Welcome to liesym’s documentation!<a class="headerlink" href="#welcome-to-liesym-s-documentation" title="Permalink to this heading">#</a></h1>
 <p>Liesym is an extension module on SymPy that reimplements the
@@ -270,7 +313,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l1"><a class="reference internal" href="algebra.html">Algebra</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#lie-algebra-base">Lie Algebra Base</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.LieAlgebra"><code class="docutils literal notranslate"><span class="pre">LieAlgebra</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.conjugate"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.conjugate()</span></code></a></li>
@@ -278,7 +321,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.dim_name"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.dimension"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.dynkin_index"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.irrep_lookup()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.max_dynkin_digit()</span></code></a></li>
@@ -287,13 +330,13 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.n_roots"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.omega_matrix"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.orbit"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.positive_roots"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.positive_roots"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.rank"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.root_system"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.series"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.simple_roots"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.simple_roots"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.to_alpha"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.LieAlgebra.to_omega"><code class="docutils literal notranslate"><span class="pre">LieAlgebra.to_omega()</span></code></a></li>
@@ -304,7 +347,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#a-series">A Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.A"><code class="docutils literal notranslate"><span class="pre">A</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">A.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">A.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">A.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">A.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.conjugate"><code class="docutils literal notranslate"><span class="pre">A.conjugate()</span></code></a></li>
@@ -312,27 +355,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.dim_name"><code class="docutils literal notranslate"><span class="pre">A.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.dimension"><code class="docutils literal notranslate"><span class="pre">A.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.dynkin_index"><code class="docutils literal notranslate"><span class="pre">A.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">A.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">A.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">A.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">A.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.is_commutative"><code class="docutils literal notranslate"><span class="pre">A.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.is_negative"><code class="docutils literal notranslate"><span class="pre">A.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.is_real"><code class="docutils literal notranslate"><span class="pre">A.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.is_zero"><code class="docutils literal notranslate"><span class="pre">A.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.kind"><code class="docutils literal notranslate"><span class="pre">A.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">A.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.metric_tensor"><code class="docutils literal notranslate"><span class="pre">A.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">A.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.n_roots"><code class="docutils literal notranslate"><span class="pre">A.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.omega_matrix"><code class="docutils literal notranslate"><span class="pre">A.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.orbit"><code class="docutils literal notranslate"><span class="pre">A.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.positive_roots"><code class="docutils literal notranslate"><span class="pre">A.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.positive_roots"><code class="docutils literal notranslate"><span class="pre">A.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">A.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.rank"><code class="docutils literal notranslate"><span class="pre">A.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">A.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.root_system"><code class="docutils literal notranslate"><span class="pre">A.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.series"><code class="docutils literal notranslate"><span class="pre">A.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.simple_roots"><code class="docutils literal notranslate"><span class="pre">A.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.simple_roots"><code class="docutils literal notranslate"><span class="pre">A.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">A.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.to_alpha"><code class="docutils literal notranslate"><span class="pre">A.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.A.to_omega"><code class="docutils literal notranslate"><span class="pre">A.to_omega()</span></code></a></li>
@@ -343,7 +381,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#b-series">B Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.B"><code class="docutils literal notranslate"><span class="pre">B</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">B.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">B.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">B.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">B.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.conjugate"><code class="docutils literal notranslate"><span class="pre">B.conjugate()</span></code></a></li>
@@ -351,27 +389,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.dim_name"><code class="docutils literal notranslate"><span class="pre">B.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.dimension"><code class="docutils literal notranslate"><span class="pre">B.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.dynkin_index"><code class="docutils literal notranslate"><span class="pre">B.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">B.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">B.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">B.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">B.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.is_commutative"><code class="docutils literal notranslate"><span class="pre">B.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.is_negative"><code class="docutils literal notranslate"><span class="pre">B.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.is_real"><code class="docutils literal notranslate"><span class="pre">B.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.is_zero"><code class="docutils literal notranslate"><span class="pre">B.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.kind"><code class="docutils literal notranslate"><span class="pre">B.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">B.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.metric_tensor"><code class="docutils literal notranslate"><span class="pre">B.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">B.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.n_roots"><code class="docutils literal notranslate"><span class="pre">B.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.omega_matrix"><code class="docutils literal notranslate"><span class="pre">B.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.orbit"><code class="docutils literal notranslate"><span class="pre">B.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.positive_roots"><code class="docutils literal notranslate"><span class="pre">B.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.positive_roots"><code class="docutils literal notranslate"><span class="pre">B.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">B.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.rank"><code class="docutils literal notranslate"><span class="pre">B.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">B.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.root_system"><code class="docutils literal notranslate"><span class="pre">B.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.series"><code class="docutils literal notranslate"><span class="pre">B.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.simple_roots"><code class="docutils literal notranslate"><span class="pre">B.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.simple_roots"><code class="docutils literal notranslate"><span class="pre">B.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">B.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.to_alpha"><code class="docutils literal notranslate"><span class="pre">B.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.B.to_omega"><code class="docutils literal notranslate"><span class="pre">B.to_omega()</span></code></a></li>
@@ -382,7 +415,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#c-series">C Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.C"><code class="docutils literal notranslate"><span class="pre">C</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">C.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">C.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">C.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">C.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.conjugate"><code class="docutils literal notranslate"><span class="pre">C.conjugate()</span></code></a></li>
@@ -390,27 +423,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.dim_name"><code class="docutils literal notranslate"><span class="pre">C.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.dimension"><code class="docutils literal notranslate"><span class="pre">C.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.dynkin_index"><code class="docutils literal notranslate"><span class="pre">C.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">C.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">C.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">C.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">C.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.is_commutative"><code class="docutils literal notranslate"><span class="pre">C.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.is_negative"><code class="docutils literal notranslate"><span class="pre">C.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.is_real"><code class="docutils literal notranslate"><span class="pre">C.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.is_zero"><code class="docutils literal notranslate"><span class="pre">C.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.kind"><code class="docutils literal notranslate"><span class="pre">C.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">C.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.metric_tensor"><code class="docutils literal notranslate"><span class="pre">C.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">C.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.n_roots"><code class="docutils literal notranslate"><span class="pre">C.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.omega_matrix"><code class="docutils literal notranslate"><span class="pre">C.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.orbit"><code class="docutils literal notranslate"><span class="pre">C.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.positive_roots"><code class="docutils literal notranslate"><span class="pre">C.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.positive_roots"><code class="docutils literal notranslate"><span class="pre">C.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">C.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.rank"><code class="docutils literal notranslate"><span class="pre">C.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">C.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.root_system"><code class="docutils literal notranslate"><span class="pre">C.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.series"><code class="docutils literal notranslate"><span class="pre">C.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.simple_roots"><code class="docutils literal notranslate"><span class="pre">C.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.simple_roots"><code class="docutils literal notranslate"><span class="pre">C.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">C.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.to_alpha"><code class="docutils literal notranslate"><span class="pre">C.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.C.to_omega"><code class="docutils literal notranslate"><span class="pre">C.to_omega()</span></code></a></li>
@@ -421,7 +449,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#d-series">D Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.D"><code class="docutils literal notranslate"><span class="pre">D</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">D.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">D.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">D.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">D.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.conjugate"><code class="docutils literal notranslate"><span class="pre">D.conjugate()</span></code></a></li>
@@ -429,27 +457,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.dim_name"><code class="docutils literal notranslate"><span class="pre">D.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.dimension"><code class="docutils literal notranslate"><span class="pre">D.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.dynkin_index"><code class="docutils literal notranslate"><span class="pre">D.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">D.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">D.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">D.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">D.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.is_commutative"><code class="docutils literal notranslate"><span class="pre">D.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.is_negative"><code class="docutils literal notranslate"><span class="pre">D.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.is_real"><code class="docutils literal notranslate"><span class="pre">D.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.is_zero"><code class="docutils literal notranslate"><span class="pre">D.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.kind"><code class="docutils literal notranslate"><span class="pre">D.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">D.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.metric_tensor"><code class="docutils literal notranslate"><span class="pre">D.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">D.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.n_roots"><code class="docutils literal notranslate"><span class="pre">D.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.omega_matrix"><code class="docutils literal notranslate"><span class="pre">D.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.orbit"><code class="docutils literal notranslate"><span class="pre">D.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.positive_roots"><code class="docutils literal notranslate"><span class="pre">D.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.positive_roots"><code class="docutils literal notranslate"><span class="pre">D.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">D.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.rank"><code class="docutils literal notranslate"><span class="pre">D.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">D.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.root_system"><code class="docutils literal notranslate"><span class="pre">D.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.series"><code class="docutils literal notranslate"><span class="pre">D.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.simple_roots"><code class="docutils literal notranslate"><span class="pre">D.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.simple_roots"><code class="docutils literal notranslate"><span class="pre">D.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">D.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.to_alpha"><code class="docutils literal notranslate"><span class="pre">D.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.D.to_omega"><code class="docutils literal notranslate"><span class="pre">D.to_omega()</span></code></a></li>
@@ -460,7 +483,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#e-series">E Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.E"><code class="docutils literal notranslate"><span class="pre">E</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">E.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">E.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">E.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">E.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.conjugate"><code class="docutils literal notranslate"><span class="pre">E.conjugate()</span></code></a></li>
@@ -468,27 +491,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.dim_name"><code class="docutils literal notranslate"><span class="pre">E.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.dimension"><code class="docutils literal notranslate"><span class="pre">E.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.dynkin_index"><code class="docutils literal notranslate"><span class="pre">E.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">E.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">E.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">E.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">E.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.is_commutative"><code class="docutils literal notranslate"><span class="pre">E.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.is_negative"><code class="docutils literal notranslate"><span class="pre">E.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.is_real"><code class="docutils literal notranslate"><span class="pre">E.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.is_zero"><code class="docutils literal notranslate"><span class="pre">E.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.kind"><code class="docutils literal notranslate"><span class="pre">E.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">E.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.metric_tensor"><code class="docutils literal notranslate"><span class="pre">E.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">E.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.n_roots"><code class="docutils literal notranslate"><span class="pre">E.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.omega_matrix"><code class="docutils literal notranslate"><span class="pre">E.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.orbit"><code class="docutils literal notranslate"><span class="pre">E.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.positive_roots"><code class="docutils literal notranslate"><span class="pre">E.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.positive_roots"><code class="docutils literal notranslate"><span class="pre">E.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">E.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.rank"><code class="docutils literal notranslate"><span class="pre">E.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">E.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.root_system"><code class="docutils literal notranslate"><span class="pre">E.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.series"><code class="docutils literal notranslate"><span class="pre">E.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.simple_roots"><code class="docutils literal notranslate"><span class="pre">E.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.simple_roots"><code class="docutils literal notranslate"><span class="pre">E.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">E.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.to_alpha"><code class="docutils literal notranslate"><span class="pre">E.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.E.to_omega"><code class="docutils literal notranslate"><span class="pre">E.to_omega()</span></code></a></li>
@@ -499,7 +517,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#g2-series">G2 Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.G2"><code class="docutils literal notranslate"><span class="pre">G2</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">G2.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">G2.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">G2.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">G2.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.conjugate"><code class="docutils literal notranslate"><span class="pre">G2.conjugate()</span></code></a></li>
@@ -507,27 +525,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.dim_name"><code class="docutils literal notranslate"><span class="pre">G2.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.dimension"><code class="docutils literal notranslate"><span class="pre">G2.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.dynkin_index"><code class="docutils literal notranslate"><span class="pre">G2.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">G2.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">G2.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">G2.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">G2.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.is_commutative"><code class="docutils literal notranslate"><span class="pre">G2.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.is_negative"><code class="docutils literal notranslate"><span class="pre">G2.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.is_real"><code class="docutils literal notranslate"><span class="pre">G2.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.is_zero"><code class="docutils literal notranslate"><span class="pre">G2.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.kind"><code class="docutils literal notranslate"><span class="pre">G2.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">G2.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.metric_tensor"><code class="docutils literal notranslate"><span class="pre">G2.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">G2.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.n_roots"><code class="docutils literal notranslate"><span class="pre">G2.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.omega_matrix"><code class="docutils literal notranslate"><span class="pre">G2.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.orbit"><code class="docutils literal notranslate"><span class="pre">G2.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.positive_roots"><code class="docutils literal notranslate"><span class="pre">G2.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.positive_roots"><code class="docutils literal notranslate"><span class="pre">G2.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">G2.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.rank"><code class="docutils literal notranslate"><span class="pre">G2.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">G2.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.root_system"><code class="docutils literal notranslate"><span class="pre">G2.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.series"><code class="docutils literal notranslate"><span class="pre">G2.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.simple_roots"><code class="docutils literal notranslate"><span class="pre">G2.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.simple_roots"><code class="docutils literal notranslate"><span class="pre">G2.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">G2.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.to_alpha"><code class="docutils literal notranslate"><span class="pre">G2.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.G2.to_omega"><code class="docutils literal notranslate"><span class="pre">G2.to_omega()</span></code></a></li>
@@ -538,7 +551,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="algebra.html#f4-series">F4 Series</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="algebra.html#liesym.F4"><code class="docutils literal notranslate"><span class="pre">F4</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">F4.adjoint_rep</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.adjoint_rep"><code class="docutils literal notranslate"><span class="pre">F4.adjoint_rep()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.cartan_matrix"><code class="docutils literal notranslate"><span class="pre">F4.cartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.cocartan_matrix"><code class="docutils literal notranslate"><span class="pre">F4.cocartan_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.conjugate"><code class="docutils literal notranslate"><span class="pre">F4.conjugate()</span></code></a></li>
@@ -546,27 +559,22 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.dim_name"><code class="docutils literal notranslate"><span class="pre">F4.dim_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.dimension"><code class="docutils literal notranslate"><span class="pre">F4.dimension</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.dynkin_index"><code class="docutils literal notranslate"><span class="pre">F4.dynkin_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">F4.fundamental_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.fundamental_weights"><code class="docutils literal notranslate"><span class="pre">F4.fundamental_weights()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.get_irrep_by_dim"><code class="docutils literal notranslate"><span class="pre">F4.get_irrep_by_dim()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">F4.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.is_commutative"><code class="docutils literal notranslate"><span class="pre">F4.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.is_negative"><code class="docutils literal notranslate"><span class="pre">F4.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.is_real"><code class="docutils literal notranslate"><span class="pre">F4.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.is_zero"><code class="docutils literal notranslate"><span class="pre">F4.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.kind"><code class="docutils literal notranslate"><span class="pre">F4.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.max_dynkin_digit"><code class="docutils literal notranslate"><span class="pre">F4.max_dynkin_digit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.metric_tensor"><code class="docutils literal notranslate"><span class="pre">F4.metric_tensor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.n_pos_roots"><code class="docutils literal notranslate"><span class="pre">F4.n_pos_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.n_roots"><code class="docutils literal notranslate"><span class="pre">F4.n_roots</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.omega_matrix"><code class="docutils literal notranslate"><span class="pre">F4.omega_matrix</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.orbit"><code class="docutils literal notranslate"><span class="pre">F4.orbit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.positive_roots"><code class="docutils literal notranslate"><span class="pre">F4.positive_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.positive_roots"><code class="docutils literal notranslate"><span class="pre">F4.positive_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">F4.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.rank"><code class="docutils literal notranslate"><span class="pre">F4.rank</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.reflection_matricies"><code class="docutils literal notranslate"><span class="pre">F4.reflection_matricies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.root_system"><code class="docutils literal notranslate"><span class="pre">F4.root_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.series"><code class="docutils literal notranslate"><span class="pre">F4.series</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.simple_roots"><code class="docutils literal notranslate"><span class="pre">F4.simple_roots</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.simple_roots"><code class="docutils literal notranslate"><span class="pre">F4.simple_roots()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.tensor_product_decomposition"><code class="docutils literal notranslate"><span class="pre">F4.tensor_product_decomposition()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.to_alpha"><code class="docutils literal notranslate"><span class="pre">F4.to_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="algebra.html#liesym.F4.to_omega"><code class="docutils literal notranslate"><span class="pre">F4.to_omega()</span></code></a></li>
@@ -586,7 +594,6 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Group.group"><code class="docutils literal notranslate"><span class="pre">Group.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Group.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">Group.irrep_lookup()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Group.product"><code class="docutils literal notranslate"><span class="pre">Group.product()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Group.sym_product"><code class="docutils literal notranslate"><span class="pre">Group.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -601,15 +608,9 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.generators"><code class="docutils literal notranslate"><span class="pre">LieGroup.generators()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.group"><code class="docutils literal notranslate"><span class="pre">LieGroup.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">LieGroup.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.is_commutative"><code class="docutils literal notranslate"><span class="pre">LieGroup.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.is_negative"><code class="docutils literal notranslate"><span class="pre">LieGroup.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.is_real"><code class="docutils literal notranslate"><span class="pre">LieGroup.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.is_zero"><code class="docutils literal notranslate"><span class="pre">LieGroup.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.kind"><code class="docutils literal notranslate"><span class="pre">LieGroup.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.product"><code class="docutils literal notranslate"><span class="pre">LieGroup.product()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">LieGroup.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.structure_constants"><code class="docutils literal notranslate"><span class="pre">LieGroup.structure_constants()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.LieGroup.sym_product"><code class="docutils literal notranslate"><span class="pre">LieGroup.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -624,15 +625,9 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.generators"><code class="docutils literal notranslate"><span class="pre">SO.generators()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.group"><code class="docutils literal notranslate"><span class="pre">SO.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">SO.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.is_commutative"><code class="docutils literal notranslate"><span class="pre">SO.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.is_negative"><code class="docutils literal notranslate"><span class="pre">SO.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.is_real"><code class="docutils literal notranslate"><span class="pre">SO.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.is_zero"><code class="docutils literal notranslate"><span class="pre">SO.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.kind"><code class="docutils literal notranslate"><span class="pre">SO.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.product"><code class="docutils literal notranslate"><span class="pre">SO.product()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">SO.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.structure_constants"><code class="docutils literal notranslate"><span class="pre">SO.structure_constants()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SO.sym_product"><code class="docutils literal notranslate"><span class="pre">SO.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -647,15 +642,9 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.generators"><code class="docutils literal notranslate"><span class="pre">Sp.generators()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.group"><code class="docutils literal notranslate"><span class="pre">Sp.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">Sp.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.is_commutative"><code class="docutils literal notranslate"><span class="pre">Sp.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.is_negative"><code class="docutils literal notranslate"><span class="pre">Sp.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.is_real"><code class="docutils literal notranslate"><span class="pre">Sp.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.is_zero"><code class="docutils literal notranslate"><span class="pre">Sp.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.kind"><code class="docutils literal notranslate"><span class="pre">Sp.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.product"><code class="docutils literal notranslate"><span class="pre">Sp.product()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">Sp.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.structure_constants"><code class="docutils literal notranslate"><span class="pre">Sp.structure_constants()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Sp.sym_product"><code class="docutils literal notranslate"><span class="pre">Sp.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -670,15 +659,9 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.generators"><code class="docutils literal notranslate"><span class="pre">SU.generators()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.group"><code class="docutils literal notranslate"><span class="pre">SU.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">SU.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.is_commutative"><code class="docutils literal notranslate"><span class="pre">SU.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.is_negative"><code class="docutils literal notranslate"><span class="pre">SU.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.is_real"><code class="docutils literal notranslate"><span class="pre">SU.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.is_zero"><code class="docutils literal notranslate"><span class="pre">SU.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.kind"><code class="docutils literal notranslate"><span class="pre">SU.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.product"><code class="docutils literal notranslate"><span class="pre">SU.product()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.quadratic_casimir"><code class="docutils literal notranslate"><span class="pre">SU.quadratic_casimir()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.structure_constants"><code class="docutils literal notranslate"><span class="pre">SU.structure_constants()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.SU.sym_product"><code class="docutils literal notranslate"><span class="pre">SU.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -690,13 +673,7 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.generators"><code class="docutils literal notranslate"><span class="pre">Z.generators()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.group"><code class="docutils literal notranslate"><span class="pre">Z.group</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.irrep_lookup"><code class="docutils literal notranslate"><span class="pre">Z.irrep_lookup()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.is_commutative"><code class="docutils literal notranslate"><span class="pre">Z.is_commutative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.is_negative"><code class="docutils literal notranslate"><span class="pre">Z.is_negative</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.is_real"><code class="docutils literal notranslate"><span class="pre">Z.is_real</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.is_zero"><code class="docutils literal notranslate"><span class="pre">Z.is_zero</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.kind"><code class="docutils literal notranslate"><span class="pre">Z.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.product"><code class="docutils literal notranslate"><span class="pre">Z.product()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="group.html#liesym.Z.sym_product"><code class="docutils literal notranslate"><span class="pre">Z.sym_product()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -720,105 +697,107 @@ mostly a reimplementation of a Mathematica module LieART.</p>
 </section>
 
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-  <a class='right-next' id="next-link" href="algebra.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Algebra</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
-</div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
+                </article>
               
-<div class="toc-item">
-  
-<div class="tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-</div>
-<nav id="bd-toc-nav" class="page-toc">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-contents">
-   Module contents
-  </a>
- </li>
-</ul>
-
-</nav>
-</div>
-
-<div class="toc-item">
-  
-<div id="searchbox"></div>
-</div>
-
-<div class="toc-item">
-  
-</div>
-
-<div class="toc-item">
-  
-<div class="tocsection sourcelink">
-    <a href="_sources/index.rst.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="algebra.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Algebra</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
 </div>
 
-            </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+</div></div>
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
     
-<p class="copyright">
+      © Copyright 2021, Nathan Papapietro.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
 
-    &copy; Copyright 2021, Nathan Papapietro.<br>
-
-</p>
-
-  </div>
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
   
-  <div class="footer-item">
-    
-<p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
-</p>
-
-  </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>
