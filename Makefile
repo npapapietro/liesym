@@ -30,7 +30,6 @@ tag-python:
 tag-rust:
 	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.package.version |= $$tag' Cargo.toml 
 	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.package.version |= $$tag' ./rootsystem/Cargo.toml 
-	tomlq -t -i --arg tag "$(LIESYM_VERSION)" '.package.version |= $$tag' ./subalgebras/Cargo.toml 
 
 # Tags both rust and python version with $LIESYM_VERSION
 tag: tag-python tag-rust
