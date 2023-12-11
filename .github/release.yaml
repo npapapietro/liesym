@@ -1,4 +1,3 @@
-
 changelog:
   categories:
     - title: Breaking Changes 🛠
@@ -7,6 +6,9 @@ changelog:
     - title: New Features 🎉
       labels:
         - enhancement
+    - title: Performance Improvements 🚀
+      labels:
+        - performance
     - title: Other Changes
       labels:
         - "*"

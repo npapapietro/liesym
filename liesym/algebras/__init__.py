@@ -1,7 +1,7 @@
-from ._base import Basis, BASIS, LieAlgebra, NumericSymbol
+from ._base import BASIS, LieAlgebra, NumericSymbol
 from ._classic import A, B, C, D
 from ._exceptionals import E, F4, G2
-from ._methods import root_angle
+from ._methods import Basis, root_angle
 
 __all__ = [
     "A",
@@ -13,7 +13,7 @@ __all__ = [
     "E",
     "LieAlgebra",
     "NumericSymbol",
-    "Basis",
     "root_angle",
     "BASIS",
+    "Basis",
 ]

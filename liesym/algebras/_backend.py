@@ -1,95 +1,97 @@
+import functools
+from typing import Any, Callable, cast, Iterable, Tuple, TypeVar
+
 import numpy as np
-from sympy import flatten, Matrix, Rational, sympify
+from sympy import flatten, Matrix, MatrixBase, Rational, sympify
 
 from .. import _LieAlgebraBackend
 
-
-def _to_rational_tuple(obj):
-    """Converts to a sympy matrix into into two
-    ndarray(dtype=int), one for numerators and one
-    for denoms
-    """
-    if obj is None:
-        return
-    elif isinstance(obj, list) or isinstance(obj, tuple):
-        obj = Matrix(obj)
-    elif isinstance(obj, Rational):
-        return int(obj)
-    elif isinstance(obj, int) or isinstance(obj, np.ndarray):
-        return obj
-    else:
-        pass
-    x = flatten(obj)
-    return np.array([(i.p, i.q) for i in x], dtype=np.int64).reshape(*obj.shape, 2)
+T = TypeVar("T")
 
 
-def _is_scalar(x) -> bool:
-    """Is a basic type"""
-    return isinstance(x, (int, str, float, bool)) or x is None
-
-
-def _is_tuple_int(x) -> bool:
-    """Tuple of ints"""
-    if not isinstance(x, tuple):
-        raise Exception("Wrapper error, tuple expected")
-    return isinstance(x[0], int) and isinstance(x[1], int)
-
-
-def _rust_wrapper(func=None, default=None):
+class _rust_wrapper:
     """Wraps the rust methods to and from. Formats the calls
     to rust by turning either a 2d matrix to 3d matrix of (x,y) => (x,y,[numerator,denominator])
     for preserving rational numbers. Rust returns objects as a tuple of (numerator-matrix, denominator-matrix)
     """
 
-    if func is None and default is not None:
-        return lambda f: _rust_wrapper(func=f, default=default)
+    def __init__(self, func: Callable[..., T]):
+        functools.update_wrapper(self, func)
+        self.func = func
 
-    def inner(*args, **kwargs):
-        cls = args[0]
-        rank = cls.rank
+    def __call__(self, *args, **kwargs):
+        prepped_args = self._prepare_backend(args)
+        result = self.func(self.instance_, *prepped_args, **kwargs)
+        return self._prepare_return(result)
 
-        nargs = [_to_rational_tuple(x) for x in args[1:]]
+    def __get__(self, instance, owner):
+        self.instance_ = instance
+        return self.__call__
 
-        result = func(cls, *nargs, **kwargs)
+    def _prepare_return(self, ret_val: Any):
+        """Prepares return type."""
+        if isinstance(ret_val, tuple):
+            if (
+                len(ret_val) == 2
+                and isinstance(ret_val[0], int)
+                and isinstance(ret_val[1], int)
+            ):  # Rational scalar
+                return Rational(*ret_val)
+            else:
+                # tuple of ndarrays
+                numer, denom = (x.squeeze() for x in cast(Tuple[np.ndarray], ret_val))
+                shape = numer.shape
 
-        if result is None:
-            return default
-        if _is_scalar(result):
-            return result
-        if _is_tuple_int(result):
-            return Rational(*result)
+                plain_values = [
+                    Rational(f"{x}/{y}")
+                    for x, y in zip(numer.flatten(), denom.flatten())
+                ]
+                # vectorlike
+                if len(shape) == 1:
+                    shape = (shape[0], 1) if self.instance_.rank == 1 else (1, shape[0])
 
-        # tuple of ndarrays
-        numer, denom = (x.squeeze() for x in result)
-        shape = numer.shape
+                m: Matrix = sympify(Matrix(*shape, plain_values))
+                return [m.row(i) for i in range(m.shape[0])]
+        elif (
+            isinstance(ret_val, (int, str, float, bool)) or ret_val is None
+        ):  # non-rational scalar
+            return ret_val
+        else:
+            raise TypeError(
+                f"type {type(ret_val)} is unsupported type to received from backend on function {self.func.__name__}."
+            )
 
-        plain_values = [
-            Rational(f"{x}/{y}") for x, y in zip(numer.flatten(), denom.flatten())
-        ]
-        # vectorlike
-        if len(shape) == 1:
-            shape = (shape[0], 1) if rank == 1 else (1, shape[0])
+    def _prepare_backend(self, args: Iterable[Any]):
+        """Prepares the args for sending to the backend."""
+        return [self._to_rational_tuple(x) for x in args]
 
-        m = sympify(Matrix(*shape, plain_values))
-        return [m.row(i) for i in range(m.shape[0])]
-
-    return inner
-
-
-def _rust_new(func):
-    """Transforms into rust acceptable types"""
-
-    def inner(*args, **kwargs):
-        cls = args[0]
-        nargs = [_to_rational_tuple(x) for x in args[1:]]
-        return func(cls, *nargs, **kwargs)
-
-    return inner
+    def _to_rational_tuple(self, arg: Any):
+        """Converts the argument into a suitable type to send to backend.
+        Supported:
+            - native python type
+            - np.ndarray
+            - sympy Rational and Matrix type
+        """
+        if arg is None:
+            return None
+        elif isinstance(arg, Rational):
+            return int(arg)
+        elif isinstance(arg, (int, np.ndarray)):
+            return arg
+        elif isinstance(arg, (list, tuple, MatrixBase)):
+            mat = Matrix(arg)
+            return np.array([(i.p, i.q) for i in flatten(mat)], dtype=np.int64).reshape(
+                *mat.shape, 2
+            )
+        else:
+            raise TypeError(
+                f"type {type(arg)} is unsupported type to send to backend on function {self.func.__name__}."
+            )
 
 
 class _LieAlgebraBackendWrapped:
-    @_rust_new
-    def __init__(self, *args, **kwargs):
+    @_rust_wrapper  # type:ignore[misc]
+    def __init__(self, *args, **kwargs) -> None:
         # obscuring this option, used in testing
         backend = kwargs.get("backend", _LieAlgebraBackend)
         self.rank = args[0]
@@ -111,7 +113,7 @@ class _LieAlgebraBackendWrapped:
     def dim(self, irrep):
         return self.backend.dim(irrep)
 
-    @_rust_wrapper(default=[])
+    @_rust_wrapper
     def get_irrep_by_dim(self, dim, max_dd):
         return self.backend.irrep_by_dim(dim, max_dd)
 
