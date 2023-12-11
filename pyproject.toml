@@ -23,6 +23,7 @@ symengine = ">=0.7.2"
 [tool.poetry.group.dev.dependencies]
 autopep8 = ">=1.5.6"
 jupyter = ">=1.0.0"
+jupyter-server = ">=2.11.2"
 ufmt = ">=2.2.0"
 pytest = ">=6.2.3"
 maturin = ">=1.3"
@@ -45,12 +46,25 @@ testpaths = ["tests"]
 
 
 [project]
-classifiers = ["Topic :: Scientific/Engineering :: Mathematics", "Topic :: Scientific/Engineering :: Physics", "Programming Language :: Rust", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11"]
+classifiers = [
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
 description = "Sympy Lie Algebra extensions powered by rust."
 name = "liesym"
 readme = "README.md"
 version = "0.0.0"
-dependencies = ["mpmath==1.3.0 ; python_version >= \"3.8\" and python_version < \"4\"", "numpy==1.24.4 ; python_version >= \"3.8\" and python_version < \"4\"", "symengine==0.10.0 ; python_version >= \"3.8\" and python_version < \"4\"", "sympy==1.12 ; python_version >= \"3.8\" and python_version < \"4\""]
+dependencies = [
+    "mpmath==1.3.0 ; python_version >= \"3.8\" and python_version < \"4\"",
+    "numpy==1.24.4 ; python_version >= \"3.8\" and python_version < \"4\"",
+    "symengine==0.10.0 ; python_version >= \"3.8\" and python_version < \"4\"",
+    "sympy==1.12 ; python_version >= \"3.8\" and python_version < \"4\"",
+]
 
 [[project.authors]]
 name = "Nathan Papapietro"
@@ -59,5 +73,3 @@ email = "npapapietro95@gmail.com"
 [project.urls]
 Documentation = "https://npapapietro.github.io/liesym"
 Homepage = "https://github.com/npapapietro/liesym"
-
-
