@@ -3,6 +3,7 @@
 LD_LIBRARY_PATH := $(shell python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
 SPHINX_BUILD := 1
 
+
 # Setups the python environment with poetry. Assumes there is an active venv already.
 setup: 
 	poetry install --sync --no-root --with dev --with docs
@@ -14,6 +15,7 @@ rust-test:
 
 # Runs python unit tests
 pytest:
+	maturin develop
 	USE_SYMENGINE=1 pytest tests
 
 # Runs all unit tests

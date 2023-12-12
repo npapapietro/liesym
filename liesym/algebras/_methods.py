@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from sympy import acos, eye, Matrix, pi, sqrt, zeros
+from sympy import acos, eye, Matrix, MatrixBase, pi, sqrt, zeros
 
 
 class Basis(Enum):
@@ -40,6 +40,8 @@ def _basis_lookup(x):
 
 
 def annotate_matrix(M, basis=Basis.ORTHO):
+    if not isinstance(M, MatrixBase):
+        M = Matrix(M).as_immutable()
     if getattr(M, "basis", None) is None:
         proper_basis = _basis_lookup(basis)
         setattr(M, "basis", proper_basis)

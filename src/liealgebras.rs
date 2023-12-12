@@ -14,13 +14,13 @@ type PyMat<'a> = PyReadonlyArray3<'a, i64>;
 type PyReturn<'py> = (&'py PyArray3<i64>, &'py PyArray3<i64>);
 
 #[pyclass]
-pub struct LieAlgebraBackend {
+pub struct LieAlgebra {
     roots: RootSystem,
     root_system: Vec<Array2R>,
 }
 
 #[pymethods]
-impl LieAlgebraBackend {
+impl LieAlgebra {
     #[new]
     fn new(
         rank: usize,
@@ -38,7 +38,7 @@ impl LieAlgebraBackend {
             to_rational_matrix(omega_matrix),
             to_rational_matrix(omega_matrix_inverse),
         );
-        LieAlgebraBackend {
+        LieAlgebra {
             root_system: roots.root_system(),
             roots,
         }
@@ -127,7 +127,7 @@ impl LieAlgebraBackend {
     }
 }
 
-impl LieAlgebraBackend {
+impl LieAlgebra {
     /// Calculates the dimension of a irreducible representation
     fn _dim(&self, irrep: &Array2R) -> i64 {
         let rho = Array2R::ones((1, self.roots.rank));

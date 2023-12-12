@@ -18,13 +18,12 @@ class SO(LieGroup):
         return super().__new__(cls, "SO", dim)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
         n = self.dimension
         if n.is_even:
             self._algebra = D(n / 2)
         else:
             self._algebra = B((n - 1) / 2)
+        super().__init__(*args, **kwargs)
 
     @overload
     def generators(

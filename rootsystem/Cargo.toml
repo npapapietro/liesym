@@ -2,7 +2,7 @@
 authors = ["Nathan Papapietro <npapapietro95@gmail.com>"]
 edition = "2021"
 name = "rootsystem"
-version = "0.0.0" # managed by ci
+version = "0.0.0"                                         # managed by ci
 
 [lib]
 name = "rootsystem"
@@ -12,6 +12,9 @@ itertools = ">= 0.10.1"
 num = ">= 0.4.0"
 num-traits = ">= 0.2.14"
 numpy = ">= 0.17.2"
+log = ">=0.4.20"
+rayon = ">=1.8.0"
+
 
 [dependencies.ndarray]
 features = ["approx", "rayon"]

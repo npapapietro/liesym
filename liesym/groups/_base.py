@@ -30,6 +30,8 @@ from sympy.tensor.array.dense_ndim_array import MutableDenseNDimArray
 
 from ..algebras import BASIS, LieAlgebra, NumericSymbol
 
+from ._backend import _LieGroupBackendWrapped
+
 
 def _cast_func(typ):
     def inner(f: Callable[..., Any]):
@@ -125,10 +127,13 @@ class Group(Basic):
 class LieGroup(Group):
     """Group that has a Lie Algebra associated with it."""
 
+    _structure_constants: tuple = (None, None)
+    _algebra: LieAlgebra = None  # type: ignore
+
     def __init__(self, *args, **kwargs):
-        """Used to set lazy properties"""
-        self._algebra = None
-        self._structure_constants = (None, None)
+        """Used to set lazy properties. This must be called
+        at the end of the subclass __init__"""
+        self._backend_group = _LieGroupBackendWrapped(self._group, self._algebra.rank)
 
     @property
     def algebra(self) -> LieAlgebra:

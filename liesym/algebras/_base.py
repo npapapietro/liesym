@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import re
-
-from functools import cached_property, cmp_to_key, lru_cache
+from functools import cached_property, cmp_to_key
 from typing import (
     Any,
     cast,
@@ -28,6 +27,18 @@ from ._methods import (
     quadratic_form,
     reflection_matricies,
 )
+
+
+if TYPE_CHECKING:
+    from typing import Callable, TypeVar
+
+    F = TypeVar("F", bound=Callable)
+
+    def lru_cache(f: F) -> F:
+        ...
+
+else:
+    from functools import lru_cache
 
 BASIS = Literal["ortho", "omega", "alpha"]
 
@@ -280,8 +291,8 @@ class LieAlgebra(Basic):
         - https://en.wikipedia.org/wiki/Group_action#Orbits_and_stabilizers
 
         """
-
-        return self._orbit(sympify(weight), stabilizers, basis, weight_basis)
+        weight = annotate_matrix(sympify(weight), weight_basis)
+        return self._orbit(weight, stabilizers, basis, weight_basis)
 
     @lru_cache
     def _orbit(
@@ -468,7 +479,7 @@ class LieAlgebra(Basic):
         self,
         dim: int,
         *,
-        max_dd: int = 3,
+        max_dd: Optional[int] = None,
         with_symbols: Literal[True],
         basis: BASIS = "omega",
     ) -> List[Tuple[Matrix, NumericSymbol]]:
@@ -479,7 +490,7 @@ class LieAlgebra(Basic):
         self,
         dim: int,
         *,
-        max_dd: int = 3,
+        max_dd: Optional[int] = None,
         with_symbols: Literal[False] = False,
         basis: BASIS = "omega",
     ) -> List[Matrix]:
@@ -489,7 +500,7 @@ class LieAlgebra(Basic):
     def get_irrep_by_dim(
         self,
         dim: int,
-        max_dd: int = 3,
+        max_dd: Optional[int] = None,
         with_symbols: bool = False,
         basis: BASIS = "omega",
     ) -> Union[List[Tuple[Matrix, NumericSymbol]], List[Matrix]]:
@@ -499,7 +510,7 @@ class LieAlgebra(Basic):
 
         Args:
             dim (int): Dimension to query
-            max_dd (int, optional): The max dynkin digit to use. Defaults to 3.
+            max_dd (int, optional): The max dynkin digit to use. Defaults to 3 for dim <= 4, 2 for 4<dim<=7, and 1 for dim>7.
             with_symbols (bool, optional): Returns list of tuples of rep and latex fmt. Defaults to False.
             basis ("ortho" | "omega" | "alpha", optional): Basis to return orbit in, Defaults to "ortho".
 
@@ -523,6 +534,14 @@ class LieAlgebra(Basic):
         >>> a3.get_irrep_by_dim(20, with_symbols=True)
         [(Matrix([[1, 1, 0]]), \bar{20}), (Matrix([[0, 1, 1]]), 20), (Matrix([[0, 2, 0]]), 20^{\prime}), (Matrix([[3, 0, 0]]), \bar{20}^{\prime \prime}), (Matrix([[0, 0, 3]]), 20^{\prime \prime})]
         """
+
+        if max_dd is None:
+            if self.rank <= 4:
+                max_dd = 3
+            elif 4 < self.rank <= 7:
+                max_dd = 2
+            else:
+                max_dd = 1
 
         if basis == "omega":
             backend_results: list[Matrix] = (

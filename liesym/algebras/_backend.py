@@ -4,7 +4,7 @@ from typing import Any, Callable, cast, Iterable, Tuple, TypeVar
 import numpy as np
 from sympy import flatten, Matrix, MatrixBase, Rational, sympify
 
-from .. import _LieAlgebraBackend
+from liesym import _LieAlgebraBackend
 
 T = TypeVar("T")
 
